@@ -124,16 +124,21 @@ h1, h2, h3, h4, h5 {
 }
 
 h1 {
-  font-size: clamp(2.1rem, 7.5vw + 0.25rem, 8rem);
+  font-size: clamp(2rem, 6.5vw + 0.25rem, 7rem);
   letter-spacing: -0.035em;
   line-height: 0.9;
   overflow-wrap: break-word;
-  hyphens: auto;
+  word-break: normal;
+  hyphens: none;
+  -webkit-hyphens: none;
+  text-wrap: balance;
 }
 
 h2 {
-  font-size: clamp(1.75rem, 4.5vw + 0.5rem, 4.5rem);
+  font-size: clamp(1.6rem, 4vw + 0.5rem, 4rem);
   overflow-wrap: break-word;
+  hyphens: none;
+  -webkit-hyphens: none;
 }
 
 h3 {
@@ -173,6 +178,19 @@ h4 {
   margin: 0 auto;
   padding-left: var(--gutter);
   padding-right: var(--gutter);
+}
+
+/* Prevent grid/flex children from blowing past their track width.
+   Without min-width:0 a long word (URL, headline) forces the track
+   to expand and overflow the container on narrow viewports. */
+.hero__grid > *,
+.split > *,
+.cards > *,
+.stats > *,
+.defs > *,
+.steps > *,
+.footer__grid > * {
+  min-width: 0;
 }
 
 .section {
@@ -694,6 +712,8 @@ h4 {
   .price-card { border-bottom: none; border-right: var(--rule); }
   .price-card:last-child { border-right: none; }
   .price-card--featured { border-right-color: var(--ink); }
+  .pricing--solo { grid-template-columns: minmax(0, 620px); justify-content: center; }
+  .pricing--solo .price-card { border-right: none; }
 }
 
 /* ---------- FAQ ----------------------------------------------------- */
@@ -923,7 +943,7 @@ details.faq__item p {
 }
 
 @media (min-width: 1280px) {
-  h1 { font-size: clamp(4rem, 7.5vw, 9rem); }
+  h1 { font-size: clamp(3.5rem, 6vw, 7.5rem); }
   .hero { padding-top: 4rem; }
 }
 
@@ -938,7 +958,11 @@ details.faq__item p {
   border-bottom: var(--rule);
 }
 .banner h1 {
-  font-size: clamp(2.5rem, 7vw, 7rem);
+  font-size: clamp(2.25rem, 6vw, 6rem);
+  overflow-wrap: break-word;
+  hyphens: none;
+  -webkit-hyphens: none;
+  text-wrap: balance;
 }
 .banner .lead { margin-top: 1rem; }
 .banner__meta {

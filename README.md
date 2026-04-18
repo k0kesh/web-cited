@@ -1,8 +1,7 @@
 # Web Cited
 
 Marketing site for **Web Cited** — a Search Experience Optimization (SXO)
-consulting practice offering a $5,000 one-time audit and a $20/month
-monitoring subscription.
+consulting practice offering a $5,000 one-time audit. Audits only. No retainers.
 
 ## Structure
 

@@ -14,11 +14,11 @@ BOLD = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
 REG = "/System/Library/Fonts/Supplemental/Arial.ttf"
 
 pages = [
-    ("home", "SXO Audits for\nSEO, AEO & GEO", "$5,000 one-time audit. $20/mo monitor."),
-    ("services", "SXO Audit\n+ Monitor", "$5K audit. $20/mo citation tracking."),
-    ("how-it-works", "How the\nSXO Audit Works", "Six steps. Four weeks. Fixed price."),
+    ("home", "SXO Audits for\nSEO, AEO & GEO", "$5,000 one-time audit. No retainer. No upsell."),
+    ("services", "One audit.\nEvery engine.", "SEO, AEO, GEO, and the off-site corpus."),
+    ("how-it-works", "How the\nSXO Audit Works", "Six fixed steps. One deliverable."),
     ("why-sxo", "SEO vs AEO\nvs GEO vs SXO", "The post-ten-blue-links search layer."),
-    ("pricing", "Two prices.\nBoth public.", "$5,000 one-time. $20/month. No retainer."),
+    ("pricing", "One price.\nPublic.", "$5,000 one-time. Fixed scope. No retainer."),
     ("about", "A narrow practice,\non purpose.", "Audits only. Senior-led. Fixed fee."),
 ]
 
