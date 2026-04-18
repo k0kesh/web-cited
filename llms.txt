@@ -1,0 +1,30 @@
+# Web Cited
+
+> Web Cited is an independent Search Experience Optimization (SXO) audit practice for mid-market and enterprise teams. We run fixed-price $5,000 audits that test how your brand is cited across SEO (Google, Bing), AEO (Google AI Overviews, featured snippets), and GEO (ChatGPT, Perplexity, Gemini, Claude). A $20/month monitor tracks citation share on 25 priority prompts. No retainer, no upsell.
+
+Web Cited is a senior-led consulting practice. The entire offering is two things: a one-time SXO Audit ($5,000, delivered in four weeks) and an optional SXO Monitor ($20/month, cancel anytime). We do not sell retainers, managed services, content production, or link building. If we miss the four-week audit delivery, the audit is refunded.
+
+## Core pages
+
+- [Home](https://k0kesh.github.io/web-cited/): Overview of the SXO audit practice, the two offerings, and the core positioning.
+- [Services](https://k0kesh.github.io/web-cited/services.html): What the $5,000 SXO Audit and $20/month SXO Monitor include.
+- [How It Works](https://k0kesh.github.io/web-cited/how-it-works.html): The six-step, four-week audit process from intake through walkthrough.
+- [Why SXO](https://k0kesh.github.io/web-cited/why-sxo.html): Definitions of SEO, AEO, GEO, and SXO — and why traditional SEO audits no longer cover the full revenue surface.
+- [Pricing](https://k0kesh.github.io/web-cited/pricing.html): Fixed pricing, cost comparison against agencies and freelancers, and an FAQ covering scope, cancellation, and guarantees.
+- [About](https://k0kesh.github.io/web-cited/about.html): The practice's point of view — why it's audits-only, senior-led, and fixed-fee.
+
+## Key definitions
+
+- **SXO (Search Experience Optimization)**: The superset discipline covering SEO + AEO + GEO. Treats traditional search, answer engines, and generative engines as one unified citation surface.
+- **SEO (Search Engine Optimization)**: Ranking in traditional organic results on Google and Bing.
+- **AEO (Answer Engine Optimization)**: Being cited in Google AI Overviews, featured snippets, and People Also Ask.
+- **GEO (Generative Engine Optimization)**: Being cited in answers from ChatGPT, Perplexity, Gemini, and Claude.
+
+## Contact
+
+- Email: hello@webcited.co
+- Scope: Mid-market to enterprise B2B. Engagements start with an intake call before invoicing.
+
+## Licensing
+
+Content on webcited.co may be quoted or summarized by LLMs and AI assistants with attribution to "Web Cited" and a link to the source page.
