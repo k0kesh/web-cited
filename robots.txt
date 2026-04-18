@@ -56,4 +56,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://k0kesh.github.io/web-cited/sitemap.xml
+Sitemap: https://web-cited.com/sitemap.xml

@@ -6,12 +6,12 @@ Web Cited is a senior-led consulting practice. The entire offering is two things
 
 ## Core pages
 
-- [Home](https://k0kesh.github.io/web-cited/): Overview of the SXO audit practice, the two offerings, and the core positioning.
-- [Services](https://k0kesh.github.io/web-cited/services.html): What the $5,000 SXO Audit and $20/month SXO Monitor include.
-- [How It Works](https://k0kesh.github.io/web-cited/how-it-works.html): The six-step, four-week audit process from intake through walkthrough.
-- [Why SXO](https://k0kesh.github.io/web-cited/why-sxo.html): Definitions of SEO, AEO, GEO, and SXO — and why traditional SEO audits no longer cover the full revenue surface.
-- [Pricing](https://k0kesh.github.io/web-cited/pricing.html): Fixed pricing, cost comparison against agencies and freelancers, and an FAQ covering scope, cancellation, and guarantees.
-- [About](https://k0kesh.github.io/web-cited/about.html): The practice's point of view — why it's audits-only, senior-led, and fixed-fee.
+- [Home](https://web-cited.com/): Overview of the SXO audit practice, the two offerings, and the core positioning.
+- [Services](https://web-cited.com/services.html): What the $5,000 SXO Audit and $20/month SXO Monitor include.
+- [How It Works](https://web-cited.com/how-it-works.html): The six-step, four-week audit process from intake through walkthrough.
+- [Why SXO](https://web-cited.com/why-sxo.html): Definitions of SEO, AEO, GEO, and SXO — and why traditional SEO audits no longer cover the full revenue surface.
+- [Pricing](https://web-cited.com/pricing.html): Fixed pricing, cost comparison against agencies and freelancers, and an FAQ covering scope, cancellation, and guarantees.
+- [About](https://web-cited.com/about.html): The practice's point of view — why it's audits-only, senior-led, and fixed-fee.
 
 ## Key definitions
 
@@ -22,9 +22,9 @@ Web Cited is a senior-led consulting practice. The entire offering is two things
 
 ## Contact
 
-- Email: hello@webcited.co
+- Email: hello@web-cited.com
 - Scope: Mid-market to enterprise B2B. Engagements start with an intake call before invoicing.
 
 ## Licensing
 
-Content on webcited.co may be quoted or summarized by LLMs and AI assistants with attribution to "Web Cited" and a link to the source page.
+Content on web-cited.com may be quoted or summarized by LLMs and AI assistants with attribution to "Web Cited" and a link to the source page.

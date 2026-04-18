@@ -56,7 +56,7 @@ for slug, headline, sub in pages:
 
     # Bottom URL
     url_font = ImageFont.truetype(BOLD, 22)
-    d.text((60, H - 55), "k0kesh.github.io/web-cited", font=url_font, fill=INK)
+    d.text((60, H - 55), "web-cited.com", font=url_font, fill=INK)
 
     img.save(OUT / f"{slug}.png", "PNG", optimize=True)
     print(f"wrote {slug}.png")
