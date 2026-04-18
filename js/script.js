@@ -38,4 +38,48 @@
   // --- Mark current year in footer -------------------------------------
   var yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+  // --- Cookie / privacy notice -----------------------------------------
+  // Web Cited uses no cookies, no analytics, and no third-party tracking.
+  // We show a one-time notice so visitors know that explicitly. The
+  // "dismissed" state is stored in localStorage (first-party, never sent
+  // anywhere) so the notice doesn't reappear on every page load.
+  var STORAGE_KEY = "wc-notice-dismissed-v1";
+  var alreadyDismissed = false;
+  try { alreadyDismissed = window.localStorage.getItem(STORAGE_KEY) === "1"; } catch (e) {}
+
+  if (!alreadyDismissed) {
+    var notice = document.createElement("aside");
+    notice.className = "cookie-notice";
+    notice.setAttribute("role", "region");
+    notice.setAttribute("aria-label", "Privacy notice");
+
+    var inner = document.createElement("div");
+    inner.className = "cookie-notice__inner";
+
+    var msg = document.createElement("p");
+    msg.innerHTML =
+      "This site uses <strong>no cookies, no analytics, and no third-party tracking</strong>. " +
+      'Read our <a href="privacy.html">privacy policy</a>.';
+
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "cookie-notice__btn";
+    btn.textContent = "Got it";
+    btn.addEventListener("click", function () {
+      try { window.localStorage.setItem(STORAGE_KEY, "1"); } catch (e) {}
+      notice.classList.remove("is-visible");
+      window.setTimeout(function () { notice.remove(); }, 260);
+    });
+
+    inner.appendChild(msg);
+    inner.appendChild(btn);
+    notice.appendChild(inner);
+    document.body.appendChild(notice);
+
+    // Reveal on next frame so the slide-up transition runs.
+    window.requestAnimationFrame(function () {
+      notice.classList.add("is-visible");
+    });
+  }
 })();
