@@ -97,7 +97,8 @@
       <div class="wrap">
         <span class="eyebrow">Intake</span>
         <h1>Start your audit.</h1>
-        <p class="lead">Nine questions. No sales call. Once you submit, we confirm scope by email, send an invoice, and kick off crawling within one business day.</p>
+        <p class="lead">A short web form. No sales call, no credential sharing. Once you submit, we confirm scope by email, send an invoice, and kick off crawling within one business day.</p>
+        <p class="hint" style="margin-top:1rem;max-width:62ch;">Auditing your own site or a competitor's? Both work — the audit runs entirely from public-web data, so you never need to own or have access to the domain you're submitting.</p>
       </div>
     </section>
 
@@ -109,9 +110,13 @@
               method="POST"
               novalidate>
 
-          <!-- Honeypot for bots -->
+          <input type="hidden" name="_next" value="https://web-cited.com/thanks.html" />
+          <input type="hidden" name="_subject" value="New SXO audit intake" />
+
           <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"
                  style="position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none;" aria-hidden="true" />
+
+          <input type="hidden" name="ts_loaded" id="ts_loaded" value="" />
 
           <fieldset class="form__row">
             <legend>Tier<span class="req" aria-hidden="true">*</span></legend>
@@ -273,24 +278,41 @@
             <p class="hint">If you leave this blank we'll discover it from <code>robots.txt</code> or crawl from the root.</p>
           </div>
 
-          <fieldset class="form__row">
-            <legend>Optional data grants (boost the report quality)</legend>
-            <label class="check">
-              <input type="checkbox" name="grant_gsc" value="yes" />
-              <span>I can grant <strong>read-only</strong> access to Google Search Console. <span class="hint" style="margin:0;">You'll receive an email walkthrough to delegate access after intake.</span></span>
-            </label>
-            <label class="check" style="margin-top:0.75rem;">
-              <input type="checkbox" name="grant_ga4" value="yes" />
-              <span>I can grant <strong>read-only</strong> access to GA4.</span>
-            </label>
-          </fieldset>
+          <div class="form__row form__row--split">
+            <div>
+              <label for="audit_type">What are you auditing?<span class="req" aria-hidden="true">*</span></label>
+              <select id="audit_type" name="audit_type" required>
+                <option value="" disabled selected>Select one</option>
+                <option value="Own brand">My own brand</option>
+                <option value="Competitor / market intel">A competitor / market intel</option>
+                <option value="Client (agency)">A client (I'm an agency)</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="referrer">How did you hear about us? (optional)</label>
+              <input id="referrer"
+                     name="referrer"
+                     type="text"
+                     inputmode="text"
+                     autocomplete="off"
+                     placeholder="LinkedIn, podcast, search…" />
+            </div>
+          </div>
 
           <div class="form__row">
             <label class="check">
-              <input type="checkbox" name="authorization" value="yes" required />
-              <span>I own this domain (or am authorized to purchase the audit) and authorize Web Cited to crawl the site at a respectful rate. <span class="req" aria-hidden="true">*</span></span>
+              <input type="checkbox" name="acknowledgement" value="yes" required />
+              <span>I understand the audit is a one-time fixed-scope deliverable, runs entirely on public-web data, and crawls the submitted site at a respectful rate. <span class="req" aria-hidden="true">*</span></span>
             </label>
           </div>
+
+          <!--
+            Optional: Cloudflare Turnstile (free, invisible, no PII).
+            To enable, replace YOUR_TURNSTILE_SITEKEY and uncomment the script tag in <head> as well:
+              <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+            <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITEKEY" data-size="flexible"></div>
+          -->
 
           <div class="submit-row">
             <button class="btn btn--primary btn--lg" type="submit">Submit intake</button>
@@ -363,6 +385,12 @@
       }
     }());
 
+    // Stamp the time the form rendered. Submissions faster than ~3s are almost always bots.
+    (function () {
+      var ts = document.getElementById('ts_loaded');
+      if (ts) ts.value = String(Date.now());
+    }());
+
     // AJAX submission to Formspree (keeps user on-page, shows success state)
     (function () {
       var form = document.getElementById('intake-form');
@@ -370,10 +398,23 @@
       if (!form || !success) return;
 
       form.addEventListener('submit', function (e) {
+        // Bot trap: honeypot filled
+        var hp = form.querySelector('input[name="_gotcha"]');
+        if (hp && hp.value) { e.preventDefault(); return; }
+
+        // Bot trap: form submitted unrealistically fast (<3s after page load)
+        var ts = parseInt(form.querySelector('#ts_loaded').value || '0', 10);
+        if (ts && (Date.now() - ts) < 3000) {
+          e.preventDefault();
+          alert('Please take a moment to review your answers before submitting.');
+          return;
+        }
+
         if (!form.action || form.action.indexOf('YOUR_FORMSPREE_ID') !== -1) {
-          // Endpoint not configured — let the browser submit natively (will 404)
-          // or fall back to mailto. For now, let it submit so the user sees the error
-          // and operator knows to wire up the endpoint.
+          // Endpoint not configured — block submission so the operator sees this state
+          // rather than losing leads to a 404. Replace YOUR_FORMSPREE_ID in the form action.
+          e.preventDefault();
+          alert('Form endpoint not configured yet. Email hello@web-cited.com directly.');
           return;
         }
         e.preventDefault();

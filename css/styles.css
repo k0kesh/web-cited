@@ -483,7 +483,8 @@ h4 {
 }
 @media (min-width: 1024px) {
   .stats { grid-template-columns: repeat(4, 1fr); }
-  .stat { border-right: var(--rule); border-bottom: none; }
+  .stat,
+  .stat:nth-child(2n) { border-right: var(--rule); border-bottom: none; }
   .stat:last-child { border-right: none; }
 }
 

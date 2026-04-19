@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="North star wayfinding logo">
+  <title>North Star</title>
+  <rect width="64" height="64" fill="#f4f3ef"/>
+  <g fill="#000">
+    <polygon points="32,4 38,32 60,32 38,38 32,60 26,38 4,32 26,26"/>
+  </g>
+  <circle cx="32" cy="32" r="4" fill="#ff4d00"/>
+</svg>
