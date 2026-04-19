@@ -1,4 +1,4 @@
-/* Web Cited — minimal progressive enhancement
+/* Web Cited - minimal progressive enhancement
    No frameworks. Pure DOM. Works with or without JS.
 */
 (function () {

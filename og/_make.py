@@ -15,7 +15,7 @@ REG = "/System/Library/Fonts/Supplemental/Arial.ttf"
 
 pages = [
     ("home", "SXO Audits for\nSEO, AEO & GEO", "$5,000 one-time audit. No retainer. No upsell."),
-    ("services", "One audit.\nEvery engine.", "SEO, AEO, GEO, and the off-site corpus."),
+    ("services", "One audit.\nEvery engine.", "SEO, AEO, GEO, and the off-site content engines quote."),
     ("how-it-works", "How the\nSXO Audit Works", "Six fixed steps. One deliverable."),
     ("why-sxo", "SEO vs AEO\nvs GEO vs SXO", "The post-ten-blue-links search layer."),
     ("pricing", "One price.\nPublic.", "$5,000 one-time. Fixed scope. No retainer."),

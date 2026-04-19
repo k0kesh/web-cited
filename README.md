@@ -1,6 +1,6 @@
 # Web Cited
 
-Marketing site for **Web Cited** — a Search Experience Optimization (SXO)
+Marketing site for **Web Cited** - a Search Experience Optimization (SXO)
 consulting practice offering a $5,000 one-time audit. Audits only. No retainers.
 
 ## Structure
@@ -33,7 +33,7 @@ python3 -m http.server 3000
 
 - Hand-written HTML, CSS, and vanilla JS
 - Mobile-first CSS Grid + Flexbox
-- System font stack (no external font CDN — Core Web Vitals optimized)
+- System font stack (no external font CDN - Core Web Vitals optimized)
 - WCAG 2.1 AA target
 
 ## Core Web Vitals (local dev)

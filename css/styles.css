@@ -1,5 +1,5 @@
 /* =====================================================================
-   WEB CITED — SXO CONSULTING
+   WEB CITED - SXO CONSULTING
    Swiss / Brutalist system. Mobile-first. WCAG 2.1 AA.
    ===================================================================== */
 
@@ -486,6 +486,7 @@ h4 {
   .stat,
   .stat:nth-child(2n) { border-right: var(--rule); border-bottom: none; }
   .stat:last-child { border-right: none; }
+  .stat__num { font-size: clamp(2.25rem, 5vw, 4rem); }
 }
 
 /* ---------- Cards / Services --------------------------------------- */
@@ -583,6 +584,31 @@ h4 {
 }
 .step__title { margin: 0 0 0.25rem; }
 .step__desc { color: var(--slate-700); margin: 0; }
+.step__tiers {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.1rem 0 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.step__tier {
+  padding: 0.15rem 0.55rem;
+  border: var(--rule);
+  border-radius: 999px;
+  background: var(--paper-white);
+  color: var(--ink);
+  line-height: 1.4;
+}
+.step__tier--off {
+  background: transparent;
+  color: var(--slate-500);
+  border-color: var(--slate-300);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
 
 /* ---------- Compare table ------------------------------------------ */
 .compare {
@@ -753,7 +779,7 @@ details.faq__item summary::after {
   line-height: 1;
   transition: transform 180ms ease;
 }
-details.faq__item[open] summary::after { content: "–"; }
+details.faq__item[open] summary::after { content: "-"; }
 details.faq__item p {
   margin: 0.85rem 0 0;
   color: var(--slate-700);
