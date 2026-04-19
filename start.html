@@ -235,6 +235,10 @@
                       name="competitors"
                       rows="3"
                       required
+                      inputmode="url"
+                      autocapitalize="off"
+                      autocorrect="off"
+                      spellcheck="false"
                       placeholder="One per line - use domain URLs, e.g.&#10;https://competitor1.com&#10;https://competitor2.com"></textarea>
           </div>
 
@@ -256,12 +260,19 @@
             </div>
             <div>
               <label for="cms">CMS / stack (optional)</label>
-              <input id="cms"
-                     name="cms"
-                     type="text"
-                     inputmode="text"
-                     autocomplete="off"
-                     placeholder="Webflow, WordPress, Next.js…" />
+              <select id="cms" name="cms">
+                <option value="" selected>Select one (or skip - we'll auto-detect)</option>
+                <option value="WordPress">WordPress</option>
+                <option value="Shopify">Shopify</option>
+                <option value="Webflow">Webflow</option>
+                <option value="Squarespace">Squarespace</option>
+                <option value="Wix">Wix</option>
+                <option value="Next.js">Next.js / React</option>
+                <option value="Custom">Custom / hand-built</option>
+                <option value="Other">Other</option>
+                <option value="Unknown">Don't know</option>
+              </select>
+              <p class="hint">Tells us where to point fix hints (Yoast panel, Shopify admin, etc.) and whether your site needs headless-browser rendering.</p>
             </div>
           </div>
 
