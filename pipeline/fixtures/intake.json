@@ -1,0 +1,31 @@
+{
+  "job_id": "WC-2026-0042",
+  "tier": "Audit",
+  "submitted_at": "2026-04-18T15:04:03Z",
+  "contact": {
+    "name": "Jane Doe",
+    "email": "jane@claimzilla.com",
+    "company": "Claimzilla"
+  },
+  "target": {
+    "domain": "claimzilla.com",
+    "sitemap_url": "https://claimzilla.com/sitemap.xml",
+    "cms": "Next.js",
+    "primary_market": "United States",
+    "audit_type": "Own brand"
+  },
+  "business_one_liner": "AI-based claims-fraud-detection platform for US auto insurers.",
+  "buyer_questions": [
+    "What's the best insurance fraud detection tool for auto insurers?",
+    "How do auto insurers automate claims fraud scoring?",
+    "Is Claimzilla HIPAA compliant?",
+    "Best claims automation platform for mid-sized carriers?",
+    "How does AI detect insurance fraud in 2026?"
+  ],
+  "competitors": [
+    "https://shift-technology.com",
+    "https://fraudx.ai",
+    "https://clara-analytics.com"
+  ],
+  "bot_checks": { "honeypot": false, "ts_delta_ms": 47820 }
+}

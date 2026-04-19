@@ -1,0 +1,131 @@
+# {{ intake.target.domain }} — SXO Audit
+
+**Job ID:** {{ intake.job_id }}
+**Tier:** {{ intake.tier }}
+**Prepared for:** {{ intake.contact.name }}, {{ intake.contact.company }}
+**Delivered:** {{ rendered_on }}
+**Primary market:** {{ intake.target.primary_market }}
+
+---
+
+## 1 — Executive summary
+
+{{ narratives.executive_summary }}
+
+**Headline numbers**
+
+| Metric | Value |
+|---|---|
+| Pages crawled | {{ rollups.pages_crawled }} |
+| Priority pages audited | {{ rollups.priority_pages }} |
+| Buyer prompts tested | {{ rollups.prompt_count }} |
+| LLM engine runs | {{ rollups.llm_runs }} |
+| Your brand cited | {{ rollups.target_citations }} / {{ rollups.llm_runs }} runs ({{ rollups.target_citation_pct }}%) |
+| Top competitor | {{ rollups.top_competitor.brand }} ({{ rollups.top_competitor.runs }} runs) |
+| High-severity findings | {{ rollups.severity_counts.high }} |
+| Medium-severity findings | {{ rollups.severity_counts.med }} |
+| Low-severity findings | {{ rollups.severity_counts.low }} |
+
+---
+
+## 2 — How you're cited today
+
+**Citation share by engine**
+
+| Engine | Runs | Your-brand citations | Your share |
+|---|---|---|---|
+{% for row in rollups.engine_table -%}
+| {{ row.engine }} | {{ row.runs }} | {{ row.target_citations }} | {{ row.target_share_pct }}% |
+{% endfor %}
+
+**Prompt-level coverage**
+
+| Prompt ID | Prompt | Engines citing you | Top brand cited |
+|---|---|---|---|
+{% for row in rollups.prompt_table -%}
+| {{ row.prompt_id }} | {{ row.prompt }} | {{ row.engines_citing_target }}/4 | {{ row.top_brand }} |
+{% endfor %}
+
+{{ narratives.citation_narrative }}
+
+---
+
+## 3 — Competitive landscape
+
+Competitors tested: {% for c in intake.competitors %}`{{ c }}`{% if not loop.last %}, {% endif %}{% endfor %}.
+
+**Brand share of voice across {{ rollups.llm_runs }} LLM runs**
+
+| Brand | Runs cited | Share |
+|---|---|---|
+{% for row in rollups.brand_table -%}
+| {{ row.brand }} | {{ row.runs }} | {{ row.share_pct }}% |
+{% endfor %}
+
+---
+
+## 4 — Findings
+
+{% for f in findings -%}
+### {{ f.id }} · {{ f.title }}
+
+**Severity:** {{ f.severity | upper }} &nbsp; **Category:** {{ f.category }} &nbsp; **Effort:** {{ f.effort }}
+
+**Evidence**
+
+{{ f.evidence.detail }}
+
+{% if 'urls' in f.evidence and f.evidence.urls %}Affected URLs:
+{% for u in f.evidence.urls %}- `{{ u }}`
+{% endfor %}{% endif %}
+
+**Impact.** {{ f.impact }}
+
+**Recommendation.** {{ f.recommendation }}
+
+**Estimated lift.** {{ f.est_lift }}
+
+---
+
+{% endfor %}
+## 5 — Recommendations, ranked by lift/effort
+
+{{ narratives.recommendations_narrative }}
+
+| Rank | Finding | Severity | Effort | Lift |
+|---|---|---|---|---|
+{% for f in recommendations_ranked -%}
+| {{ loop.index }} | {{ f.id }} — {{ f.title }} | {{ f.severity | upper }} | {{ f.effort }} | {{ f.est_lift }} |
+{% endfor %}
+
+---
+
+## 6 — 30/60/90 plan
+
+**Days 0–30 (foundation):** ship answer-first blocks on priority pages, add Product + FAQPage + BreadcrumbList schema, fix homepage LCP, refresh HIPAA page with dateModified.
+
+**Days 31–60 (authority):** author bylines + Person schema across features and compliance, submit Wikidata QID, publish transcripts for all product-demo video, rewrite thin meta descriptions.
+
+**Days 61–90 (measurement):** re-run the {{ rollups.prompt_count }}-prompt LLM panel, measure citation-share lift, A/B the new answer blocks, decide whether to expand to {{ intake.buyer_questions | length * 2 }} prompts next quarter.
+
+---
+
+## 7 — Methodology
+
+- **Crawl.** {{ rollups.pages_crawled }} pages starting from `{{ intake.target.sitemap_url }}`, depth-limited to 3, render-mode chromium, respecting robots.txt.
+- **LLM panel.** Four engines (ChatGPT gpt-4o, Perplexity sonar-pro, Gemini 2.0, Claude sonnet-4-5), each prompt run once per engine with web-search enabled. Run window: {{ rollups.run_window }}.
+- **Scoring.** Citation = the target domain appears in `sources_cited` for at least one brand in the response. Rank = brand's ordinal position in the response's brand list.
+- **Limitations.** Single run per engine per prompt (stochastic variance not modeled). No regional personalization. Cited-source extraction is best-effort; some engines surface citations inconsistently.
+
+---
+
+## 8 — Appendix
+
+- **Full findings list:** {{ findings | length }} items above.
+- **Raw crawl data:** `{{ intake.job_id }}/crawl.jsonl` ({{ rollups.pages_crawled }} rows).
+- **Raw LLM test data:** `{{ intake.job_id }}/llm_tests.jsonl` ({{ rollups.llm_runs }} rows).
+- **Intake record:** `{{ intake.job_id }}/intake.json`.
+
+---
+
+*Prepared by Web Cited · web-cited.com · one-time fixed-scope audit · all findings based on public-web data captured {{ rendered_on }}.*
