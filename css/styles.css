@@ -895,7 +895,7 @@ details.faq__item p {
 @media (min-width: 768px) {
   .footer__grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
 }
-.footer h4 {
+.footer h3 {
   color: var(--paper-white);
   font-size: 0.8rem;
   letter-spacing: 0.18em;
