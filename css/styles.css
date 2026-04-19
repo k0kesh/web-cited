@@ -843,6 +843,7 @@ details.faq__item p {
 }
 .cta-band h2 { color: var(--paper-white); }
 .cta-band .lead { color: var(--slate-200); }
+.cta-band .eyebrow { color: var(--slate-300); }
 .cta-band .btn { background: var(--paper-white); color: var(--ink); border-color: var(--paper-white); }
 .cta-band .btn--ghost {
   background: transparent;
