@@ -18,7 +18,8 @@
   --slate-100: #ededea;
   --paper: #f4f3ef;
   --paper-white: #ffffff;
-  --accent: #ff4d00;       /* signal orange, sparing use */
+  --accent: #CC0000;       /* signal red, AA on paper (~5.25:1) */
+  --accent-ink: #8b0000;   /* darker red for hover/active states */
   --focus: #0047ff;        /* high-contrast focus ring */
 
   --font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, "Segoe UI", Arial, sans-serif;
@@ -1292,6 +1293,68 @@ details.faq__item p {
   background: var(--paper-white);
 }
 .form-success h2 { margin-top: 0; }
+
+/* ---------- Sample-report screenshots ------------------------------- */
+.sample-shots {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin-top: 1.5rem;
+}
+@media (min-width: 720px) {
+  .sample-shots { grid-template-columns: 1fr 1fr; }
+  .sample-shots .sample-shots__hero { grid-column: 1 / -1; }
+}
+.sample-shot {
+  border: var(--rule);
+  background: var(--paper-white);
+  padding: clamp(0.75rem, 1.5vw, 1.25rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.sample-shot img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--slate-200);
+  display: block;
+}
+.sample-shot figcaption {
+  font-size: 0.875rem;
+  color: var(--slate-700);
+  line-height: 1.5;
+}
+.sample-shot figcaption strong {
+  display: block;
+  color: var(--ink);
+  font-weight: 800;
+  margin-bottom: 0.15rem;
+  letter-spacing: -0.005em;
+}
+.sample-shot--accent {
+  border-left: 4px solid var(--accent);
+}
+
+.case-card {
+  border: var(--rule);
+  background: var(--paper-white);
+  padding: clamp(0.75rem, 1.5vw, 1.25rem);
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.case-card img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--slate-200);
+  display: block;
+}
+.case-card figcaption {
+  font-size: 0.875rem;
+  color: var(--slate-700);
+  line-height: 1.5;
+}
 
 /* ---------- Print --------------------------------------------------- */
 @media print {
