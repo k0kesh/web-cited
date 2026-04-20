@@ -221,6 +221,18 @@
           </div>
 
           <div class="form__row">
+            <label for="brand_qualifier">Brand qualifier (optional, 1-3 words)</label>
+            <input id="brand_qualifier"
+                   name="brand_qualifier"
+                   type="text"
+                   inputmode="text"
+                   maxlength="60"
+                   autocomplete="off"
+                   placeholder="molecular diagnostics" />
+            <p class="hint">Only if your brand name collides with a common word (e.g. Cepheid the company vs. Cepheid the variable star, Apple the company vs. the fruit). Adds a short category tag to entity-graph and SERP lookups so the audit resolves to the right entity.</p>
+          </div>
+
+          <div class="form__row">
             <label for="buyer_questions">Top buyer questions (3 to 5)<span class="req" aria-hidden="true">*</span></label>
             <textarea id="buyer_questions"
                       name="buyer_questions"
