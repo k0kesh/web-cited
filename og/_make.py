@@ -13,6 +13,9 @@ BLACK = "/System/Library/Fonts/Supplemental/Arial Black.ttf"
 BOLD = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
 REG = "/System/Library/Fonts/Supplemental/Arial.ttf"
 
+TRUST_NAMES = ["Tenet Healthcare", "Omni Hotels & Resorts", "Oakley", "Ray-Ban", "Arnette", "Revo"]
+TRUST_EYEBROW = "METHODOLOGY DISTILLED FROM IN-HOUSE WORK AT"
+
 pages = [
     ("home", "SXO Audits for\nSEO, AEO & GEO", "$5,000 one-time audit. No retainer. No upsell."),
     ("services", "One audit.\nEvery engine.", "SEO, AEO, GEO, and the off-site content engines quote."),
@@ -52,7 +55,16 @@ for slug, headline, sub in pages:
 
     # Subhead
     sub_font = ImageFont.truetype(BOLD, 34)
-    d.text((60, H - 130), sub, font=sub_font, fill=SLATE)
+    d.text((60, H - 190), sub, font=sub_font, fill=SLATE)
+
+    # Trust strip: small eyebrow + flattened brand-experience list.
+    # Keeps the copy-level promise honest (past in-house work, not clients)
+    # and matches the on-page experience-strip treatment.
+    eyebrow_font = ImageFont.truetype(BOLD, 14)
+    d.text((60, H - 115), TRUST_EYEBROW, font=eyebrow_font, fill=SLATE)
+    trust_font = ImageFont.truetype(BOLD, 20)
+    trust_line = "  ·  ".join(TRUST_NAMES)
+    d.text((60, H - 90), trust_line, font=trust_font, fill=INK)
 
     # Bottom URL
     url_font = ImageFont.truetype(BOLD, 22)
