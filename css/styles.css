@@ -1358,6 +1358,23 @@ details.faq__item p {
   line-height: 1.5;
 }
 
+/* Bare image strip (founder experience trust bar) */
+.experience-strip {
+  margin: 0 auto;
+  max-width: 100%;
+}
+.experience-strip img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Vertical-compact section modifier: pairs with .experience-strip */
+.section--strip {
+  padding-top: clamp(1.25rem, 2.5vw, 2rem);
+  padding-bottom: clamp(1.25rem, 2.5vw, 2rem);
+}
+
 /* ---------- Print --------------------------------------------------- */
 @media print {
   .site-header, .footer, .cta-band, .nav-toggle, .cookie-notice { display: none; }
