@@ -107,12 +107,9 @@
         <h2 id="intake-form-head" class="sr-only">Audit intake form.</h2>
         <form class="form"
               id="intake-form"
-              action="https://formspree.io/f/meevlqkj"
+              action="https://api.web-cited.com/intake"
               method="POST"
               novalidate>
-
-          <input type="hidden" name="_next" value="https://web-cited.com/thanks.html" />
-          <input type="hidden" name="_subject" value="New SXO audit intake" />
 
           <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"
                  style="position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none;" aria-hidden="true" />
@@ -416,7 +413,9 @@
       if (ts) ts.value = String(Date.now());
     }());
 
-    // AJAX submission to Formspree (keeps user on-page, shows success state)
+    // AJAX submission to the web-cited intake Worker (api.web-cited.com/intake).
+    // Serializes the form as JSON (the Worker expects application/json),
+    // keeps the user on-page, and swaps in the success panel on 200.
     (function () {
       var form = document.getElementById('intake-form');
       var success = document.getElementById('intake-success');
@@ -435,20 +434,22 @@
           return;
         }
 
-        if (!form.action || form.action.indexOf('YOUR_FORMSPREE_ID') !== -1) {
-          // Endpoint not configured - block submission so the operator sees this state
-          // rather than losing leads to a 404. Replace YOUR_FORMSPREE_ID in the form action.
-          e.preventDefault();
-          alert('Form endpoint not configured yet. Email hello@web-cited.com directly.');
-          return;
-        }
         e.preventDefault();
         var submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
+
+        // Collapse FormData → plain object. The intake form has no duplicate
+        // field names (radios are single-value, no multi-select checkboxes),
+        // so Object.fromEntries is safe here.
+        var payload = Object.fromEntries(new FormData(form));
+
         fetch(form.action, {
           method: 'POST',
-          body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
+          body: JSON.stringify(payload),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
         }).then(function (resp) {
           if (resp.ok) {
             form.hidden = true;
