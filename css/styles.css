@@ -1242,6 +1242,7 @@ details.faq__item p {
   border-radius: 50%;
 }
 .form .tier-opt__label { font-weight: 800; letter-spacing: 0.02em; }
+.form .tier-opt__badge { font-weight: 400; color: var(--slate-600); }
 .form .tier-opt__scope {
   font-size: 0.8125rem;
   font-weight: 400;
