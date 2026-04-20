@@ -1,81 +1,101 @@
 User-agent: *
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 # Explicitly welcome generative-engine and LLM crawlers (GEO signal)
 User-agent: GPTBot
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: OAI-SearchBot
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: ChatGPT-User
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: ClaudeBot
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: Claude-Web
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: anthropic-ai
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: PerplexityBot
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: Perplexity-User
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: Google-Extended
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: Googlebot
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: Googlebot-Image
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: Bingbot
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: Applebot
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: Applebot-Extended
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: DuckDuckBot
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: Amazonbot
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: Meta-ExternalAgent
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: Bytespider
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 User-agent: CCBot
 Allow: /
 Disallow: /assets/success-case-dx.png
+Disallow: /assets/experience-strip.png
 
 Sitemap: https://web-cited.com/sitemap.xml
