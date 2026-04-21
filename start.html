@@ -157,16 +157,32 @@
 
           <div class="form__row form__row--split">
             <div>
-              <label for="contact_name">Your name<span class="req" aria-hidden="true">*</span></label>
-              <input id="contact_name"
-                     name="contact_name"
+              <label for="first_name">First name<span class="req" aria-hidden="true">*</span></label>
+              <input id="first_name"
+                     name="first_name"
                      type="text"
                      inputmode="text"
-                     autocomplete="name"
+                     autocomplete="given-name"
                      autocapitalize="words"
+                     maxlength="100"
                      required
-                     placeholder="Jane Doe" />
+                     placeholder="Jane" />
             </div>
+            <div>
+              <label for="last_name">Last name<span class="req" aria-hidden="true">*</span></label>
+              <input id="last_name"
+                     name="last_name"
+                     type="text"
+                     inputmode="text"
+                     autocomplete="family-name"
+                     autocapitalize="words"
+                     maxlength="100"
+                     required
+                     placeholder="Doe" />
+            </div>
+          </div>
+
+          <div class="form__row form__row--split">
             <div>
               <label for="company">Company<span class="req" aria-hidden="true">*</span></label>
               <input id="company"
