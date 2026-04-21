@@ -1382,21 +1382,56 @@ details.faq__item p {
   a { color: #000; text-decoration: underline; }
 }
 
-/* ---------- Radio group (local_presence on /start) ------------------- */
+/* ---------- Radio group (local_presence on /start) -------------------
+ * Reset the eyebrow-style inheritance from `.form label, .form legend`
+ * the same way `.form .check` does for the acknowledgement checkbox —
+ * radio descriptions are body text, not uppercase-mono caps. */
 .radio-group { border: 0; padding: 0; margin: 0; }
-.radio-group > legend { font-weight: 600; margin-bottom: 4px; }
+.radio-group > legend {
+  /* Match the baseline .form legend weight (700) — was 600, visibly
+   * lighter than every other legend on the page. */
+  font-weight: 700;
+  margin-bottom: 4px;
+}
 .radio-group > .hint { margin: 0 0 12px; }
 .radio-group .radio {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
   align-items: flex-start;
-  gap: 10px;
   padding: 10px 0;
   border-bottom: 1px solid var(--slate-200);
+  /* Same reset as `.form .check` so the <label> itself doesn't inherit
+   * eyebrow styling (affects cursor, not text since text lives in the
+   * inner span, but keeps the label as a clean body-text container). */
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--slate-800);
+  line-height: 1.5;
+  cursor: pointer;
 }
 .radio-group .radio:last-child { border-bottom: 0; }
-.radio-group .radio input { margin-top: 4px; flex-shrink: 0; }
+.radio-group .radio input[type="radio"] {
+  /* Match the checkbox sizing + ink-black accent used on `.form .check`
+   * so the control reads as part of the same form system, not a raw
+   * browser-default blue radio. */
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-top: 0.15rem;
+  accent-color: var(--ink);
+  flex-shrink: 0;
+}
 .radio-group .radio__label {
-  font-size: 0.95rem;
+  /* Explicitly override the inherited mono-caps-bold from `.form label`
+   * so the description renders as body text. */
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
   line-height: 1.5;
   color: var(--slate-800);
 }
