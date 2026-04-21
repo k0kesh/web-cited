@@ -1381,3 +1381,22 @@ details.faq__item p {
   body { background: #fff; color: #000; }
   a { color: #000; text-decoration: underline; }
 }
+
+/* ---------- Radio group (local_presence on /start) ------------------- */
+.radio-group { border: 0; padding: 0; margin: 0; }
+.radio-group > legend { font-weight: 600; margin-bottom: 4px; }
+.radio-group > .hint { margin: 0 0 12px; }
+.radio-group .radio {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--slate-200);
+}
+.radio-group .radio:last-child { border-bottom: 0; }
+.radio-group .radio input { margin-top: 4px; flex-shrink: 0; }
+.radio-group .radio__label {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--slate-800);
+}

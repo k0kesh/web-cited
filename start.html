@@ -303,6 +303,25 @@
           </div>
 
           <div class="form__row">
+            <fieldset class="radio-group">
+              <legend>Local presence<span class="req" aria-hidden="true">*</span></legend>
+              <p class="hint">Tells us whether to audit your Google Business Profile and local search pack.</p>
+              <label class="radio">
+                <input type="radio" name="local_presence" value="storefront" required>
+                <span class="radio__label"><strong>Storefront</strong> &mdash; Customers come to a physical address (retail, restaurant, clinic, service hub).</span>
+              </label>
+              <label class="radio">
+                <input type="radio" name="local_presence" value="service_area" required>
+                <span class="radio__label"><strong>Service area</strong> &mdash; You travel to customers within a defined region (plumber, installer, mobile service, regional consultant).</span>
+              </label>
+              <label class="radio">
+                <input type="radio" name="local_presence" value="online_only" required>
+                <span class="radio__label"><strong>Online-only</strong> &mdash; No physical customer touchpoint. Discovery is national or global.</span>
+              </label>
+            </fieldset>
+          </div>
+
+          <div class="form__row">
             <label for="sitemap">Sitemap URL (optional, speeds things up)</label>
             <input id="sitemap"
                    name="sitemap"
