@@ -371,6 +371,11 @@
             <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITEKEY" data-size="flexible"></div>
           -->
 
+          <div id="intake-error-summary" class="form-error-summary" hidden aria-labelledby="intake-error-summary-title">
+            <p id="intake-error-summary-title" class="form-error-summary__title">Please fix the following before submitting.</p>
+            <ul id="intake-error-summary-list"></ul>
+          </div>
+
           <div class="submit-row">
             <button class="btn btn--primary btn--lg" type="submit">Submit intake</button>
             <span class="submit-note">We reply inside 1 business day · no sales calls</span>
@@ -379,12 +384,25 @@
           <p class="hint" style="max-width:60ch;">By submitting, you agree to our <a href="privacy.html">privacy policy</a>. No data is sent to third-party analytics; see the policy for the short version.</p>
         </form>
 
+        <div id="intake-live" class="form-live" role="status" aria-live="polite" aria-atomic="true"></div>
+
         <div id="intake-success" class="form-success" hidden role="status" aria-live="polite">
           <span class="eyebrow">Received</span>
           <h2>Got it - thanks.</h2>
           <p>Your intake is in our inbox. We'll reply to the email you provided within one business day, confirm scope and tier, and send an invoice. The moment payment clears, crawling begins.</p>
           <p>Nothing else is required from you until the report lands.</p>
           <p><a class="btn btn--ghost" href="index.html">Back to home</a></p>
+        </div>
+
+        <div id="intake-retry" class="form-retry" hidden role="alert" aria-live="assertive">
+          <span class="eyebrow">Couldn't send</span>
+          <h2>Your intake is still here.</h2>
+          <p>We couldn't reach our intake server. This is almost always a flaky connection, not a problem with your answers.</p>
+          <p>Your form is still filled in below. Try again, or email <a href="mailto:hello@web-cited.com">hello@web-cited.com</a> and paste your answers in the body.</p>
+          <div class="submit-row">
+            <button class="btn btn--primary" id="intake-retry-button" type="button">Try again</button>
+            <span class="submit-note">Your answers are kept on-page</span>
+          </div>
         </div>
       </div>
     </section>
@@ -449,33 +467,357 @@
     }());
 
     // AJAX submission to the web-cited intake Worker (api.web-cited.com/intake).
-    // Serializes the form as JSON (the Worker expects application/json),
-    // keeps the user on-page, and swaps in the success panel on 200.
+    //
+    // Three failure modes are surfaced inline (no more generic alerts):
+    //   1. Pre-submit: form.checkValidity() per field → inline messages
+    //      under each invalid input, scroll + focus first, live-region
+    //      announce, summary banner above submit.
+    //   2. Server 400: worker returns `{ok:false, error:"<field>: <reason>"}`.
+    //      We parse it, look up a friendly sentence for the (field, reason)
+    //      pair, and anchor it to the correct input the same way (1) does.
+    //   3. Fetch rejected / 5xx: dedicated retry panel with "Try again"
+    //      button. Form stays populated so the user can resubmit as-is.
     (function () {
       var form = document.getElementById('intake-form');
       var success = document.getElementById('intake-success');
-      if (!form || !success) return;
+      var retryPanel = document.getElementById('intake-retry');
+      var retryButton = document.getElementById('intake-retry-button');
+      var summary = document.getElementById('intake-error-summary');
+      var summaryList = document.getElementById('intake-error-summary-list');
+      var live = document.getElementById('intake-live');
+      if (!form || !success || !retryPanel || !retryButton || !summary || !summaryList || !live) return;
 
+      // ---- field label map: the user-visible name, singular noun phrase ----
+      var FIELD_LABELS = {
+        tier: 'Audit tier',
+        first_name: 'First name',
+        last_name: 'Last name',
+        company: 'Company',
+        email: 'Work email',
+        website: 'Website URL',
+        business_one_liner: 'Business description',
+        brand_qualifier: 'Brand qualifier',
+        buyer_questions: 'Top buyer questions',
+        competitors: 'Primary competitors',
+        geo_focus: 'Primary market',
+        cms: 'CMS / stack',
+        local_presence: 'Local presence',
+        sitemap: 'Sitemap URL',
+        audit_type: 'What are you auditing',
+        referrer: 'How did you hear about us',
+        acknowledgement: 'Acknowledgement'
+      };
+
+      // ---- one error container per named field ----
+      // Build at load time so aria-describedby is stable for assistive tech.
+      // The container is inserted into the same structural parent as the
+      // input so it flows naturally with page layout.
+      var ERROR_EL = {};           // name -> <p class="field-error">
+      var FIELD_ROOT = {};         // name -> wrapping element (for radio fieldsets + single inputs)
+      var FIRST_FOCUSABLE = {};    // name -> the element to focus/scroll on error
+
+      (function installErrorContainers() {
+        // Deduplicate by field name — radios share a name.
+        var seen = {};
+        var inputs = form.querySelectorAll('[name]');
+        for (var i = 0; i < inputs.length; i++) {
+          var el = inputs[i];
+          var name = el.name;
+          if (!name || name === '_gotcha' || name === 'ts_loaded') continue;
+          if (seen[name]) continue;
+          seen[name] = true;
+
+          var errEl = document.createElement('p');
+          errEl.className = 'field-error';
+          errEl.id = 'err-' + name;
+          errEl.hidden = true;
+
+          // Error container placement:
+          //   - radio: appended inside the fieldset (after the last <label.radio>)
+          //   - checkbox (acknowledgement): after the wrapping <label.check>
+          //   - everything else: immediately after the input so it sits
+          //     under the control inside whatever wrapper exists (.form__row
+          //     or .form__row--split > div).
+          if (el.type === 'radio') {
+            var fs = el.closest('fieldset');
+            fs.appendChild(errEl);
+          } else if (el.type === 'checkbox') {
+            var lbl = el.closest('label') || el;
+            lbl.parentNode.insertBefore(errEl, lbl.nextSibling);
+          } else {
+            el.parentNode.insertBefore(errEl, el.nextSibling);
+          }
+
+          // Wire aria-describedby — preserve any existing ids (hints use them indirectly
+          // via proximity, but some inputs may have aria-describedby set explicitly).
+          var describers = (el.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+          if (describers.indexOf(errEl.id) === -1) describers.push(errEl.id);
+          // For radio groups, set describedby on every radio so focus order works.
+          if (el.type === 'radio') {
+            var radios = form.querySelectorAll('input[name="' + name + '"]');
+            for (var r = 0; r < radios.length; r++) {
+              var rd = (radios[r].getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+              if (rd.indexOf(errEl.id) === -1) rd.push(errEl.id);
+              radios[r].setAttribute('aria-describedby', rd.join(' '));
+            }
+          } else {
+            el.setAttribute('aria-describedby', describers.join(' '));
+          }
+
+          ERROR_EL[name] = errEl;
+          FIELD_ROOT[name] = (el.type === 'radio') ? el.closest('fieldset') : el;
+          FIRST_FOCUSABLE[name] = el; // first input for this name — radios: first radio
+
+          // Clear error as user fixes it. `input` covers text/textarea/select;
+          // `change` covers radios/checkboxes/selects across browsers.
+          (function (fieldName) {
+            function handler() { clearFieldError(fieldName); }
+            if (el.type === 'radio' || el.type === 'checkbox' || el.tagName === 'SELECT') {
+              var same = form.querySelectorAll('[name="' + fieldName + '"]');
+              for (var k = 0; k < same.length; k++) same[k].addEventListener('change', handler);
+            } else {
+              el.addEventListener('input', handler);
+            }
+          }(name));
+        }
+      }());
+
+      function setFieldError(name, message) {
+        var errEl = ERROR_EL[name];
+        if (!errEl) return;
+        errEl.textContent = message;
+        errEl.hidden = false;
+        var root = FIELD_ROOT[name];
+        if (root) {
+          root.classList.add('field--invalid');
+          // For single inputs, mark aria-invalid. For fieldsets, mark every radio.
+          if (root.tagName === 'FIELDSET') {
+            var radios = root.querySelectorAll('input');
+            for (var i = 0; i < radios.length; i++) radios[i].setAttribute('aria-invalid', 'true');
+          } else {
+            root.setAttribute('aria-invalid', 'true');
+          }
+        }
+      }
+      function clearFieldError(name) {
+        var errEl = ERROR_EL[name];
+        if (!errEl) return;
+        errEl.hidden = true;
+        errEl.textContent = '';
+        var root = FIELD_ROOT[name];
+        if (root) {
+          root.classList.remove('field--invalid');
+          if (root.tagName === 'FIELDSET') {
+            var radios = root.querySelectorAll('input');
+            for (var i = 0; i < radios.length; i++) radios[i].removeAttribute('aria-invalid');
+          } else {
+            root.removeAttribute('aria-invalid');
+          }
+        }
+      }
+      function clearAllErrors() {
+        for (var name in ERROR_EL) if (Object.prototype.hasOwnProperty.call(ERROR_EL, name)) clearFieldError(name);
+        summary.hidden = true;
+        summaryList.innerHTML = '';
+      }
+
+      // ---- message map: (field, reason) -> friendly sentence ----
+      function messageForPreSubmit(el, label) {
+        // Prefer specific HTML5 ValidityState flags over the generic :invalid.
+        var v = el.validity;
+        if (!v) return 'Please fill in ' + label + '.';
+        if (v.valueMissing) {
+          if (el.type === 'radio') return 'Please choose an option for ' + label + '.';
+          if (el.type === 'checkbox') return 'Please check ' + label + ' to continue.';
+          if (el.tagName === 'SELECT') return 'Please select ' + label + '.';
+          return 'Please fill in ' + label + '.';
+        }
+        if (v.typeMismatch) {
+          if (el.type === 'email') return 'Please enter a valid work email (like jane@acme.com).';
+          if (el.type === 'url') return 'Please enter a full URL starting with https:// (like https://acme.com).';
+        }
+        if (v.tooShort) return label + ' is too short — please expand it a bit.';
+        if (v.tooLong) return label + ' is too long — please shorten it.';
+        if (v.patternMismatch) return 'Please check the format of ' + label + '.';
+        return 'Please review ' + label + '.';
+      }
+      function messageForServer(name, reason, label) {
+        // Worker ValidationError reasons (from src/index.ts):
+        //   "required string", "too short (N < M)", "too long (N > M)",
+        //   "must be a string", "must be 'yes'",
+        //   "unknown tier: X", "unknown: X" (audit_type / local_presence)
+        if (/required string/i.test(reason)) return 'Please fill in ' + label + '.';
+        if (/too short/i.test(reason))       return label + ' is too short — please expand it a bit.';
+        if (/too long/i.test(reason))        return label + ' is too long — please shorten it.';
+        if (/must be 'yes'/i.test(reason))   return 'Please acknowledge the audit terms to continue.';
+        if (/must be a string/i.test(reason))return 'Please enter text for ' + label + '.';
+        if (/unknown tier/i.test(reason))    return 'Please choose one of the three audit tiers.';
+        if (/^unknown:/i.test(reason) && name === 'audit_type')     return 'Please choose one of the listed audit types.';
+        if (/^unknown:/i.test(reason) && name === 'local_presence') return 'Please choose one of the three local-presence options.';
+        // Generic fallback — still field-specific.
+        return 'Please review ' + label + ' (' + reason + ').';
+      }
+
+      // ---- summary-above-submit builder ----
+      // Each invalid field shows up as a bullet that links to the field.
+      // Clicking the bullet scrolls + focuses the input the same way a
+      // native <label for=""> does.
+      function showSummary(errors) {
+        summaryList.innerHTML = '';
+        for (var i = 0; i < errors.length; i++) {
+          var li = document.createElement('li');
+          var a = document.createElement('a');
+          a.href = '#' + (FIRST_FOCUSABLE[errors[i].name].id || 'err-' + errors[i].name);
+          a.textContent = errors[i].message;
+          a.addEventListener('click', (function (name) {
+            return function (ev) {
+              ev.preventDefault();
+              focusField(name);
+            };
+          }(errors[i].name)));
+          li.appendChild(a);
+          summaryList.appendChild(li);
+        }
+        summary.hidden = false;
+      }
+
+      function focusField(name) {
+        var target = FIRST_FOCUSABLE[name];
+        if (!target) return;
+        try { target.focus({ preventScroll: true }); } catch (e) { target.focus(); }
+        var scrollTarget = FIELD_ROOT[name].tagName === 'FIELDSET' ? FIELD_ROOT[name] : target;
+        scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      function announce(msg) {
+        // Toggle the text to force SR re-announcement even on identical msgs.
+        live.textContent = '';
+        setTimeout(function () { live.textContent = msg; }, 50);
+      }
+
+      // ---- pre-submit validation ----
+      function validateBeforeSubmit() {
+        clearAllErrors();
+        var errors = [];
+        // Iterate every named field in declared order so the summary matches page order.
+        var seen = {};
+        var inputs = form.querySelectorAll('[name]');
+        for (var i = 0; i < inputs.length; i++) {
+          var el = inputs[i];
+          var name = el.name;
+          if (!name || name === '_gotcha' || name === 'ts_loaded') continue;
+          if (seen[name]) continue;
+          // For radio groups, check across all same-name inputs — checkValidity()
+          // on a single radio only reports valueMissing when no sibling is checked,
+          // so one check is enough.
+          if (el.type === 'radio') {
+            var group = form.querySelectorAll('input[name="' + name + '"]');
+            var groupValid = Array.prototype.some.call(group, function (g) { return g.checked; });
+            if (!groupValid && el.required) {
+              seen[name] = true;
+              var msg = messageForPreSubmit(el, FIELD_LABELS[name] || name);
+              setFieldError(name, msg);
+              errors.push({ name: name, message: msg });
+              continue;
+            }
+            seen[name] = true;
+            continue;
+          }
+          seen[name] = true;
+          if (!el.checkValidity()) {
+            var m = messageForPreSubmit(el, FIELD_LABELS[name] || name);
+            setFieldError(name, m);
+            errors.push({ name: name, message: m });
+          }
+        }
+        if (errors.length > 0) {
+          showSummary(errors);
+          announce(errors.length === 1
+            ? 'One field needs attention.'
+            : errors.length + ' fields need attention.');
+          focusField(errors[0].name);
+          return false;
+        }
+        return true;
+      }
+
+      // ---- server 400 handler ----
+      // Expected shape: { ok: false, error: "<field>: <reason>" }
+      function surfaceServerError(payload) {
+        clearAllErrors();
+        var raw = (payload && payload.error) || '';
+        var match = /^([a-z_]+):\s*(.+)$/.exec(String(raw));
+        if (match) {
+          var name = match[1];
+          var reason = match[2];
+          if (name === '_root') {
+            announce('Something was off with the submission. Please review and try again.');
+            return { name: null, message: raw };
+          }
+          var label = FIELD_LABELS[name] || name;
+          var msg = messageForServer(name, reason, label);
+          if (ERROR_EL[name]) {
+            setFieldError(name, msg);
+            showSummary([{ name: name, message: msg }]);
+            focusField(name);
+            announce(msg);
+            return { name: name, message: msg };
+          }
+        }
+        // Fallback: server returned an unknown shape. Surface on the summary
+        // banner only — don't pin to a field we can't identify.
+        summaryList.innerHTML = '';
+        var li = document.createElement('li');
+        li.textContent = 'Something was off with the submission: ' + (raw || 'unknown error') + '.';
+        summaryList.appendChild(li);
+        summary.hidden = false;
+        announce('Something was off with the submission. Please review and try again.');
+        return { name: null, message: raw };
+      }
+
+      // ---- network-failure panel ----
+      function showRetryPanel() {
+        form.hidden = true;
+        success.hidden = true;
+        retryPanel.hidden = false;
+        retryPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      function hideRetryPanel() {
+        retryPanel.hidden = true;
+        form.hidden = false;
+      }
+      retryButton.addEventListener('click', function () {
+        hideRetryPanel();
+        // Programmatically re-fire submit so the normal path runs (including
+        // pre-submit validation, which is fine — payload hasn't changed).
+        if (typeof form.requestSubmit === 'function') form.requestSubmit();
+        else form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+      });
+
+      // ---- submit handler ----
       form.addEventListener('submit', function (e) {
         // Bot trap: honeypot filled
         var hp = form.querySelector('input[name="_gotcha"]');
         if (hp && hp.value) { e.preventDefault(); return; }
 
         // Bot trap: form submitted unrealistically fast (<3s after page load)
-        var ts = parseInt(form.querySelector('#ts_loaded').value || '0', 10);
+        var tsEl = form.querySelector('#ts_loaded');
+        var ts = parseInt((tsEl && tsEl.value) || '0', 10);
         if (ts && (Date.now() - ts) < 3000) {
           e.preventDefault();
-          alert('Please take a moment to review your answers before submitting.');
+          // Treat as a field-level nudge rather than an alert().
+          announce('Please take a moment to review your answers before submitting.');
           return;
         }
 
         e.preventDefault();
+
+        // Pre-submit validation — never hits the network if the form's invalid.
+        if (!validateBeforeSubmit()) return;
+
         var submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
 
-        // Collapse FormData → plain object. The intake form has no duplicate
-        // field names (radios are single-value, no multi-select checkboxes),
-        // so Object.fromEntries is safe here.
         var payload = Object.fromEntries(new FormData(form));
 
         fetch(form.action, {
@@ -488,15 +830,24 @@
         }).then(function (resp) {
           if (resp.ok) {
             form.hidden = true;
+            retryPanel.hidden = true;
             success.hidden = false;
             success.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+          }
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit intake'; }
+          // Attempt to parse JSON. A 400 from the worker is application/json;
+          // a 5xx or CDN error page may not parse — fall through to retry panel.
+          if (resp.status >= 400 && resp.status < 500) {
+            resp.json().then(surfaceServerError).catch(function () {
+              surfaceServerError({ error: 'server returned ' + resp.status });
+            });
           } else {
-            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit intake'; }
-            alert('Something went wrong - please email hello@web-cited.com directly.');
+            showRetryPanel();
           }
         }).catch(function () {
           if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit intake'; }
-          alert('Network error - please email hello@web-cited.com directly.');
+          showRetryPanel();
         });
       });
     }());
