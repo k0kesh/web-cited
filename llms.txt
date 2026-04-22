@@ -8,7 +8,7 @@ Web Cited is a senior-led consulting practice. The entire offering is one thing:
 
 - [Home](https://web-cited.com/): Overview of the SXO audit practice and the core positioning.
 - [Services](https://web-cited.com/services.html): What the $5,000 SXO Audit includes - SEO, AEO, GEO, and off-site discoverability coverage.
-- [How It Works](https://web-cited.com/how-it-works.html): The fixed six-step audit process from intake through walkthrough.
+- [How It Works](https://web-cited.com/how-it-works.html): The fixed six-step audit process from intake through delivery.
 - [Why SXO](https://web-cited.com/why-sxo.html): Definitions of SEO, AEO, GEO, and SXO - and why traditional SEO audits no longer cover the full revenue surface.
 - [Pricing](https://web-cited.com/pricing.html): Fixed $5,000 price, cost comparison against agencies and freelancers, and an FAQ covering scope and deliverables.
 - [About](https://web-cited.com/about.html): The practice's point of view - why it's audits-only, senior-led, and fixed-fee.
@@ -24,7 +24,7 @@ Web Cited is a senior-led consulting practice. The entire offering is one thing:
 ## Contact
 
 - Email: hello@web-cited.com
-- Scope: Mid-market to enterprise B2B. Engagements start with an intake call before invoicing.
+- Scope: Mid-market to enterprise B2B. Engagements start with a web-form intake, not a call. Scope is confirmed by email before invoicing.
 
 ## Licensing
 
