@@ -1,13 +1,16 @@
 #!/bin/bash
-# privacy-notify.sh — Post a GitHub Issue in k0kesh/web-cited and send an
-# email via Resend, using the drift report written by privacy-audit.sh.
-# Only invoked when the audit step flagged drift=true.
+# privacy-notify.sh — Post a GitHub Issue in k0kesh/web-cited using the
+# drift report written by privacy-audit.sh. Only invoked when the audit
+# step flagged drift=true.
+#
+# The Issue is assigned to k0kesh, which triggers GitHub's built-in
+# assignment email to the notification address on file. That email
+# covers the "tell me drift happened" use case; we intentionally do
+# not send a separate transactional email.
 #
 # Env (set by the caller workflow):
-#   GH_TOKEN           GITHUB_TOKEN with issues:write
-#   RESEND_API_TOKEN   Resend API key
-#   NOTIFY_EMAIL       Recipient address (plain email, no display name)
-#   CUTOFF             YYYY-MM-DD of last privacy.html commit (for subject line)
+#   GH_TOKEN   GITHUB_TOKEN with issues:write
+#   CUTOFF     YYYY-MM-DD of last privacy.html commit (for subject line)
 
 set -euo pipefail
 
@@ -37,32 +40,3 @@ gh issue create \
   --title "Privacy policy review due — drift detected $TODAY" \
   --body "$BODY" \
   --assignee k0kesh
-
-if [ -z "${RESEND_API_TOKEN:-}" ]; then
-  echo "::warning::RESEND_API_TOKEN not set — GitHub Issue created but email skipped."
-  exit 0
-fi
-
-echo "---- Sending email via Resend ----"
-PAYLOAD=$(jq -nc \
-  --arg from "Web Cited Audit <intake@send.web-cited.com>" \
-  --arg to "$NOTIFY_EMAIL" \
-  --arg subject "Privacy policy review due — drift detected $TODAY" \
-  --arg text "$BODY" \
-  '{from: $from, to: [$to], subject: $subject, text: $text}')
-
-HTTP_STATUS=$(curl -sS -o /tmp/resend-response.json -w '%{http_code}' \
-  -X POST https://api.resend.com/emails \
-  -H "Authorization: Bearer $RESEND_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d "$PAYLOAD")
-
-if [ "$HTTP_STATUS" -lt 200 ] || [ "$HTTP_STATUS" -ge 300 ]; then
-  echo "::error::Resend returned HTTP $HTTP_STATUS"
-  cat /tmp/resend-response.json
-  exit 1
-fi
-
-echo "Email sent. Resend response:"
-cat /tmp/resend-response.json
-echo
