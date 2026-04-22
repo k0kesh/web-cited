@@ -1,58 +1,37 @@
 # Audit Pipeline Wiring — Phase 0+1 Design Spec
 
-**Date:** 2026-04-22
+**Date:** 2026-04-22 (revised same-day after codebase audit)
 **Author:** Craig Kokesh (via brainstorming with Claude)
 **Status:** Design approved; implementation plan pending
 **Related specs:**
 - `2026-04-21-audit-report-design.md` — deliverable content + design system
 - `2026-04-21-email-refresh-and-delivery.md` — `sendDeliveryEmail` consumer (shipped)
+- `docs/superpowers/specs/2026-04-20-hubspot-capture-everything-design.md` (in `web-cited-api` repo) — the AST-enforced single-write-path pattern this spec builds on
 
 ---
 
 ## Purpose
 
-Wire the Cloudflare Worker (`web-cited-api`, TypeScript) and the audit pipeline (`web-cited-pipeline`, Python) into a single coherent system with clean ownership boundaries. The invoice-paid event in the Worker should cause the Python pipeline to run an audit and call back with a signed completion webhook; the Worker then sends the already-built delivery email.
+Wire the Cloudflare Worker (`web-cited-api`, TypeScript) and the audit pipeline (`web-cited-pipeline`, Python) into a single coherent system with clean ownership boundaries. The invoice-paid event in the Worker should cause the Python pipeline to run an audit and call back with a bearer-authed completion request; the Worker then sends the already-built delivery email and logs `report_delivered` via the existing capture path.
 
-**Scope of this spec:** Phase 0+1 of the two-service architecture — just the transport and ownership boundary. No statistical methodology work, no new checks, no report redesign. The pipeline keeps producing the same deliverables it produces today; we're moving *where* and *how* it is triggered.
+**Scope of this spec:** Phase 0+1 of the two-service architecture — just the transport and the delivery-email ownership boundary. No statistical methodology work, no new checks, no report redesign, **and no broad migration of other pipeline HubSpot writes**. The pipeline keeps producing the same deliverables it produces today; we're wiring *where* and *how* the final delivery email is triggered.
 
 ## Problem framing — what's actually broken
 
-Two repos have independently grown a full commerce stack. The symptoms:
+Two repos have independently grown parts of a commerce stack. The symptoms:
 
-1. **`web-cited-pipeline/src/pipeline/cli.py`** owns Stripe invoicing (`send_intake_invoice`), HubSpot contact+deal creation (`sync_intake`, `sync_audit_result`), Airtable writes, AND the delivery email (`send_report_ready` via `pipeline/mailer.py`).
-2. **`web-cited-api/src/`** owns the same Stripe invoicing (`stripe.ts`, `intake.ts`), HubSpot writes (`hubspot.ts`), scope/kickoff/delivery emails (`scope-email.ts`, `kickoff-email.ts`, `delivery-email.ts`). The delivery email is brand-new, Brutalist, and not yet triggered by anything.
-3. Both repos dropped a "remove Loom from deliverables" commit within fifteen seconds of each other on 2026-04-21. That is not migration — that is live duplication.
-4. The pipeline writes to Airtable. The Worker writes to HubSpot. Neither writes to both. Airtable is a **third** CRM target that needs a decision later (out of scope for this spec — see §Out of scope).
-5. The Worker has no way to *trigger* an audit. Every paid invoice today requires manual `web-cited-audit audit --intake <file>` on the operator's laptop.
+1. **`web-cited-pipeline/src/pipeline/cli.py`** runs every audit today. Its side effects during a run include:
+   - `send_intake_invoice` → Stripe (may be a no-op in prod if `stripe_api_key` is unset on the Python side — the Worker already creates the invoice)
+   - `sync_intake` + `sync_audit_result` → HubSpot via `pipeline/hubspot.py` + Airtable via `pipeline/airtable.py`
+   - `send_report_ready` → Resend, using the old un-Brutalist delivery copy in `pipeline/mailer.py`
+2. **`web-cited-api/src/`** owns the other half: Stripe invoicing, HubSpot writes via the AST-enforced `hubspotCapture()` single-write-path, and — as of last week — the new Brutalist scope/kickoff/delivery emails. `sendDeliveryEmail` is shipped but has no trigger.
+3. The Worker's `POST /capture` endpoint already accepts `source: "pipeline"` and its `EventKind` enum includes the full audit lifecycle (`audit_started`, `crawl_complete`, `llm_tests_complete`, `findings_graded`, `report_rendered`, `report_delivered`). The pipeline is *not* currently using this path — `grep -rn CAPTURE_SECRET pipeline/` finds nothing.
+4. The Worker has no way to *trigger* an audit. Every paid invoice today requires manual `web-cited-audit audit --intake <file>` on the operator's laptop.
+5. Airtable is a third CRM target with only the Python side writing to it. A decision on whether to keep it, move it, or drop it is deferred.
 
-The decision already made during brainstorming: **Option A** — TS Worker is the front door (commerce, CRM, emails), Python pipeline is pure compute (audit + artifact render + signed completion callback), communication via HTTPS webhooks, no queue.
+The decision already made during brainstorming: **Option A** — TS Worker is the front door (commerce, email orchestration, HubSpot logging), Python pipeline is compute (audit + artifact render + signed completion callback), communication via HTTPS, no queue.
 
-Why no queue at 1–2 audits/week: a queue is a failure-isolation mechanism. Signed webhooks with a dead-letter KV entry are simpler, observable (CF tail logs + operator email banner already exists), and recoverable (operator clicks [Retry all] — pattern already in production for HubSpot capture failures).
-
-## Scope — what this spec produces
-
-**In scope:**
-
-1. **Python FastAPI surface** on the pipeline repo (`src/pipeline/api.py`) exposing:
-   - `POST /audit` — bearer-auth'd, takes an `IntakePayload` + `jobId`, kicks off an audit, returns 202 immediately.
-   - `GET /audit/{jobId}` — bearer-auth'd, returns `queued | running | done | failed` for operator visibility during debugging. Not called by the Worker in v1.
-2. **Python completion webhook** (`src/pipeline/completion_webhook.py`) that POSTs an `AuditDeliverable`-shaped body back to the Worker with an HMAC-SHA256 signature, plus a local SQLite-backed retry queue for transient failures.
-3. **Python refactor of `cli.py`** — extract the pure-audit function `run_audit(intake, queries) -> AuditRunResult` away from the Stripe/HubSpot/Airtable/mailer calls. `AuditRunResult` is a new Pydantic model (defined in `pipeline/models.py`) that wraps the existing `AuditReport` with the three artifact URLs + the derived `CitationShareResult`. A `PIPELINE_COMMERCE_ENABLED=false` flag (default false once the Worker is driving things) makes the commerce/email side-effects opt-in so the CLI still works for ad-hoc dev runs against `--url`.
-4. **Python R2 uploader** (`src/pipeline/artifacts.py`) — pushes PDF + Playbook HTML + schema-pack zip to Cloudflare R2, returns stable public URLs under `artifacts.web-cited.com`. The bucket is public-readable (not listable); UUID-prefixed keys are the access control.
-5. **TS audit trigger** (`src/audit-trigger.ts`) — `startAudit(intake, invoiceId)` called from the existing `invoice.paid` Stripe webhook handler; POSTs to the Python `/audit` endpoint with a generated `jobId`; idempotent via KV sentinel `audit-started-{invoiceId}`; falls back to `CAPTURE_DEAD_LETTER` on transport failure so the operator email banner surfaces the miss.
-6. **TS completion webhook** (`src/audit-complete-webhook.ts`) — `POST /webhooks/audit-complete`, verifies HMAC, looks up intake from `INTAKE_CACHE`, calls `sendDeliveryEmail(intake, deliverable)`, captures a `report_delivered` event to HubSpot, writes KV sentinel `audit-complete-{jobId}` for idempotency.
-7. **Contract mirroring** — TS `AuditDeliverable` in `types.ts` mirrored by Pydantic `AuditDeliverable` in `pipeline/models.py`. Contract test on each side asserts fixture parity.
-8. **Infra** — R2 bucket `web-cited-audit-artifacts` exposed at `artifacts.web-cited.com` (CF custom domain), cloudflared named tunnel `audit-tunnel` exposing operator laptop `localhost:8000` at `audit.web-cited.com`, two launchd plists (uvicorn + cloudflared) running on login.
-
-**Out of scope:**
-
-- Statistical methodology upgrade (confidence intervals, bootstrap resampling, rolling windows). This is Phase 3 work. It's the reason the architecture needs to exist, but it is not this spec.
-- Airtable deprecation — Airtable still gets written by `sync_audit_result` today; the decision on whether to keep it, move it to the Worker, or drop it is deferred. The wiring work here does not make Airtable worse; it leaves it where it is.
-- Redesigning the PDF or Playbook. The Python side keeps producing the same `reporter_html.py` output as today; the only change is it uploads them to R2 instead of writing to `reports/` locally and emailing a localhost URL.
-- Building the Playbook web surface (that's a separate deliverable in the audit-report-design spec). In v1 the Worker's `AuditDeliverable` will include `playbookUrl` pointing at the R2-hosted Playbook when the Playbook ships; until then, Audit+Enterprise will get the PDF URL only (pipeline passes `playbookUrl: undefined` — delivery email renders PDF-only treatment).
-- Auto-failure webhooks. If the pipeline errors, v1 logs it and leaves the HubSpot deal stuck at `audit_in_progress` — the operator notices stuck deals during the weekly review. Phase 2 can add `POST /webhooks/audit-failed`.
-- Migrating the pipeline to Fly.io or any other host. That's a later phase with explicit triggers (see §Migration triggers).
-- Replacing the existing `pipeline/mailer.py` `send_report_ready` function. It stays in the codebase for dev-mode ad-hoc runs (when `PIPELINE_COMMERCE_ENABLED=true`). In Worker-driven mode it is never called.
+**Why no queue at 1–2 audits/week:** signed HTTPS + idempotency sentinels in KV + the existing `CAPTURE_DEAD_LETTER` operator-banner recovery path already solve the same problem. Queues are a failure-isolation mechanism worth adding only once volume justifies the moving parts.
 
 ## Architecture
 
@@ -60,54 +39,84 @@ Why no queue at 1–2 audits/week: a queue is a failure-isolation mechanism. Sig
 [web-cited.com/start.html form]
             │
             ▼
-[TS Worker · api.web-cited.com]           ← source of truth for commerce/CRM/email
-  - POST /intake             → validate + HubSpot + Stripe invoice + scope email
-  - POST /webhooks/stripe    → on invoice.paid: kickoff email + startAudit()
-  - POST /webhooks/audit-complete  ← NEW (HMAC-verified; calls sendDeliveryEmail)
+[TS Worker · api.web-cited.com]           ← front door
+  - POST /intake                    → validate + HubSpot + Stripe invoice + scope email
+  - POST /stripe/webhook            → on invoice.paid: kickoff email + startAudit()       ← extended
+  - POST /capture                   → bearer-auth'd HubSpot write path (existing, unchanged)
+  - POST /audit/complete            → NEW: bearer-auth'd completion handler
+  - POST /audit/retrigger           → NEW: query-param-token operator re-trigger (for start failures)
             │
-            │  signed HTTPS (bearer on request, HMAC on completion body)
+            │  HTTPS + bearer tokens (two distinct secrets)
             ▼
-[Python FastAPI · audit.web-cited.com]    ← pure compute
-  - POST /audit              → 202 accepted, bg task runs audit
-  - GET  /audit/{jobId}      → status
+[Python FastAPI · audit.web-cited.com]    ← compute
+  - POST /audit/start               → 202 accepted; background task runs audit
+  - GET  /audit/{dealId}            → status (for operator debugging)
             │
-            ├─▶ [LLM + signal checks]  (existing checks/)
-            ├─▶ [render PDF + Playbook] (existing reporter_html)
+            ├─▶ [LLM + signal checks]   (existing pipeline/checks/)
+            ├─▶ [render PDF via WeasyPrint + Playbook HTML]  (existing reporter_html + new renderer)
             ├─▶ [upload to R2 · artifacts.web-cited.com]
-            └─▶ [POST back to Worker /webhooks/audit-complete]
+            └─▶ [POST back to Worker /audit/complete with AuditDeliverable payload]
 ```
 
-**Why two separate endpoints on the Worker (`stripe` + `audit-complete`):** same reason Stripe has its own endpoint — each upstream has a different signature scheme (Stripe HMAC with their format, audit HMAC with ours), different retry behavior, different failure modes. Collapsing them hides the contracts.
+**Why `/audit/complete` is separate from `/capture`:** `/capture` is disciplined pure logging — the AST-enforced single non-initial HubSpot write path (see `scripts/check-capture-coverage.ts` in the Worker repo). Adding side-effects (send the delivery email) to its handler would violate that framing. `/audit/complete` is the *orchestrator* for the completion event: it calls `sendDeliveryEmail`, and *internally* calls `hubspotCapture({ kind: "report_delivered", ... })` to log to HubSpot via the existing path. Two endpoints, one responsibility each.
 
-**Trigger point:** inside the existing `invoice.paid` handler in `src/webhooks.ts` (or wherever `sendKickoffEmail` is called from). Right after `sendKickoffEmail` succeeds, call `startAudit(intake, invoice.id)`. Kickoff-email failure does not block the audit; audit-start failure does not block the kickoff email. They are independent.
+**Identifier: `dealId`, not a new `jobId`.** The Worker already keys `INTAKE_CACHE` by dealId, carries dealId through Stripe webhook metadata, and anchors every HubSpot capture on dealId. The audit pipeline inherits that identifier end-to-end. No new ID.
 
-**`jobId` generation:** TS side, `crypto.randomUUID()`. Passed in request body to Python. Python echoes it on the completion webhook. Used as the KV idempotency key on both sides.
+**Trigger point:** inline inside `handleStripeWebhook` → `case "invoice.paid":` in `src/index.ts`, right after the kickoff-email try-block. Wrapped in its own try/catch so a trigger failure does not roll back the 200 OK to Stripe.
 
 ## Hosting — Phase 0+1 choice and migration plan
 
 **Phase 0+1 host: operator laptop + Cloudflare Tunnel (free).**
 
-- uvicorn binds `127.0.0.1:8000` under a launchd plist at login.
+- `uvicorn` binds `127.0.0.1:8000` under a launchd plist at login.
 - `cloudflared tunnel` under a second launchd plist, named tunnel `audit-tunnel`, routes `audit.web-cited.com` → `localhost:8000`. DNS record is a CNAME to `<tunnel-id>.cfargotunnel.com`, managed by `cloudflared tunnel route dns`.
 - Cost: $0. Cloudflare Tunnel is free on the free plan; R2 free tier covers our volume (10 GB storage + 10 GB egress/month; a full audit artifact bundle is <5 MB).
-- No public ingress on the operator machine. The tunnel dials out from the laptop to CF edge; CF handles TLS termination and routes signed traffic inbound. The laptop's firewall stays closed.
+- No public ingress on the operator machine. The tunnel dials out from the laptop to CF edge; CF handles TLS termination.
 
 **Why this is OK at 1–2 audits/week:**
-- Operator runs audits manually today anyway. A tunneled service is strictly better than an SSH-triggered shell command.
-- Operator-asleep-at-invoice-paid is the same failure mode that already exists. `CAPTURE_DEAD_LETTER` already has a [Retry all] operator-banner UI; extending it to handle `{ kind: "audit-start", ... }` entries alongside the existing HubSpot-capture entries is a few lines in the drain path. When the operator wakes up, they click the banner.
-- Single-laptop failure (hard drive dies, stolen, etc.) costs at most one audit, which the operator re-runs manually. Not an availability win, but not a disaster.
+- Operator runs audits manually today anyway — a tunneled service is strictly better than an SSH-triggered shell command.
+- Operator-asleep-at-invoice-paid is the same failure mode that already exists with manual runs. On transport failure the trigger writes a HubSpot note via `hubspotCapture` (`audit_status: "start_failed"`), and the deal surfaces in the operator's weekly review queue. Operator clicks the retrigger link in the ops email → `POST /audit/retrigger?deal={dealId}` re-runs `startAudit`. (If the HubSpot write itself fails, `hubspotCapture`'s own fallback pushes to `CAPTURE_DEAD_LETTER` and the [Retry all] banner covers the HubSpot recovery.)
+- Single-laptop failure (disk dies, stolen, etc.) costs at most one audit. Operator re-triggers via `POST /audit/retrigger` once replacement hardware is online.
 
-**Migration triggers to Fly.io (or similar):**
+**Migration triggers to Fly.io:**
 
-Evaluate the move when *any* of these fire:
+Evaluate when *any* of these fire:
 
-1. **Audit volume exceeds 5 completed audits per month** — at that cadence, asleep-laptop misses become user-visible.
-2. **Two consecutive operator-asleep misses in the dead letter** — even below 5/mo, a repeated failure pattern means the hosting is wrong.
-3. **Phase 3 methodology work begins** — confidence-interval sampling means each audit makes ~50× more LLM calls. That's longer-running jobs where laptop sleep cycles start causing partial-run failures. Migrate before, not after.
-4. **Operator travel > 1 week** — the dead-letter recovery requires hands on the laptop. If the operator is going to be out, fire up Fly ahead of time.
-5. **Paying customer SLA tightens** — if any tier's turnaround guarantee drops below 5 business days, asleep-laptop-Friday is a real commercial risk.
+1. **Audit volume exceeds 5 completed audits per month** — asleep-laptop misses become user-visible.
+2. **Two consecutive operator-asleep misses in the dead letter** — pattern means hosting is wrong.
+3. **Phase 3 methodology work begins** — confidence-interval sampling means each audit makes ~50× more LLM calls; longer-running jobs collide with laptop sleep cycles.
+4. **Operator travel > 1 week** — dead-letter recovery needs hands on the laptop.
+5. **Paying customer SLA tightens** — if any tier's turnaround guarantee drops below 5 business days, asleep-laptop-Friday becomes a commercial risk.
 
-**Fly.io fit (Phase 2):** Same FastAPI process, `fly.toml` binds `internal_port = 8000`, `flyctl secrets set` for the pipeline tokens + R2 keys, HTTPS termination free via Fly. Single region (sjc or dfw, operator-proximal), min_machines_running = 1, so the audit endpoint is always warm. Estimated cost at Phase 2 volume: ~$5–10/mo (shared-cpu-1x, 512 MB). Cheap insurance.
+**Fly.io fit (Phase 2):** same FastAPI process, `fly.toml` with `internal_port = 8000`, `flyctl secrets set` for pipeline tokens + R2 keys, HTTPS termination free. Single region (sjc or dfw, operator-proximal), `min_machines_running = 1`. Estimated cost at Phase 2 volume: ~$5–10/mo (shared-cpu-1x, 512 MB).
+
+## Scope — what's in and out
+
+### In scope (this spec)
+
+1. **Python FastAPI surface** (`src/pipeline/api.py`) exposing:
+   - `POST /audit/start` — bearer-auth'd, takes `{ dealId, intake }`, kicks off an audit, returns 202 immediately.
+   - `GET /audit/{dealId}` — bearer-auth'd, returns `queued | running | done | failed` for operator debugging.
+2. **Python completion call** (`src/pipeline/completion_client.py`) — POSTs the `AuditDeliverable` + `dealId` + timing to the Worker at `/audit/complete` with bearer auth. Retry schedule 1s / 4s / 15s / 60s / 300s; after 5 failures, enqueue in local SQLite `pending_completion_callbacks`, scheduler re-drains every 5 min.
+3. **Python refactor of `cli.py`** — extract `run_audit(intake, queries) -> AuditRunResult` (pure compute). The existing `audit` Typer command calls `run_audit` then conditionally fires commerce side-effects behind `PIPELINE_COMMERCE_ENABLED=false` (default). This preserves the ad-hoc `--url` dev-run path. `AuditRunResult` is a new Pydantic model that wraps the existing `AuditReport` with `ArtifactUrls` + `CitationShareResult`.
+4. **Python R2 uploader** (`src/pipeline/artifacts.py`) — `upload_artifacts(deal_id, pdf_bytes, playbook_html, schema_zip_bytes) -> ArtifactUrls`. `boto3` against R2's S3-compatible endpoint. Stable public URLs under `https://artifacts.web-cited.com/{dealId}/{filename}`.
+5. **WeasyPrint PDF generation** — wire `weasyprint` into `run_audit` to render the existing `reporter_html.py` output to PDF bytes. Shipped alongside the HTML so artifacts on R2 include a real `.pdf` file, not HTML-named-pdf.
+6. **TS audit trigger** (`src/audit-trigger.ts`) — `startAudit(env, intake, dealId, invoiceId) -> Promise<void>`. Checks KV `audit-started-{invoiceId}` sentinel for idempotency. Stashes intake in `INTAKE_CACHE` via existing `cacheIntake()` (already done at scope-email time; re-writes are safe). POSTs to `env.AUDIT_PIPELINE_URL + "/audit/start"` with bearer. On transport failure: writes a `hubspotCapture` note with `kind: "audit_started"` and `dealPropertyPatch: { audit_status: "start_failed" }` so the operator sees the stuck deal; the existing dead-letter drain path covers HubSpot-write failures on top.
+7. **TS completion handler** (`src/audit-complete.ts`) — handles `POST /audit/complete`. Verifies bearer `AUDIT_COMPLETE_SECRET`. Checks KV `audit-complete-{dealId}` sentinel for idempotency (if present, return 200 noop). Parses body as `AuditCompletionBody`. Loads intake via `fetchCachedIntake(env.INTAKE_CACHE, dealId)`. Calls `sendDeliveryEmail(env.RESEND_TOKEN, intake, deliverable)`. Calls `hubspotCapture({ kind: "report_delivered", source: "pipeline", dealId, contactId, summary: ..., payload: ..., dealPropertyPatch: { audit_status: "delivered" } })`. Sets KV sentinel. Returns 200. Any internal failure after bearer verification returns 500 so Python retries.
+8. **TS operator re-trigger** (`src/audit-retrigger.ts`) — handles `POST /audit/retrigger?deal={dealId}&token={CAPTURE_SECRET}` (query-param token, same pattern as the shipped `/capture/retry`). Loads cached intake and re-invokes `startAudit()` with a fresh `retrigger-${Date.now()}` sentinel key so the original `audit-started-${invoiceId}` gate doesn't block the retry. Linked from the operator email when a deal has `audit_status: "start_failed"`.
+9. **Contract mirror** — TS `AuditDeliverable` in `types.ts` (already exists) mirrored by Pydantic `AuditDeliverable` in `pipeline/models.py`. A shared `audit-completion.json` fixture lives in both repos; contract tests on both sides load it and assert parsability.
+10. **Infra** — R2 bucket `web-cited-audit-artifacts` (location hint `ENAM`) exposed at `artifacts.web-cited.com` (R2 custom domain); cloudflared named tunnel `audit-tunnel` routing `audit.web-cited.com` → `localhost:8000`; two launchd plists (uvicorn + cloudflared).
+
+### Out of scope (explicit, so planning doesn't drift)
+
+- **Methodology upgrade.** Confidence intervals, bootstrap resampling, rolling windows. Phase 3.
+- **Airtable decision.** Python keeps writing Airtable directly via `pipeline/airtable.py` during the audit. No change in v1.
+- **Moving mid-audit HubSpot writes to `/capture`.** Python's `sync_intake` and `sync_audit_result` continue to write HubSpot directly during the audit. v1 only moves the *final delivery email trigger* + the `report_delivered` log. Phase 2 can consolidate the mid-audit writes into a pipeline→Worker `/capture` flow.
+- **Playbook web surface build.** `playbookUrl` in `AuditDeliverable` is populated only when the Playbook ships (separate spec). Until then, pipeline uploads a PDF + schema-pack-zip, no Playbook file; `AuditCompletionBody.deliverable.playbookUrl` is omitted; delivery-email renders the PDF-only treatment (already implemented).
+- **Auto-failure webhook.** If the Python audit itself errors (LLM outage, R2 upload fails), v1 logs via Sentry, the HubSpot deal sits at `audit_status: "in_progress"`, and the operator notices stuck deals during weekly review. Phase 2 can add a `/audit/failed` endpoint that flips `audit_status: "failed"` and notifies the operator via Resend.
+- **Fly.io migration.** Triggered by the criteria above, not this phase.
+- **Deleting `pipeline/mailer.py`.** Stays in the codebase for dev-mode ad-hoc runs (`PIPELINE_COMMERCE_ENABLED=true`). In Worker-driven mode it is never called.
+- **Deleting the abandoned stub at `/Users/craigkokesh/web-cited/pipeline/`.** Unrelated dead code in the marketing site repo. Spawn a separate cleanup ticket.
 
 ## Components
 
@@ -115,85 +124,90 @@ Evaluate the move when *any* of these fire:
 
 | Path | Action | Responsibility |
 |---|---|---|
-| `src/pipeline/api.py` | **Create** | FastAPI app. `POST /audit` (bearer auth, 202 + background task), `GET /audit/{jobId}`. No DB for job state in v1 — use an in-memory dict. Surviving a restart = job is lost; operator re-triggers via the dead-letter banner on the Worker side. |
-| `src/pipeline/artifacts.py` | **Create** | `upload_artifacts(job_id, pdf_bytes, playbook_html, schema_zip_bytes) -> ArtifactUrls`. Uses `boto3` against R2's S3-compatible endpoint (`endpoint_url = f"https://{r2_account_id}.r2.cloudflarestorage.com"`). `ArtifactUrls` is a small dataclass `(pdf_url, playbook_url, schema_pack_zip_url)`. Returns stable URLs under `https://artifacts.web-cited.com/{jobId}/{filename}`. Content-types: `application/pdf`, `text/html; charset=utf-8`, `application/zip`. |
-| `src/pipeline/completion_webhook.py` | **Create** | `post_completion(job_id, deliverable)` — POSTs to Worker with `X-Audit-Signature: sha256=<hex>` header. Retries with exponential backoff: 1s, 4s, 15s, 60s, 300s (5 attempts total). After all retries fail, writes the payload to a local SQLite table `pending_completion_webhooks(job_id PRIMARY KEY, payload_json, next_retry_at, attempt_count)`. A separate APScheduler job re-drains every 5 min. |
-| `src/pipeline/cli.py` | **Modify** | Extract `run_audit(intake, queries) -> AuditArtifacts` (pure compute, no I/O to HubSpot / Stripe / Airtable / mailer). The existing `audit` Typer command calls `run_audit` and then conditionally calls the commerce/mailer side-effects behind `if settings.pipeline_commerce_enabled:`. Default is `false`. Preserves the ad-hoc `--url` dev-run path. |
-| `src/pipeline/config.py` | **Modify** | Add `pipeline_commerce_enabled: bool = False`, `pipeline_bearer_token: str`, `audit_webhook_secret: str`, `audit_webhook_target_url: str`, `r2_account_id: str`, `r2_access_key_id: str`, `r2_secret_access_key: str`, `r2_bucket_name: str = "web-cited-audit-artifacts"`, `r2_public_base_url: str = "https://artifacts.web-cited.com"`. Read via pydantic-settings from env / `.env`. |
-| `src/pipeline/models.py` | **Modify** | Add Pydantic models mirroring the TS contract: `CitationShareResult`, `AuditDeliverable`, `AuditCompletionBody` (adds `jobId` + timing metadata). Add `IntakePayload` if not already present and reconcile with the existing `intake.py` shape. |
-| `pyproject.toml` | **Modify** | Add `fastapi>=0.111`, `uvicorn[standard]>=0.30`, `boto3>=1.34`, `apscheduler>=3.10`, `weasyprint>=61` to `dependencies`. `freezegun`, `moto>=5` go in the `dev` optional group. |
-| `tests/test_api.py` | **Create** | TestClient coverage: bearer rejection, 202 on valid body, status endpoint echoes job state, background task is invoked (monkeypatched). |
-| `tests/test_completion_webhook.py` | **Create** | HMAC round-trip (signature matches what the Worker verifies), retry backoff uses `freezegun`, dead-letter SQLite row written after 5 failures. |
-| `tests/test_artifacts.py` | **Create** | `moto`-mocked S3, assert three files uploaded with correct keys + content-types, returned URLs are `https://artifacts.web-cited.com/<jobId>/...`. |
-| `tests/test_contract.py` | **Create** | Load a fixture `tests/fixtures/audit-completion.json` (checked into both repos) and assert `AuditCompletionBody.model_validate(fixture)` succeeds. |
-| `scripts/run-api.sh` | **Create** | `exec uvicorn pipeline.api:app --host 127.0.0.1 --port 8000 --log-config config/log-config.yaml`. Called by the launchd plist. |
-| `scripts/run-tunnel.sh` | **Create** | `exec cloudflared tunnel run audit-tunnel`. Called by the launchd plist. |
-| `docs/ops/launchd-setup.md` | **Create** | Operator runbook: how to install the two plists, register the tunnel, set env vars in `.env`, validate the stack. |
+| `src/pipeline/api.py` | **Create** | FastAPI app. `POST /audit/start` (bearer, 202 + background task), `GET /audit/{dealId}`. Job state lives in an in-memory dict keyed by `dealId`. Pipeline restart = job lost, operator re-triggers via `/audit/retrigger` on the Worker. |
+| `src/pipeline/artifacts.py` | **Create** | `upload_artifacts(deal_id, pdf_bytes, playbook_html_or_none, schema_zip_bytes) -> ArtifactUrls`. `boto3` against `https://{r2_account_id}.r2.cloudflarestorage.com`. `ArtifactUrls` is a dataclass `(pdf_url, playbook_url, schema_pack_zip_url)` where `playbook_url` is `None` when no Playbook was rendered. Content-types: `application/pdf`, `text/html; charset=utf-8`, `application/zip`. |
+| `src/pipeline/completion_client.py` | **Create** | `post_completion(deal_id, deliverable, completed_at, duration_s) -> None`. POSTs JSON body to `settings.audit_complete_url` with `Authorization: Bearer ${settings.audit_complete_secret}`. Retries 1s / 4s / 15s / 60s / 300s. After 5 failures, writes the payload to SQLite table `pending_completion_callbacks(deal_id PRIMARY KEY, payload_json, next_retry_at, attempt_count)` at `~/.local/share/webcited/pipeline.db`. APScheduler job re-drains every 5 min. |
+| `src/pipeline/cli.py` | **Modify** | Extract `run_audit(intake, queries) -> AuditRunResult` (pure compute: checks + render + R2 upload + `AuditDeliverable` construction). The existing `audit` Typer command calls `run_audit` and then *conditionally* calls the commerce/mailer side-effects behind `if settings.pipeline_commerce_enabled:`. Default false. Preserves `--url` dev-run path. |
+| `src/pipeline/config.py` | **Modify** | Add: `pipeline_commerce_enabled: bool = False`, `pipeline_bearer_token: str` (for inbound `/audit/start` auth), `audit_complete_url: str` (target URL, defaults to `https://api.web-cited.com/audit/complete`), `audit_complete_secret: str` (bearer token we send), `r2_account_id`, `r2_access_key_id`, `r2_secret_access_key`, `r2_bucket_name: str = "web-cited-audit-artifacts"`, `r2_public_base_url: str = "https://artifacts.web-cited.com"`. Read via pydantic-settings. |
+| `src/pipeline/models.py` | **Modify** | Add Pydantic models mirroring the TS contract: `CitationShareResult`, `AuditDeliverable`, `AuditCompletionBody` (wraps `AuditDeliverable` with `dealId`, `completedAt`, `durationSeconds`), `AuditRunResult` (wraps `AuditReport` with `ArtifactUrls` + `CitationShareResult`). Reconcile with the existing `intake.py` if it has a duplicate `Intake` shape. |
+| `pyproject.toml` | **Modify** | Add to `dependencies`: `fastapi>=0.111`, `uvicorn[standard]>=0.30`, `boto3>=1.34`, `apscheduler>=3.10`, `weasyprint>=61`. Add to `dev` optional group: `freezegun>=1.5`, `moto>=5`. |
+| `tests/test_api.py` | **Create** | `TestClient` coverage: bearer rejection, 202 on valid body, status endpoint echoes job state, background task is invoked (monkeypatched). |
+| `tests/test_completion_client.py` | **Create** | Bearer round-trip (TS mock accepts correct token, rejects wrong); retry backoff uses `freezegun`; SQLite dead-letter row is written after 5 failures; scheduler re-drains the row and clears it on success. |
+| `tests/test_artifacts.py` | **Create** | `moto`-mocked S3, assert three files uploaded with correct keys + content-types, returned URLs are `https://artifacts.web-cited.com/<dealId>/...`. |
+| `tests/test_contract.py` | **Create** | Load `tests/fixtures/audit-completion.json` (checked into both repos) and assert `AuditCompletionBody.model_validate(fixture)` succeeds. |
+| `tests/fixtures/audit-completion.json` | **Create** | Canonical body both repos test against. |
+| `scripts/run-api.sh` | **Create** | `set -a; source ~/.config/webcited/pipeline.env; set +a; exec uvicorn pipeline.api:app --host 127.0.0.1 --port 8000`. Called by launchd plist. |
+| `scripts/run-tunnel.sh` | **Create** | `exec cloudflared tunnel run audit-tunnel`. Called by launchd plist. |
+| `docs/ops/launchd-setup.md` | **Create** | Operator runbook: install the two plists, register the tunnel, set env vars in `~/.config/webcited/pipeline.env` (mode 600), validate with `curl https://audit.web-cited.com/audit/healthz`. |
 
 ### TS Worker (`web-cited-api`)
 
-| Path | Action | Responsibility |
-|---|---|---|
-| `src/audit-trigger.ts` | **Create** | `startAudit(env, intake, invoiceId) -> Promise<{ jobId: string }>`. Checks KV `audit-started-{invoiceId}` for idempotency, generates `jobId`, stores `INTAKE_CACHE` mapping `jobId → intake` (30-day TTL), POSTs `{ jobId, intake }` to `env.AUDIT_PIPELINE_URL + "/audit"` with `Authorization: Bearer ${env.AUDIT_PIPELINE_TOKEN}`. On transport failure: write to `CAPTURE_DEAD_LETTER` as `{ kind: "audit-start", invoiceId, intake, at }`, surface on operator-email banner. |
-| `src/audit-complete-webhook.ts` | **Create** | Handles `POST /webhooks/audit-complete`. Verifies `X-Audit-Signature` HMAC against `env.AUDIT_WEBHOOK_SECRET`. Checks KV `audit-complete-{jobId}` for idempotency (if present, return 200 noop). Parses body as `AuditCompletionBody`. Looks up intake via `INTAKE_CACHE.get(jobId)`. Calls `sendDeliveryEmail(env.RESEND_TOKEN, intake, deliverable)`. Captures `report_delivered` event via the existing HubSpot capture path. Sets KV sentinel. Returns 200. Any internal failure after signature verification returns 500 so Python retries. |
-| `src/index.ts` | **Modify** | Add route registration for `POST /webhooks/audit-complete`. No change to existing routes. |
-| `src/webhooks.ts` | **Modify** | In the `invoice.paid` handler, after `sendKickoffEmail` resolves, `await startAudit(env, intake, event.data.object.id)` wrapped in try/catch so a trigger failure does not roll back the webhook ack. |
-| `src/types.ts` | **Modify** | Add `AuditCompletionBody` interface (wraps existing `AuditDeliverable` with `jobId`, `completedAt`, `durationSeconds`). |
-| `src/audit-trigger.test.ts` | **Create** | Idempotency (second call with same invoiceId returns the same jobId), transport failure writes to dead-letter, happy path hits the pipeline URL once. |
-| `src/audit-complete-webhook.test.ts` | **Create** | Signature rejection, idempotency short-circuit, intake cache miss path, happy path calls `sendDeliveryEmail`. |
-| `src/contract.test.ts` | **Create** | Load the same fixture as the Python side, assert it satisfies the TS `AuditCompletionBody` shape via a tiny runtime validator. |
-| `wrangler.jsonc` | **Modify** | Add env vars: `AUDIT_PIPELINE_URL = "https://audit.web-cited.com"`. Add secrets (referenced in comment, set via `wrangler secret put`): `AUDIT_PIPELINE_TOKEN`, `AUDIT_WEBHOOK_SECRET`. |
-
-### Shared fixture
+**Important:** there is no `src/webhooks.ts`. The Stripe webhook is routed inline in `src/index.ts` at `/stripe/webhook`. The first draft of this spec incorrectly referred to a non-existent file. Actual edits below.
 
 | Path | Action | Responsibility |
 |---|---|---|
-| `tests/fixtures/audit-completion.json` (both repos) | **Create** | Canonical completion-webhook body. Both sides' contract tests load this file. Any field change must land in both repos at once. The file's SHA is noted in PR descriptions for drift detection. |
+| `src/audit-trigger.ts` | **Create** | `startAudit(env, intake, dealId, invoiceId) -> Promise<void>`. Checks KV sentinel `audit-started-${invoiceId}` (90-day TTL, matching the `kickoff-sent-${invoiceId}` precedent in `handleStripeWebhook`). If already set, return. Writes sentinel *before* the POST (matches kickoff-email discipline — we'd rather have a stuck audit than a duplicate run). POSTs `{ dealId, intake, triggeredAt }` to `env.AUDIT_PIPELINE_URL + "/audit/start"` with `Authorization: Bearer ${env.AUDIT_PIPELINE_TOKEN}`. On non-2xx or network error: log via `console.error`, call `hubspotCapture({ kind: "audit_started", source: "webhook", dealId, contactId, summary: "Audit start FAILED — operator must retrigger", payload: { error, invoiceId }, dealPropertyPatch: { audit_status: "start_failed" } })` — the existing dead-letter machinery covers HubSpot-write failures on top of this. |
+| `src/audit-complete.ts` | **Create** | `handleAuditComplete(req, env) -> Response`. Verifies bearer `AUDIT_COMPLETE_SECRET`. Parses body as `AuditCompletionBody`. Checks KV `audit-complete-${dealId}` sentinel — if present, returns 200 noop. Loads intake via `fetchCachedIntake(env.INTAKE_CACHE, dealId)`; if missing, returns 500 (Python retries) and logs — 30-day `INTAKE_CACHE` TTL should cover the longest plausible audit. Calls `sendDeliveryEmail(env.RESEND_TOKEN, cached.intake, body.deliverable)`. Calls `hubspotCapture({ kind: "report_delivered", source: "pipeline", dealId, contactId: cached.contactId, summary: ..., payload: { pdfUrl, durationSeconds }, dealPropertyPatch: { audit_status: "delivered", audit_completed_at: ISO } })`. Sets KV sentinel `audit-complete-${dealId}` (90-day TTL). Returns 200. Any failure after bearer verify returns 500. |
+| `src/audit-retrigger.ts` | **Create** | `handleAuditRetrigger(req, env) -> Response`. Query-param auth'd via `?token=${env.CAPTURE_SECRET}` (same pattern as `/capture/retry`). Takes `?deal={dealId}`. Loads cached intake. Invokes `startAudit(env, cached.intake, dealId, "retrigger-" + Date.now())` — fresh sentinel key so the original gate doesn't block the retry. Returns a small HTML page (same `htmlResponse` helper used by `/scope-email/approve`). |
+| `src/index.ts` | **Modify** | Route `POST /audit/complete` → `handleAuditComplete`; route `POST /audit/retrigger` → `handleAuditRetrigger`. In `handleStripeWebhook` → `case "invoice.paid"`, immediately after the kickoff-email try-block (around the current line ~742), add a sibling try/catch guarded by the `AUDIT_PIPELINE_ENABLED` feature flag: `if (env.AUDIT_PIPELINE_ENABLED === "true" && dealId) { try { await startAudit(env, cached.intake, dealId, invoiceId); } catch (err) { console.error("startAudit failed", err); } }`. |
+| `src/types.ts` | **Modify** | Add `AuditCompletionBody` interface (`dealId`, `completedAt`, `durationSeconds`, `deliverable: AuditDeliverable`). `AuditDeliverable` already exists (shipped in the email-refresh work). |
+| `src/audit-trigger.test.ts` | **Create** | Sentinel idempotency (second call with same invoiceId is a no-op), non-2xx pipeline response triggers the `hubspotCapture` fallback with `dealPropertyPatch: audit_status: "start_failed"`, happy path hits `AUDIT_PIPELINE_URL/audit/start` exactly once. |
+| `src/audit-complete.test.ts` | **Create** | Bearer rejection → 401, idempotency short-circuit (sentinel present → 200 noop, no email sent), intake-cache miss → 500 with logged error, happy path calls `sendDeliveryEmail` once and `hubspotCapture` once with correct kind + patch. |
+| `src/audit-retrigger.test.ts` | **Create** | Bearer rejection, missing-deal rejection, happy path re-invokes `startAudit` with a new sentinel key. |
+| `src/contract.test.ts` | **Create** | Load `tests/fixtures/audit-completion.json` (copy of Python-side fixture), validate against the TS `AuditCompletionBody` shape via a small runtime validator (no framework — the type is simple). |
+| `wrangler.jsonc` | **Modify** | Add to `vars`: `"AUDIT_PIPELINE_URL": "https://audit.web-cited.com"`, `"AUDIT_PIPELINE_ENABLED": "false"` (feature flag — flipped to `"true"` at cut-over). Add to the secret comment block: `AUDIT_PIPELINE_TOKEN` (bearer we send to Python), `AUDIT_COMPLETE_SECRET` (bearer Python sends to us). Both set via `wrangler secret put`. |
+| `scripts/check-capture-coverage.ts` | **Potentially modify** | If the AST scanner enumerates allowed call sites, add `src/audit-complete.ts` and `src/audit-trigger.ts` so they're recognized as permitted `hubspotCapture` callers. If the scanner is pattern-based (match imports from `./hubspot-capture`), no change needed. |
+
+### Shared test fixture
+
+| Path | Action | Responsibility |
+|---|---|---|
+| `tests/fixtures/audit-completion.json` (both repos) | **Create** | Canonical completion body. The two copies must match byte-for-byte; any field change lands in both repos in one PR. A short `scripts/verify-fixture-parity.sh` in each repo diffs against the other on CI when both checkouts are available (the privacy-audit GHA already pulls both via deploy keys — same mechanism is available here if we choose to add a CI check; not required for v1). |
 
 ## Communication contract
 
-### `POST /audit` (TS → Python)
+### `POST /audit/start` (TS → Python)
 
 **Headers:**
-- `Authorization: Bearer <AUDIT_PIPELINE_TOKEN>` — rotating shared secret, stored as `AUDIT_PIPELINE_TOKEN` on TS side and `pipeline_bearer_token` on Python side.
+- `Authorization: Bearer <AUDIT_PIPELINE_TOKEN>` — bearer shared between TS and Python. Stored as `AUDIT_PIPELINE_TOKEN` in Worker secrets and `pipeline_bearer_token` in `~/.config/webcited/pipeline.env`.
 - `Content-Type: application/json`
 
 **Body:**
 ```json
 {
-  "jobId": "5c4a1f2e-4b0c-4e1a-9c5f-0a3b7d6e8f2c",
+  "dealId": "18234567890",
   "intake": { "tier": "Audit", "first_name": "Sarah", ... },
   "triggeredAt": "2026-04-22T15:04:05.678Z"
 }
 ```
 
-**Response:** `202 Accepted`, body `{ "jobId": "...", "status": "queued" }`.
+**Response:** `202 Accepted`, body `{ "dealId": "18234567890", "status": "queued" }`.
 
 **Rejection cases:**
 - Missing/invalid bearer → `401`
 - Body fails pydantic validation → `422`
-- Duplicate jobId already in Python's in-memory job table (running or done) → `409`. TS-side idempotency should prevent this in practice, but the guard is cheap. Note: Python's state is in-memory, so a pipeline restart resets the table — a re-POST after restart will return `202`, not `409`. TS-side KV is the durable idempotency layer.
+- `dealId` already present in Python's in-memory job table as `running` or `done` → `409`. Python state is in-memory — pipeline restart resets the table. TS-side KV sentinel `audit-started-${invoiceId}` is the durable idempotency layer.
 
-### `GET /audit/{jobId}` (Python, operator debugging)
+### `GET /audit/{dealId}` (Python, operator debugging)
 
-Bearer auth same as above. Returns `{ "jobId", "status", "startedAt", "completedAt"?, "error"? }`. Not called by the Worker in v1; exists for operator curl during debugging.
+Bearer auth same as above. Returns `{ "dealId", "status", "startedAt", "completedAt"?, "error"? }`. Not called by the Worker in v1; exists for operator `curl` during debugging.
 
-### `POST /webhooks/audit-complete` (Python → TS)
+### `POST /audit/complete` (Python → TS)
 
-**Headers:**
-- `X-Audit-Signature: sha256=<hex>` — `HMAC_SHA256(AUDIT_WEBHOOK_SECRET, raw_request_body)`. Mirrors Stripe's scheme, reuses the timing-safe compare helper already in `src/stripe.ts`.
-- `Content-Type: application/json`
+**Auth:** bearer `AUDIT_COMPLETE_SECRET`, distinct from `AUDIT_PIPELINE_TOKEN` so compromise of one direction doesn't grant the other.
+
+**Why bearer not HMAC:** the existing `/capture` endpoint uses bearer (`CAPTURE_SECRET`) and is the architectural precedent for "trusted external service calls into Worker." HMAC-over-body is stronger against replay but inconsistent with the shipped pattern; at 1–2 audits/week with per-`dealId` idempotency sentinels, replay is not an active threat. If we later move to Fly.io and lose the tunnel's transport-level pairing, revisit HMAC.
 
 **Body (`AuditCompletionBody`):**
 ```json
 {
-  "jobId": "5c4a1f2e-...",
+  "dealId": "18234567890",
   "completedAt": "2026-04-22T16:47:12.345Z",
   "durationSeconds": 5827,
   "deliverable": {
-    "pdfUrl": "https://artifacts.web-cited.com/5c4a1f2e-.../audit-report.pdf",
-    "playbookUrl": "https://artifacts.web-cited.com/5c4a1f2e-.../playbook/index.html",
-    "schemaPackZipUrl": "https://artifacts.web-cited.com/5c4a1f2e-.../schema-pack.zip",
+    "pdfUrl": "https://artifacts.web-cited.com/18234567890/audit-report.pdf",
+    "playbookUrl": "https://artifacts.web-cited.com/18234567890/playbook/index.html",
+    "schemaPackZipUrl": "https://artifacts.web-cited.com/18234567890/schema-pack.zip",
     "citationShare": {
       "you": { "name": "Acme Heating", "percent": 22 },
       "leader": { "name": "Competitor Inc", "percent": 67 },
@@ -206,34 +220,41 @@ Bearer auth same as above. Returns `{ "jobId", "status", "startedAt", "completed
 }
 ```
 
-`playbookUrl` is **omitted from the JSON body** (not `null`) for Pulse tier and until the Playbook ships — matches the existing TS `AuditDeliverable` shape where `playbookUrl?: string` is optional. Same for `leader` inside `citationShare` when the intake had zero competitors. Pydantic serializes absent optional fields via `model_dump(exclude_none=True)`; the TS runtime validator treats absent and `null` equivalently.
+`deliverable.playbookUrl` is **omitted** from the JSON body (not `null`) for Pulse tier and until the Playbook ships — matches the existing TS `AuditDeliverable` where `playbookUrl?: string` is optional. Same for `deliverable.citationShare.leader` when the intake had zero competitors. Pydantic uses `model_dump(exclude_none=True)`; the TS handler treats absent and `null` equivalently.
 
 **Response:**
-- `200` on success (idempotent — second call with same `jobId` also returns 200, no side effects)
-- `401` on signature mismatch
-- `422` on body validation failure
-- `500` on any internal failure after validation — causes Python to retry
+- `200 OK` on success — including the idempotent repeat case where the sentinel is already set.
+- `401` on bearer mismatch.
+- `422` on body validation failure.
+- `500` on any internal failure after validation — causes Python retry.
 
-### Idempotency keys
+### `POST /audit/retrigger?deal={dealId}&token=...` (operator → TS)
 
-- TS `audit-started-{invoiceId}` in KV (30-day TTL) — guarantees one trigger per paid invoice, even if Stripe re-sends the webhook.
-- TS `audit-complete-{jobId}` in KV (30-day TTL) — guarantees one delivery email per audit, even if the Python webhook is retried after a 500.
-- Python `pending_completion_webhooks` SQLite table keyed by `jobId` — the retry scheduler never re-enqueues a job that's already present in the table.
+Query-param token auth via `?token=${env.CAPTURE_SECRET}` (same pattern as the shipped `/capture/retry` endpoint — the token is in the URL so the operator can click a link from the ops email without constructing headers). Linked from the operator-email dead-letter banner when an `audit_started/start_failed` note exists on a deal.
+
+### Idempotency keys — summary
+
+| Key | KV namespace | TTL | Meaning |
+|---|---|---|---|
+| `audit-started-${invoiceId}` | `INTAKE_CACHE` | 90d | One audit-start per paid invoice. Set before the POST fires. |
+| `audit-complete-${dealId}` | `INTAKE_CACHE` | 90d | One delivery email per audit. Set after `sendDeliveryEmail` + `hubspotCapture` both succeed. |
+| `pending_completion_callbacks.deal_id` | Python SQLite | no TTL | Persistent retry queue for Python→TS completion POSTs. Row removed on 2xx. |
+| `intake-cache-${dealId}` | `INTAKE_CACHE` | 30d | Existing — intake + score for scope-email approve flow + audit-complete handler reads. |
 
 ## Infrastructure
 
 ### Cloudflare R2 bucket
 
-- Bucket: `web-cited-audit-artifacts`, location hint `ENAM` (eastern North America) to sit close to the operator laptop + the typical North American prospect.
-- Public access via a CF custom domain `artifacts.web-cited.com`, connected via R2 → Settings → Custom Domains. Objects are public-readable, not listable. Keys are UUID-prefixed, so unguessable access is the access control.
-- Lifecycle rule: objects older than 180 days are deleted (via the R2 lifecycle UI or `wrangler r2 bucket lifecycle`). Artifacts are also archived to the operator's local `reports/` directory during the same render step, so the R2 copy is "hot" and the laptop copy is "cold but forever."
-- No object versioning in v1.
+- Name: `web-cited-audit-artifacts`, location hint `ENAM`.
+- Public access via R2 → Settings → Custom Domains → `artifacts.web-cited.com`. Objects are public-readable, not listable. Keys are dealId-prefixed (HubSpot deal IDs are long numeric strings, unguessable in practice).
+- Lifecycle rule: objects older than 180 days deleted. Operator-laptop `reports/` directory keeps a local cold copy.
+- No versioning in v1.
 
 ### Cloudflared named tunnel
 
-- Tunnel name: `audit-tunnel`, created via `cloudflared tunnel create audit-tunnel`. The one-time setup writes `~/.cloudflared/<tunnel-id>.json` (keep out of git — add to `.gitignore` if the repo touches that path).
-- Routing: `cloudflared tunnel route dns audit-tunnel audit.web-cited.com` creates the CNAME; zero manual DNS edits.
-- Config file `~/.cloudflared/config.yml`:
+- Tunnel name: `audit-tunnel`, `cloudflared tunnel create audit-tunnel` (one-time). Credentials at `~/.cloudflared/<tunnel-id>.json` — never commit.
+- DNS: `cloudflared tunnel route dns audit-tunnel audit.web-cited.com` (one-time).
+- Config at `~/.cloudflared/config.yml`:
   ```yaml
   tunnel: <tunnel-id>
   credentials-file: /Users/<operator>/.cloudflared/<tunnel-id>.json
@@ -243,89 +264,86 @@ Bearer auth same as above. Returns `{ "jobId", "status", "startedAt", "completed
     - service: http_status:404
   ```
 
-### launchd plists
-
-Two plists under `~/Library/LaunchAgents/`:
+### launchd plists (both at `~/Library/LaunchAgents/`)
 
 - `com.webcited.audit-api.plist` — runs `scripts/run-api.sh`, `RunAtLoad=true`, `KeepAlive=true`, logs to `/usr/local/var/log/webcited/audit-api.{out,err}.log`.
-- `com.webcited.audit-tunnel.plist` — runs `scripts/run-tunnel.sh`, same flags, logs to `.../audit-tunnel.{out,err}.log`.
+- `com.webcited.audit-tunnel.plist` — runs `scripts/run-tunnel.sh`, same flags, logs to `audit-tunnel.{out,err}.log`.
 
-Operator installs with `launchctl load ~/Library/LaunchAgents/com.webcited.audit-api.plist` (same for tunnel). Neither plist runs as root. Env vars are loaded from `~/.config/webcited/pipeline.env` (mode 600) which the shell scripts `set -a; source` before exec.
+Installed via `launchctl load ~/Library/LaunchAgents/<name>.plist`. Neither runs as root. Env vars load from `~/.config/webcited/pipeline.env` (mode 600).
 
-Full runbook lives in `docs/ops/launchd-setup.md` in the pipeline repo.
+Full runbook: `docs/ops/launchd-setup.md` in the pipeline repo.
 
 ## Secrets
 
-Added in Phase 0+1. All secrets are shared between TS and Python where noted.
-
-| Name | Where set | Shared? | Purpose |
+| Name | Set on | Shared? | Purpose |
 |---|---|---|---|
-| `AUDIT_PIPELINE_TOKEN` | TS `wrangler secret` + Python `~/.config/webcited/pipeline.env` | **Yes** | Bearer token for TS → Python `POST /audit`. Rotate quarterly. |
-| `AUDIT_WEBHOOK_SECRET` | TS `wrangler secret` + Python `~/.config/webcited/pipeline.env` | **Yes** | HMAC key for Python → TS `POST /webhooks/audit-complete`. Rotate quarterly. |
+| `AUDIT_PIPELINE_TOKEN` | Worker (`wrangler secret`) + Python `~/.config/webcited/pipeline.env` as `pipeline_bearer_token` | **Yes** | Bearer for TS → Python `POST /audit/start` and `GET /audit/{dealId}`. Rotate quarterly. |
+| `AUDIT_COMPLETE_SECRET` | Worker (`wrangler secret`) + Python env as `audit_complete_secret` | **Yes** | Bearer for Python → TS `POST /audit/complete`. Rotate quarterly. |
 | `R2_ACCOUNT_ID` | Python only | No | Cloudflare R2 account. |
-| `R2_ACCESS_KEY_ID` | Python only | No | R2 S3-compat key with write to `web-cited-audit-artifacts`. |
+| `R2_ACCESS_KEY_ID` | Python only | No | R2 S3-compat key with write access to `web-cited-audit-artifacts`. |
 | `R2_SECRET_ACCESS_KEY` | Python only | No | R2 S3-compat secret. |
 
-Existing secrets are untouched. Airtable/Stripe/HubSpot credentials on the Python side stay where they are until the Airtable decision (out of scope). Both `STRIPE_SECRET_KEY` and `HUBSPOT_TOKEN` remain on the Python side so `pipeline_commerce_enabled=true` dev mode continues to work.
+All existing secrets unchanged. Python keeps `HUBSPOT_TOKEN`, `AIRTABLE_TOKEN`, `STRIPE_SECRET_KEY` for dev-mode commerce runs (`PIPELINE_COMMERCE_ENABLED=true`).
 
 ## Error handling — v1
 
-The design is intentionally sparse at the failure edges. Each degrade is explicit:
+| Failure mode | Degrade path |
+|---|---|
+| Python `/audit/start` returns 5xx or times out | TS `startAudit` calls `hubspotCapture({ kind: "audit_started", ..., dealPropertyPatch: { audit_status: "start_failed" } })`. Operator-email banner surfaces deals with `audit_status = "start_failed"`. Operator clicks re-trigger link hitting `POST /audit/retrigger?deal=...`. |
+| Python audit itself throws (LLM outage, R2 fails, WeasyPrint error, etc.) | Logged via Sentry (pipeline already has `observability.init_sentry`). HubSpot deal stays at `audit_status: "in_progress"`. Operator notices during weekly deal review. No auto-failure webhook in v1. |
+| Python → TS `/audit/complete` POST fails | Retry 1s/4s/15s/60s/300s. After 5 failures, SQLite `pending_completion_callbacks` row. Scheduler re-drains every 5 min forever. Worker never distinguishes "completed quickly" from "completed via retry" — sentinel makes it safe. |
+| TS `/audit/complete` fails after bearer verify (Resend rate limit, KV write timeout) | 500 → Python retries → eventually succeeds when transient cause clears. **Phase-2 consideration:** add TS-side dead-letter so persistent failures (e.g. Resend account suspended) don't spin forever. Acceptable to omit in v1 since Python's SQLite retry queue provides durability. |
+| Operator laptop sleeps during audit | In-memory job state lost. Operator notices deal stuck at `audit_status: "in_progress"`, hits `/audit/retrigger`. Python re-runs from scratch. R2 upload overwrites any partial artifacts. |
+| INTAKE_CACHE miss in `/audit/complete` (30-day TTL expired) | `/audit/complete` returns 500, Python retries indefinitely. Extremely unlikely given 30d TTL vs. ~90-min audit. If it does happen, operator escalates manually and we extend TTL. Out-of-spec for v1 auto-recovery. |
 
-1. **Python `/audit` returns 5xx or times out** → TS writes `CAPTURE_DEAD_LETTER` entry `kind: "audit-start"`, operator-email banner surfaces the count with a `[Retry all]` link. Operator fixes the root cause (tunnel down, uvicorn crashed), clicks retry, the existing dead-letter-drain path re-POSTs.
-2. **Python audit itself throws** (LLM outage, R2 upload fails, etc.) → logged via Sentry (pipeline already has `observability.init_sentry`), HubSpot deal stays at `audit_in_progress`, operator notices during weekly deal review. No `audit-failed` webhook in v1.
-3. **Python completion-webhook POST fails** → retry schedule 1s / 4s / 15s / 60s / 300s; after 5 failures, enqueue in local SQLite `pending_completion_webhooks`, scheduler re-drains every 5 min forever. The Worker never knows the difference between "completed quickly" and "completed via retry"; the idempotency key makes it safe.
-4. **TS completion-webhook handler fails after signature verification** → 500 back to Python, Python retries, eventually TS succeeds once the transient cause clears (Resend rate limit, KV write timeout). Phase-3 consideration: add a TS-side dead-letter for the `audit-complete` failure mode so a truly persistent failure doesn't spin forever.
-5. **Operator laptop sleeps during an audit** → audit state is in-memory, so jobs in flight are lost. Python `/audit` is idempotent on re-trigger (TS sees no `audit-complete-{jobId}` ever arrived, so the operator dead-letter retry re-POSTs the same jobId; Python starts over). The R2 upload overwrites the partial artifacts.
-
-Under 5 audits/month with an operator actively monitoring, (1) and (5) are the realistic failure modes. Both land in the existing operator-banner surface.
+Under expected volume (1–5 audits/month with an attentive operator), the dominant failure modes are (1) and (5). Both land on the existing operator-banner surface.
 
 ## Testing strategy
 
 **Unit tests (both sides):**
 
-- HMAC: round-trip test where Python signs a fixture body, TS verifies. Assert bit-identical signatures. Flip one byte, assert rejection.
-- Bearer: TS sends token, Python accepts; TS sends wrong token, Python returns 401.
-- Idempotency: second call with same `jobId` (or `invoiceId`) is a noop on both sides.
-- Retry backoff: Python webhook retry uses `freezegun` to advance time; assert exactly 5 POST attempts at the scheduled intervals, then dead-letter enqueue.
-- Contract: a shared `audit-completion.json` fixture is validated by both Pydantic and the TS runtime validator.
+- Bearer: wrong token → 401 on both `/audit/start` and `/audit/complete`; correct token → happy path.
+- Idempotency: second POST with same `invoiceId` (trigger) or `dealId` (complete) is a no-op on both sides.
+- Python retry backoff: `freezegun` advances time; assert exactly 5 POSTs at the scheduled intervals, then SQLite row insertion.
+- TS sentinel write-before-send discipline for `startAudit` (matches kickoff-email precedent).
+- Contract: shared `audit-completion.json` fixture parses cleanly into both `AuditCompletionBody` models.
 
 **Integration tests (Python only, `moto` + `httpx.MockTransport`):**
 
-- `POST /audit` under bearer, observe in-memory job table transitions, observe mocked R2 upload, observe mocked completion-webhook POST to TS.
-- End-to-end dry run: `pytest tests/test_end_to_end.py` runs `run_audit` against a cached intake fixture (Cepheid — molecular diagnostics, already in use per user memory) with LLM calls stubbed.
+- `POST /audit/start` under bearer: observe job transitions in the in-memory table, observe mocked R2 uploads, observe mocked completion POST.
+- End-to-end dry run: `pytest tests/test_end_to_end.py` runs `run_audit` against a cached Cepheid (molecular-diagnostics) intake fixture with all LLM calls stubbed.
 
 **Smoke test (manual, post-deploy):**
 
-1. On operator laptop, verify `curl https://audit.web-cited.com/healthz` returns 200.
-2. From anywhere, `curl -X POST https://audit.web-cited.com/audit -H "Authorization: Bearer $TOKEN"` with a test intake body, observe 202.
-3. Let the audit run. Within ~90 min, observe delivery email in the test inbox with a real PDF URL.
-4. Re-POST the same trigger; assert no second email fires and no second R2 upload happens.
-
-## Out of scope (repeated for emphasis)
-
-- Confidence-interval methodology (Phase 3).
-- Airtable decision (ad-hoc ticket).
-- Playbook web surface build (separate spec).
-- PDF/Playbook redesign.
-- `audit-failed` webhook.
-- Fly.io / Railway / hosted migration (triggered separately).
-- Replacing Python's `pipeline/mailer.py` for dev runs.
+1. On operator laptop, `curl https://audit.web-cited.com/audit/healthz` → 200.
+2. From anywhere, bearer-authed `curl -X POST https://audit.web-cited.com/audit/start` with a test intake body → 202.
+3. Within ~90 min, delivery email arrives in test inbox with real `artifacts.web-cited.com` URLs.
+4. Re-POST the trigger → no duplicate email, no duplicate R2 upload.
+5. Re-POST the completion → no duplicate email (sentinel guards).
 
 ## Implementation notes
 
-**PDF generation in v1:** the existing pipeline's `reporter_html.py` produces HTML with `@page Letter` print CSS but does not produce PDF bytes. v1 of this spec wires **WeasyPrint** (added to `pyproject.toml` alongside the FastAPI deps) to render the same HTML to PDF bytes inside `run_audit`, then uploads those bytes to R2 under `audit-report.pdf`. The Playbook HTML is uploaded separately under `playbook/index.html` (same HTML source, no print CSS override needed because browsers happily ignore `@page`). WeasyPrint handles our simple Swiss/Brutalist CSS; complex JS-rendered layouts are not a concern (the report is static). If WeasyPrint's rendering diverges from the browser print-preview in operator review, the fallback is to ship PDF as HTML-with-`.pdf`-extension and set `Content-Disposition: inline` — but the spec assumes WeasyPrint works, and the implementation plan's first task should smoke-test WeasyPrint against the existing HTML fixtures before building the rest.
+**PDF generation (WeasyPrint decision):** `reporter_html.py` produces HTML with `@page Letter` print CSS. v1 wires `weasyprint>=61` into `run_audit` to render the HTML to PDF bytes server-side, then uploads those bytes as `audit-report.pdf` to R2. First plan task should smoke-test WeasyPrint against the existing fixtures to confirm our Brutalist CSS renders acceptably. Fallback (only if WeasyPrint output diverges from browser print-preview in operator review): ship the HTML file with `.pdf` extension and `Content-Disposition: inline; filename="audit-report.pdf"`.
 
 **Plan ordering when this spec becomes tasks:**
 
-1. Python side first — `api.py`, `artifacts.py`, `completion_webhook.py`, cli.py refactor. This can be tested end-to-end against a mocked Worker. Ship it to the operator laptop under the tunnel. Smoke-test `curl` against `audit.web-cited.com/audit` with a fake bearer body and observe R2 uploads. At this point nothing in prod changes — the Worker isn't calling it yet.
-2. TS side second — `audit-trigger.ts`, `audit-complete-webhook.ts`, wire into the `invoice.paid` handler. Deploy to a preview environment (or stage behind a feature flag in `env.vars`). Run the smoke test from §Testing.
-3. Cut over — set `PIPELINE_COMMERCE_ENABLED=false` on the Python side. From that point forward, the Python CLI no longer sends Stripe invoices, writes HubSpot/Airtable, or sends emails when invoked via the API. Dev mode with the flag on remains available for ad-hoc `--url` runs. The existing manual operator workflow is preserved.
+1. **Python side first** — `api.py`, `artifacts.py`, `completion_client.py`, `cli.py` refactor, WeasyPrint wiring, test coverage. End-to-end tested against a mocked Worker. Ship to operator laptop under the tunnel. Smoke-test `curl` with a test body and observe R2 uploads. At this point nothing in prod changes — the Worker isn't calling it yet.
+2. **TS side second** — `audit-trigger.ts`, `audit-complete.ts`, `audit-retrigger.ts`, wire into `handleStripeWebhook`'s `invoice.paid` case, route registration, wrangler secrets. Deploy behind a `AUDIT_PIPELINE_ENABLED` `vars` toggle (default `false` until ready). Run the smoke test from §Testing.
+3. **Cut over** — flip `AUDIT_PIPELINE_ENABLED=true` on the Worker. Set `PIPELINE_COMMERCE_ENABLED=false` on the operator laptop's `~/.config/webcited/pipeline.env`. From that point forward, `cli.py` invoked without `--commerce` runs in pure-compute mode — the Worker owns invoice creation (already true in practice) and the final delivery email (new). Mid-audit HubSpot writes and Airtable writes continue from Python. `--url` dev mode still works for ad-hoc runs.
 
-**Idempotency hygiene:** the `jobId` must be stable from trigger through completion. TS generates it once (`crypto.randomUUID()`), passes it to Python in the trigger body, Python echoes it in the completion body. Never regenerate.
+**Architectural precedents to reuse (not reinvent):**
 
-**Why not use Cloudflare Queues:** they'd be a fine choice at scale, but add a second moving part (queue bindings, a consumer Worker) for no gain at 1–2 audits/week. The dead-letter-KV + banner pattern already solves the same problem and is in production. Revisit at Fly migration time.
+- `src/hubspot-capture.ts` — single write path; `canonicalJson` for stable serialization; `CaptureInput` shape with optional `dealPropertyPatch`.
+- `src/dead-letter.ts` — the `CAPTURE_DEAD_LETTER` KV namespace, `pushDeadLetter` / `listDeadLetter` / `clearDeadLetter` functions, operator-banner surfacing.
+- `src/intake-cache.ts` — `cacheIntake` / `fetchCachedIntake`, 30-day TTL.
+- `src/scope-approve.ts` — HMAC helper `hmacSha256Hex` (available if we need token-binding for the operator retrigger link in a later iteration).
+- `src/stripe.ts` `verifyWebhookSignature` — HMAC-over-raw-body pattern, precedent if we ever upgrade `/audit/complete` from bearer to HMAC.
+- The `kickoff-sent-${invoiceId}` sentinel pattern in `handleStripeWebhook` — write the sentinel *before* the email fires; we'd rather miss a send than duplicate one.
 
-**Why store intake in `INTAKE_CACHE` rather than passing it through the whole round-trip:** the Python → TS completion body is signed. If we passed the intake through Python and back, the signature would have to cover a prospect-data blob that the Python side has no business modifying. Cleaner: TS stashes the intake at trigger time, Python only sees and echoes `jobId`, TS rehydrates intake by `jobId` on the way back.
+**Airtable:** `pipeline/airtable.py` stays live in Python during v1. The `sync_audit_result` path continues to write `Domain`-keyed rows via `performUpsert`. Decision on whether to migrate Airtable writes into the Worker's `/capture` path (with a new `AIRTABLE_TOKEN` binding) is deferred — separate decision ticket.
 
-**Why no `POST /audit/{jobId}/cancel`:** at 1–2/week volume, an operator can `launchctl stop` and `launchctl start` the uvicorn plist to kill a stuck audit. Not worth an endpoint.
+**Why no `POST /audit/{dealId}/cancel`:** at 1–2/week volume, operator can `launchctl stop com.webcited.audit-api` and `launchctl start` to kill a stuck audit. Not worth an endpoint.
+
+**Why not extend `/capture` instead of adding `/audit/complete`:** `/capture` is disciplined pure HubSpot logging (AST-enforced as the single non-initial write path). Adding a side-effect (call `sendDeliveryEmail`) to its handler breaks that invariant. `/audit/complete` is the completion orchestrator; it *calls* `hubspotCapture` internally to satisfy the single-write-path rule. Two endpoints, one responsibility each.
+
+**Why `dealId` as the identifier:** it's already the cache key (`intake-cache-{dealId}`), flows through Stripe metadata, and is present in every capture call. Introducing a new `jobId` would add a second index that nothing else uses.
