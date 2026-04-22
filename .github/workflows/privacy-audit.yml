@@ -1,0 +1,61 @@
+name: Privacy policy drift check
+
+# Monthly check for drift between the shipped data pipeline and the live
+# privacy policy. Fires on the 1st of every month and on manual dispatch.
+# When drift is detected, files a GitHub Issue and emails NOTIFY_EMAIL.
+# When no drift is detected, exits clean — no issue, no email.
+#
+# Required secrets (set at the repo level):
+#   PRIVACY_AUDIT_TOKEN  Fine-grained PAT with "Contents: read" on
+#                        k0kesh/web-cited-api and k0kesh/web-cited-pipeline.
+#                        Used only to clone the two private sibling repos.
+#   RESEND_API_TOKEN     Existing Resend API key (same one the Worker uses).
+#                        Used to send the monthly drift email from
+#                        intake@send.web-cited.com to NOTIFY_EMAIL.
+#
+# GITHUB_TOKEN is auto-provided by Actions and scoped below to issues:write.
+
+on:
+  schedule:
+    # 1st of every month at 13:17 UTC (~9:17 AM ET). Intentionally off
+    # the :00 minute mark so this fleet-wide job doesn't pile up with
+    # every other "hourly-at-top-of-hour" cron.
+    - cron: '17 13 1 * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout web-cited (full history — need privacy.html log)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Clone sibling private repos
+        env:
+          TOKEN: ${{ secrets.PRIVACY_AUDIT_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::PRIVACY_AUDIT_TOKEN secret is not set. Create a fine-grained PAT with Contents:read on k0kesh/web-cited-api and k0kesh/web-cited-pipeline, then add it as a repo secret."
+            exit 1
+          fi
+          git clone --depth 100 --quiet "https://x-access-token:${TOKEN}@github.com/k0kesh/web-cited-api.git" /tmp/web-cited-api
+          git clone --depth 100 --quiet "https://x-access-token:${TOKEN}@github.com/k0kesh/web-cited-pipeline.git" /tmp/web-cited-pipeline
+
+      - name: Run drift audit
+        id: audit
+        run: bash .github/scripts/privacy-audit.sh
+
+      - name: Notify on drift (Issue + email)
+        if: steps.audit.outputs.drift == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RESEND_API_TOKEN: ${{ secrets.RESEND_API_TOKEN }}
+          NOTIFY_EMAIL: craig@web-cited.com
+          CUTOFF: ${{ steps.audit.outputs.cutoff }}
+        run: bash .github/scripts/privacy-notify.sh
