@@ -6,14 +6,16 @@ name: Privacy policy drift check
 # When no drift is detected, exits clean — no issue, no email.
 #
 # Required secrets (set at the repo level):
-#   PRIVACY_AUDIT_TOKEN  Fine-grained PAT with "Contents: read" on
-#                        k0kesh/web-cited-api and k0kesh/web-cited-pipeline.
-#                        Used only to clone the two private sibling repos.
-#   RESEND_API_TOKEN     Existing Resend API key (same one the Worker uses).
-#                        Used to send the monthly drift email from
+#   DEPLOY_KEY_API       Private half of a read-only ed25519 deploy key
+#                        registered on k0kesh/web-cited-api. Used only to
+#                        clone that repo.
+#   DEPLOY_KEY_PIPELINE  Same, for k0kesh/web-cited-pipeline.
+#   RESEND_API_TOKEN     Resend API key (same one the Worker uses). Used
+#                        to send the monthly drift email from
 #                        intake@send.web-cited.com to NOTIFY_EMAIL.
 #
 # GITHUB_TOKEN is auto-provided by Actions and scoped below to issues:write.
+# Deploy keys are per-repo and read-only — narrowest possible blast radius.
 
 on:
   schedule:
@@ -36,16 +38,32 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Clone sibling private repos
+      - name: Configure SSH deploy keys
         env:
-          TOKEN: ${{ secrets.PRIVACY_AUDIT_TOKEN }}
+          DEPLOY_KEY_API: ${{ secrets.DEPLOY_KEY_API }}
+          DEPLOY_KEY_PIPELINE: ${{ secrets.DEPLOY_KEY_PIPELINE }}
         run: |
-          if [ -z "$TOKEN" ]; then
-            echo "::error::PRIVACY_AUDIT_TOKEN secret is not set. Create a fine-grained PAT with Contents:read on k0kesh/web-cited-api and k0kesh/web-cited-pipeline, then add it as a repo secret."
+          if [ -z "$DEPLOY_KEY_API" ] || [ -z "$DEPLOY_KEY_PIPELINE" ]; then
+            echo "::error::DEPLOY_KEY_API or DEPLOY_KEY_PIPELINE secret is missing. Re-generate keypairs and register read-only deploy keys on the two private repos, then store the private halves as repo secrets here."
             exit 1
           fi
-          git clone --depth 100 --quiet "https://x-access-token:${TOKEN}@github.com/k0kesh/web-cited-api.git" /tmp/web-cited-api
-          git clone --depth 100 --quiet "https://x-access-token:${TOKEN}@github.com/k0kesh/web-cited-pipeline.git" /tmp/web-cited-pipeline
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY_API"      > ~/.ssh/deploy-api
+          printf '%s\n' "$DEPLOY_KEY_PIPELINE" > ~/.ssh/deploy-pipeline
+          chmod 600 ~/.ssh/deploy-api ~/.ssh/deploy-pipeline
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Clone sibling private repos via deploy keys
+        run: |
+          # IdentitiesOnly=yes forces each clone to use only its matched
+          # key — otherwise SSH might present the wrong key first and
+          # waste a rate-limited attempt.
+          GIT_SSH_COMMAND="ssh -i ~/.ssh/deploy-api -o IdentitiesOnly=yes" \
+            git clone --depth 100 --quiet git@github.com:k0kesh/web-cited-api.git /tmp/web-cited-api
+          GIT_SSH_COMMAND="ssh -i ~/.ssh/deploy-pipeline -o IdentitiesOnly=yes" \
+            git clone --depth 100 --quiet git@github.com:k0kesh/web-cited-pipeline.git /tmp/web-cited-pipeline
 
       - name: Run drift audit
         id: audit
