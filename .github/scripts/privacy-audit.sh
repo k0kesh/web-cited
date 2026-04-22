@@ -21,8 +21,19 @@
 
 set -euo pipefail
 
-CUTOFF_ISO=$(git log -1 --format=%cI -- privacy.html)
-CUTOFF_DATE=$(git log -1 --format=%cs -- privacy.html)
+# If FORCE_CUTOFF_ISO is set (via workflow_dispatch inputs.since), use it
+# as the cutoff instead of the real privacy.html commit date. Useful for
+# smoke-testing the drift/notify path, or for ad-hoc "what changed since
+# <date>" audits. The PRIVACY_SHA_SHORT filter still excludes the actual
+# privacy.html commit from the drift list.
+if [ -n "${FORCE_CUTOFF_ISO:-}" ]; then
+  CUTOFF_ISO="$FORCE_CUTOFF_ISO"
+  CUTOFF_DATE="${FORCE_CUTOFF_ISO%%T*}"   # strip time if present
+  echo "::notice::Cutoff overridden via workflow input: $CUTOFF_ISO"
+else
+  CUTOFF_ISO=$(git log -1 --format=%cI -- privacy.html)
+  CUTOFF_DATE=$(git log -1 --format=%cs -- privacy.html)
+fi
 PRIVACY_SHA_SHORT=$(git log -1 --format=%h -- privacy.html)
 
 echo "Privacy policy last updated: $CUTOFF_DATE (commit $PRIVACY_SHA_SHORT)"

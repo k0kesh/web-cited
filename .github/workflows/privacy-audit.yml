@@ -24,6 +24,11 @@ on:
     # every other "hourly-at-top-of-hour" cron.
     - cron: '17 13 1 * *'
   workflow_dispatch:
+    inputs:
+      since:
+        description: 'Optional cutoff override (ISO date, e.g. 2026-01-01). Defaults to last privacy.html commit.'
+        required: false
+        default: ''
 
 permissions:
   issues: write
@@ -67,6 +72,8 @@ jobs:
 
       - name: Run drift audit
         id: audit
+        env:
+          FORCE_CUTOFF_ISO: ${{ inputs.since }}
         run: bash .github/scripts/privacy-audit.sh
 
       - name: Notify on drift (Issue + email)
