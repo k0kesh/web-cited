@@ -268,38 +268,20 @@
                       placeholder="One per line - use domain URLs, e.g.&#10;https://competitor1.com&#10;https://competitor2.com"></textarea>
           </div>
 
-          <div class="form__row form__row--split">
-            <div>
-              <label for="geo_focus">Primary market<span class="req" aria-hidden="true">*</span></label>
-              <select id="geo_focus" name="geo_focus" required>
-                <option value="" disabled selected>Select market</option>
-                <option value="United States">United States</option>
-                <option value="Canada">Canada</option>
-                <option value="United Kingdom">United Kingdom</option>
-                <option value="EU">European Union</option>
-                <option value="APAC">APAC</option>
-                <option value="LATAM">LATAM</option>
-                <option value="Global">Global (multi-region)</option>
-                <option value="Other">Other</option>
-              </select>
-              <p class="hint">Audits currently run against English-language answer engines only. Non-English markets are available as a custom-scoped engagement. Email <a href="mailto:hello@web-cited.com">hello@web-cited.com</a> and we will price it.</p>
-            </div>
-            <div>
-              <label for="cms">CMS / stack (optional)</label>
-              <select id="cms" name="cms">
-                <option value="" selected>Select one (or skip - we'll auto-detect)</option>
-                <option value="WordPress">WordPress</option>
-                <option value="Shopify">Shopify</option>
-                <option value="Webflow">Webflow</option>
-                <option value="Squarespace">Squarespace</option>
-                <option value="Wix">Wix</option>
-                <option value="Next.js">Next.js / React</option>
-                <option value="Custom">Custom / hand-built</option>
-                <option value="Other">Other</option>
-                <option value="Unknown">Don't know</option>
-              </select>
-              <p class="hint">Tells us where to point fix hints (Yoast panel, Shopify admin, etc.).</p>
-            </div>
+          <div class="form__row">
+            <label for="geo_focus">Primary market<span class="req" aria-hidden="true">*</span></label>
+            <select id="geo_focus" name="geo_focus" required>
+              <option value="" disabled selected>Select market</option>
+              <option value="United States">United States</option>
+              <option value="Canada">Canada</option>
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="EU">European Union</option>
+              <option value="APAC">APAC</option>
+              <option value="LATAM">LATAM</option>
+              <option value="Global">Global (multi-region)</option>
+              <option value="Other">Other</option>
+            </select>
+            <p class="hint">Audits currently run against English-language answer engines only. Non-English markets are available as a custom-scoped engagement. Email <a href="mailto:hello@web-cited.com">hello@web-cited.com</a> and we will price it.</p>
           </div>
 
           <div class="form__row">
@@ -322,39 +304,14 @@
           </div>
 
           <div class="form__row">
-            <label for="sitemap">Sitemap URL (optional, speeds things up)</label>
-            <input id="sitemap"
-                   name="sitemap"
-                   type="url"
-                   inputmode="url"
-                   autocomplete="off"
-                   autocapitalize="off"
-                   autocorrect="off"
-                   spellcheck="false"
-                   placeholder="https://acme.com/sitemap.xml" />
-            <p class="hint">If you leave this blank we'll discover it from <code>robots.txt</code> or crawl from the root.</p>
-          </div>
-
-          <div class="form__row form__row--split">
-            <div>
-              <label for="audit_type">What are you auditing?<span class="req" aria-hidden="true">*</span></label>
-              <select id="audit_type" name="audit_type" required>
-                <option value="" disabled selected>Select one</option>
-                <option value="Own brand">My own brand</option>
-                <option value="Competitor / market intel">A competitor / market intel</option>
-                <option value="Client (agency)">A client (I'm an agency)</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <div>
-              <label for="referrer">How did you hear about us? (optional)</label>
-              <input id="referrer"
-                     name="referrer"
-                     type="text"
-                     inputmode="text"
-                     autocomplete="off"
-                     placeholder="LinkedIn, podcast, search…" />
-            </div>
+            <label for="audit_type">What are you auditing?<span class="req" aria-hidden="true">*</span></label>
+            <select id="audit_type" name="audit_type" required>
+              <option value="" disabled selected>Select one</option>
+              <option value="Own brand">My own brand</option>
+              <option value="Competitor / market intel">A competitor / market intel</option>
+              <option value="Client (agency)">A client (I'm an agency)</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
 
           <div class="form__row">
@@ -500,11 +457,8 @@
         buyer_questions: 'Top buyer questions',
         competitors: 'Primary competitors',
         geo_focus: 'Primary market',
-        cms: 'CMS / stack',
         local_presence: 'Local presence',
-        sitemap: 'Sitemap URL',
         audit_type: 'What are you auditing',
-        referrer: 'How did you hear about us',
         acknowledgement: 'Acknowledgement'
       };
 
