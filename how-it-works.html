@@ -75,7 +75,7 @@
         "estimatedCost": { "@type": "MonetaryAmount", "currency": "USD", "value": "5000" },
         "step": [
           { "@type": "HowToStep", "position": 1, "name": "Intake", "text": "Short web-form questionnaire covering priority buyer questions, target personas, competitors, and business goals. The audit runs from public-web data and your intake answers - no GA4, GSC, or CMS access required." },
-          { "@type": "HowToStep", "position": 2, "name": "Multi-engine crawl", "text": "Technical crawl of the site plus testing of priority prompts across Google Search, Google AI Overviews, Bing, ChatGPT, Perplexity, Gemini, and Claude." },
+          { "@type": "HowToStep", "position": 2, "name": "Multi-engine crawl", "text": "Technical crawl of the site plus testing of priority prompts across Google Search, Google AI Overviews, Bing (organic rank and presence; Copilot detection code is active but Copilot answers are not currently surfaced via SERP APIs), ChatGPT, Perplexity, Gemini, and Claude." },
           { "@type": "HowToStep", "position": 3, "name": "Citation & answer-share analysis", "text": "For every prompt, score who got cited, who got paraphrased, and who got ignored, and reverse-engineer why each source won." },
           { "@type": "HowToStep", "position": 4, "name": "Remediation plan & writing", "text": "Pair every finding with a specific implementable fix - schema, copy edit, information architecture change, or new asset." },
           { "@type": "HowToStep", "position": 5, "name": "Delivery", "text": "Final report, CSV exports, and per-page JSON-LD schema pack delivered by email. Fully written artifacts, so anything you need to discuss internally is copy-pasteable. No live call required." },
@@ -163,7 +163,7 @@
                 <span class="step__tier">Audit</span>
                 <span class="step__tier">Enterprise</span>
               </p>
-              <p class="step__desc">We run your site through a full technical crawl and test your priority prompts across Google Search, Google AI Overviews, Bing, ChatGPT, Perplexity, Gemini, and Claude, capturing the raw responses and the sources each engine cited. Pulse tests 10 prompts; Audit tests 20; Enterprise tests 40 across up to three brands.</p>
+              <p class="step__desc">We run your site through a full technical crawl and test your priority prompts across Google Search, Google AI Overviews, Bing, ChatGPT, Perplexity, Gemini, and Claude, capturing the raw responses and the sources each engine cited. Pulse tests up to 10 prompts; SXO Audit tests up to 25 prompts; Enterprise tests up to 25 prompts per brand across up to three brands. (Bing note: our pipeline includes Copilot detection, but Copilot answers are not currently available through SERP APIs. Bing organic rank and presence is the live signal we report today.)</p>
             </div>
             <div>
               <p class="step__desc"><strong>What we produce:</strong> Raw response log + technical crawl data. Nothing for your team to action yet.</p>
@@ -195,7 +195,7 @@
                 <span class="step__tier">Audit</span>
                 <span class="step__tier">Enterprise</span>
               </p>
-              <p class="step__desc">Every finding is paired with a specific, implementable fix: schema addition, copy edit, information architecture change, or new asset. We write the report as one cohesive narrative, not a dashboard dump. Pulse delivers a one-page exec summary plus a three-page schema pack; Audit ships the full fix backlog plus a 25-page schema pack; Enterprise adds per-brand backlogs and a 75-page schema pack.</p>
+              <p class="step__desc">Every finding is paired with a specific, implementable fix: schema addition, copy edit, information architecture change, or new asset. We write the report as one cohesive narrative, not a dashboard dump. Pulse delivers a one-page exec summary plus a three-page schema pack; SXO Audit ships the full fix backlog plus a JSON-LD schema pack for up to 25 URLs; Enterprise adds per-brand backlogs and a per-brand JSON-LD schema pack for up to 25 URLs per brand.</p>
             </div>
             <div>
               <p class="step__desc"><strong>What we produce:</strong> Draft report + prioritized backlog. Schema &amp; JSON-LD pack.</p>
