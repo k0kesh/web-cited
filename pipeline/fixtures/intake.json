@@ -9,8 +9,6 @@
   },
   "target": {
     "domain": "claimzilla.com",
-    "sitemap_url": "https://claimzilla.com/sitemap.xml",
-    "cms": "Next.js",
     "primary_market": "United States",
     "audit_type": "Own brand"
   },
