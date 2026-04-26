@@ -25,7 +25,7 @@ fi
 BODY=$(cat <<EOF
 Monthly privacy-policy drift check flagged changes to data-relevant files across the three Web Cited repos since the policy was last updated on **$CUTOFF**.
 
-Review these commits and decide whether any of them introduced a new data surface: a new subprocessor, a new field collected, a new retention behavior, a new cookie/pixel/widget, or a new automated decision: that should be disclosed in \`privacy.html\`.
+Review these commits and decide whether any of them introduced a new data surface (a new subprocessor, a new field collected, a new retention behavior, a new cookie/pixel/widget, or a new automated decision) that should be disclosed in \`privacy.html\`.
 
 $(cat "$REPORT")
 
