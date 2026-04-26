@@ -282,7 +282,7 @@
           </div>
 
           <div class="form__row">
-            <label for="competitors">Primary competitors (2-4)</label>
+            <label for="competitors">Primary competitors</label>
             <textarea id="competitors"
                       name="competitors"
                       rows="3"
@@ -291,7 +291,14 @@
                       autocapitalize="off"
                       autocorrect="off"
                       spellcheck="false"
+                      aria-describedby="competitors-hint competitors-counter"
                       placeholder="One per line - use domain URLs, e.g.&#10;https://competitor1.com&#10;https://competitor2.com"></textarea>
+            <p id="competitors-hint" class="hint">
+              Caps by tier: <strong>Pulse</strong> up to 2 competitors &middot; <strong>SXO Audit</strong> 2 to 4 primary competitors &middot; <strong>Enterprise</strong> 2 to 4 primary competitors per brand.
+            </p>
+            <p class="field-counter" id="competitors-counter">
+              <span id="competitors-counter-text">0 / 2</span> competitors entered
+            </p>
           </div>
 
           <div class="form__row">
@@ -443,6 +450,12 @@
     // backend + repeater UI, this cap becomes per-brand.
     var TIER_MAX_URLS = { Pulse: 10, Audit: 25, Enterprise: 25 };
 
+    // Tier-aware caps for the competitors list. Marketing positions Pulse at
+    // "up to 2" and SXO Audit / Enterprise at "2 to 4 primary competitors" as
+    // a deliberate upgrade-driving signal. Mirror these exact values in
+    // web-cited-api/src/types.ts (TIER_MAX_COMPETITORS) when changing.
+    var TIER_MAX_COMPETITORS = { Pulse: 2, Audit: 4, Enterprise: 4 };
+
     // Pre-select tier from ?tier=pulse|audit|enterprise
     (function () {
       var params = new URLSearchParams(window.location.search);
@@ -491,6 +504,42 @@
         r.addEventListener('change', renderCounter);
       });
       // Initial paint
+      renderCounter();
+    }());
+
+    // Tier-driven UI for the competitors field: cap counter (mirrors URLs).
+    (function () {
+      var form = document.getElementById('intake-form');
+      var competitors = document.getElementById('competitors');
+      var counterText = document.getElementById('competitors-counter-text');
+      if (!form || !competitors || !counterText) return;
+
+      function currentTier() {
+        var checked = form.querySelector('input[name="tier"]:checked');
+        return checked ? checked.value : null;
+      }
+
+      function countCompetitors() {
+        return competitors.value
+          .split('\n')
+          .map(function (s) { return s.trim(); })
+          .filter(Boolean)
+          .length;
+      }
+
+      function renderCounter() {
+        var tier = currentTier();
+        var cap = tier ? TIER_MAX_COMPETITORS[tier] : 2;
+        var n = countCompetitors();
+        counterText.textContent = n + ' / ' + cap;
+        var counterEl = document.getElementById('competitors-counter');
+        if (counterEl) counterEl.classList.toggle('field-counter--over', n > cap);
+      }
+
+      competitors.addEventListener('input', renderCounter);
+      form.querySelectorAll('input[name="tier"]').forEach(function (r) {
+        r.addEventListener('change', renderCounter);
+      });
       renderCounter();
     }());
 
@@ -689,6 +738,7 @@
         if (/^unknown:/i.test(reason) && name === 'local_presence') return 'Please choose one of the three local-presence options.';
         if (/too many URLs/i.test(reason) && name === 'urls')       return reason.charAt(0).toUpperCase() + reason.slice(1) + '. Trim the list before submitting.';
         if (/invalid URL/i.test(reason) && name === 'urls')         return reason.charAt(0).toUpperCase() + reason.slice(1) + '. Each URL must start with http:// or https://.';
+        if (/too many competitors/i.test(reason) && name === 'competitors') return reason.charAt(0).toUpperCase() + reason.slice(1) + '. Trim the list before submitting.';
         // Generic fallback, still field-specific.
         return 'Please review ' + label + ' (' + reason + ').';
       }
@@ -788,6 +838,22 @@
                 break;
               }
             }
+          }
+        }
+
+        // Competitors list: required field with per-tier cap. Mirror these
+        // rules in web-cited-api/src/index.ts validateCompetitors() to keep
+        // the client and server messages aligned. Pulse caps at 2; SXO Audit
+        // and Enterprise cap at 4.
+        var competitorsEl = form.querySelector('textarea[name="competitors"]');
+        if (competitorsEl && competitorsEl.value.trim()) {
+          var compTier = (form.querySelector('input[name="tier"]:checked') || {}).value;
+          var compCapMap = { Pulse: 2, Audit: 4, Enterprise: 4 };
+          var compLines = competitorsEl.value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+          if (compTier && compLines.length > compCapMap[compTier]) {
+            var compTooManyMsg = 'Too many competitors for the ' + compTier + ' tier (' + compLines.length + ' entered, ' + compCapMap[compTier] + ' max). Trim the list before submitting.';
+            setFieldError('competitors', compTooManyMsg);
+            errors.push({ name: 'competitors', message: compTooManyMsg });
           }
         }
 
