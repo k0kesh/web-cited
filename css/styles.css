@@ -1345,6 +1345,29 @@ details.faq__item p {
 }
 .form fieldset.field--invalid > legend { color: var(--accent); }
 
+/* Counter for line-capped textareas (currently the URL list). Sits below
+ * the textarea and updates live as the user edits. Goes accent-red when
+ * the line count exceeds the tier cap. Color contrast against --paper:
+ * slate-500 ~5.4:1 (AA), accent (#CC0000) ~5.4:1 (AA). */
+.form .field-counter {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.85rem;
+  color: var(--slate-500);
+  margin: 0.4rem 0 0;
+}
+.form .field-counter--over {
+  color: var(--accent);
+  font-weight: 600;
+}
+/* Subtle interim Enterprise-multi-brand-by-email note (Q35: A). Italic,
+ * slate-700, no border or background, sits inline within the URL hint. */
+.form .urls-enterprise-note {
+  display: inline-block;
+  margin-top: 0.25rem;
+  color: var(--slate-700);
+}
+.form .urls-enterprise-note[hidden] { display: none; }
+
 /* Visually-hidden live region for SR announcements. Mirrors .sr-only
  * rules but kept local so the form script can target it by class. */
 .form-live {

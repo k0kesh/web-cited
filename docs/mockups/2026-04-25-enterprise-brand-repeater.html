@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Web Cited intake form, Enterprise brand-block repeater MOCKUP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --ink: #000;
+    --paper: #f4f3ef;
+    --accent: #CC0000;
+    --accent-hover: #8b0000;
+    --focus: #0047ff;
+    --slate-300: #d4d3cf;
+    --slate-500: #6e6e6e;
+    --slate-700: #2d2d2d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    margin: 0;
+    padding: 32px;
+    line-height: 1.5;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+  h1 {
+    font-family: "Helvetica Neue", "Arial Black", Helvetica, sans-serif;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    margin: 0 0 8px;
+  }
+  .lead { color: var(--slate-700); margin: 0 0 32px; }
+  .mockup-banner {
+    background: var(--ink); color: var(--paper);
+    padding: 12px 16px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0 0 24px;
+  }
+  fieldset {
+    border: 1.5px solid var(--ink);
+    margin: 0 0 24px;
+    padding: 20px 24px;
+    background: #fff;
+  }
+  legend {
+    font-weight: 600;
+    padding: 0 8px;
+    background: var(--paper);
+  }
+  label.tier-opt {
+    display: block;
+    border: 1.5px solid var(--ink);
+    padding: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    background: #fff;
+  }
+  label.tier-opt input { margin-right: 12px; }
+  label.tier-opt .scope {
+    display: block;
+    font-size: 13px;
+    color: var(--slate-500);
+    margin-top: 4px;
+    margin-left: 24px;
+  }
+  label.tier-opt .price {
+    float: right;
+    font-weight: 600;
+  }
+  label.tier-opt:has(input:checked) {
+    border-color: var(--accent);
+    border-width: 3px;
+    padding: 14px;
+  }
+  .brand-block {
+    border: 1.5px solid var(--ink);
+    padding: 20px;
+    margin-bottom: 16px;
+    background: #fff;
+    position: relative;
+  }
+  .brand-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin: 0 0 12px;
+    padding: 0 0 8px;
+    border-bottom: 1.5px solid var(--ink);
+  }
+  .brand-block-header h3 {
+    margin: 0;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .brand-block-header .remove-brand {
+    background: none;
+    border: 1px solid var(--slate-500);
+    color: var(--slate-500);
+    padding: 4px 12px;
+    font-size: 11px;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .brand-block-header .remove-brand:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .field input, .field textarea, .field select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    font-family: inherit;
+    font-size: 14px;
+  }
+  .field textarea { min-height: 100px; resize: vertical; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .field .hint {
+    font-size: 12px;
+    color: var(--slate-500);
+    margin-top: 4px;
+  }
+  .field-counter {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 12px;
+    margin-top: 4px;
+    color: var(--slate-500);
+  }
+  .field-counter.over-cap { color: var(--accent); font-weight: 600; }
+  .add-brand-btn {
+    display: block;
+    width: 100%;
+    border: 1.5px dashed var(--ink);
+    background: transparent;
+    padding: 16px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .add-brand-btn:hover { background: var(--paper); border-color: var(--accent); color: var(--accent); }
+  .add-brand-btn:disabled, .add-brand-btn[hidden] { display: none; }
+  .submit-btn {
+    background: var(--accent);
+    color: #fff;
+    border: 1.5px solid var(--ink);
+    padding: 16px 32px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 16px;
+  }
+  .submit-btn:hover:not(:disabled) { background: var(--accent-hover); }
+  .submit-btn:disabled { background: var(--slate-300); cursor: not-allowed; color: var(--slate-700); }
+  .submit-note {
+    display: block;
+    font-size: 12px;
+    color: var(--slate-500);
+    margin-top: 8px;
+  }
+  .form-error {
+    background: #ffe5e5;
+    border: 1.5px solid var(--accent);
+    padding: 12px 16px;
+    margin: 0 0 16px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .form-error[hidden] { display: none; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="mockup-banner">DESIGN MOCKUP, NOT LIVE FORM. Use to validate Enterprise multi-brand UX before implementation.</div>
+
+  <h1>Start your audit</h1>
+  <p class="lead">Pick your tier, fill in the brand details (1, 2, or 3 brands at Enterprise), and submit. We will reply within one business day with a scope confirmation and an invoice.</p>
+
+  <form id="intake-form" novalidate>
+
+    <div class="form-error" id="form-error" hidden></div>
+
+    <fieldset id="tier-fieldset">
+      <legend>Tier</legend>
+      <label class="tier-opt">
+        <input type="radio" name="tier" value="Pulse">
+        <strong>SXO Pulse</strong>
+        <span class="price">$1,500</span>
+        <span class="scope">Single brand, up to 10 URLs, up to 10 buyer questions, 6 engines, 3 business day turnaround</span>
+      </label>
+      <label class="tier-opt">
+        <input type="radio" name="tier" value="Audit" checked>
+        <strong>SXO Audit</strong>
+        <span class="price">$5,000</span>
+        <span class="scope">Single brand, up to 25 URLs, up to 25 buyer questions, 6 engines, 5 business day turnaround</span>
+      </label>
+      <label class="tier-opt">
+        <input type="radio" name="tier" value="Enterprise">
+        <strong>SXO Enterprise</strong>
+        <span class="price">$12,500</span>
+        <span class="scope">Up to 3 brands, up to 25 URLs per brand, up to 25 buyer questions per brand, 6 engines, 10 business day turnaround</span>
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Who are you</legend>
+      <div class="field">
+        <label>First name</label>
+        <input type="text" name="first_name" required>
+      </div>
+      <div class="field">
+        <label>Last name</label>
+        <input type="text" name="last_name" required>
+      </div>
+      <div class="field">
+        <label>Work email</label>
+        <input type="email" name="email" required>
+      </div>
+    </fieldset>
+
+    <fieldset id="brands-fieldset">
+      <legend>Your business info</legend>
+      <div id="brands-container">
+        <!-- brand blocks render here, initial Brand 1 inserted by JS -->
+      </div>
+      <button type="button" class="add-brand-btn" id="add-brand-btn" hidden>+ Add another brand</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Acknowledgement</legend>
+      <label>
+        <input type="checkbox" name="acknowledgement" required>
+        I confirm the scope and agree to the one-time invoice for the selected tier.
+      </label>
+    </fieldset>
+
+    <button type="submit" class="submit-btn" id="submit-btn">Submit intake</button>
+    <span class="submit-note">We reply inside 1 business day. No sales calls.</span>
+
+  </form>
+
+  <template id="brand-block-template">
+    <div class="brand-block" data-brand-idx="">
+      <div class="brand-block-header">
+        <h3 class="brand-label">Brand 1</h3>
+        <button type="button" class="remove-brand" hidden>Remove brand</button>
+      </div>
+      <div class="field">
+        <label>Company</label>
+        <input type="text" data-field="company" required>
+      </div>
+      <div class="field">
+        <label>Website</label>
+        <input type="url" data-field="website" placeholder="https://..." required>
+      </div>
+      <div class="field">
+        <label>Business one-liner</label>
+        <input type="text" data-field="business_one_liner" placeholder="What does this brand do?" required>
+      </div>
+      <div class="field">
+        <label>Brand qualifier</label>
+        <input type="text" data-field="brand_qualifier" placeholder="e.g. molecular diagnostics" required>
+        <span class="hint">A short qualifier to disambiguate brands with common names.</span>
+      </div>
+      <div class="field">
+        <label>Buyer questions</label>
+        <textarea data-field="buyer_questions" placeholder="One per line. Each is run against 4 LLM engines."></textarea>
+        <span class="field-counter" data-counter="buyer_questions">0 / 10</span>
+      </div>
+      <div class="field">
+        <label>Competitors</label>
+        <textarea data-field="competitors" placeholder="One per line. URLs or brand names."></textarea>
+        <span class="hint">For citation-share comparison.</span>
+      </div>
+      <div class="field">
+        <label>Primary market</label>
+        <input type="text" data-field="primary_market" placeholder="e.g. United States, DACH region" required>
+      </div>
+      <div class="field">
+        <label>Local presence</label>
+        <select data-field="local_presence" required>
+          <option value="">Select one</option>
+          <option value="storefront">Storefront (customers come to you)</option>
+          <option value="service_area">Service area (you go to customers)</option>
+          <option value="online_only">Online only</option>
+        </select>
+      </div>
+    </div>
+  </template>
+
+</div>
+
+<script>
+  // Tier limits, mirror of web-cited-pipeline/src/pipeline/tier_limits.py
+  // and web-cited-api/src/types.ts. Keep in sync.
+  const TIER_MAX_URLS_PER_BRAND = { Pulse: 10, Audit: 25, Enterprise: 25 };
+  const TIER_MAX_PROMPTS_PER_BRAND = { Pulse: 10, Audit: 25, Enterprise: 25 };
+  const TIER_MAX_BRANDS = { Pulse: 1, Audit: 1, Enterprise: 3 };
+
+  const form = document.getElementById("intake-form");
+  const brandsContainer = document.getElementById("brands-container");
+  const addBrandBtn = document.getElementById("add-brand-btn");
+  const submitBtn = document.getElementById("submit-btn");
+  const formError = document.getElementById("form-error");
+  const template = document.getElementById("brand-block-template");
+
+  function currentTier() {
+    const checked = form.querySelector('input[name="tier"]:checked');
+    return checked ? checked.value : "Audit";
+  }
+
+  function brandBlocks() {
+    return Array.from(brandsContainer.querySelectorAll(".brand-block"));
+  }
+
+  function reindexBrands() {
+    brandBlocks().forEach((block, idx) => {
+      block.dataset.brandIdx = String(idx);
+      block.querySelector(".brand-label").textContent = "Brand " + (idx + 1);
+      const removeBtn = block.querySelector(".remove-brand");
+      removeBtn.hidden = idx === 0;
+    });
+  }
+
+  function updateAddBrandVisibility() {
+    const tier = currentTier();
+    const max = TIER_MAX_BRANDS[tier];
+    const current = brandBlocks().length;
+    addBrandBtn.hidden = !(tier === "Enterprise" && current < max);
+  }
+
+  function attachCounter(block) {
+    const textarea = block.querySelector('textarea[data-field="buyer_questions"]');
+    const counter = block.querySelector('span[data-counter="buyer_questions"]');
+    function update() {
+      const tier = currentTier();
+      const cap = TIER_MAX_PROMPTS_PER_BRAND[tier];
+      const lines = textarea.value.split("\n").map(s => s.trim()).filter(Boolean).length;
+      counter.textContent = lines + " / " + cap;
+      counter.classList.toggle("over-cap", lines > cap);
+      validateForm();
+    }
+    textarea.addEventListener("input", update);
+    update();
+  }
+
+  function attachRemove(block) {
+    const removeBtn = block.querySelector(".remove-brand");
+    removeBtn.addEventListener("click", () => {
+      block.remove();
+      reindexBrands();
+      updateAddBrandVisibility();
+      validateForm();
+    });
+  }
+
+  function addBrandBlock() {
+    const tier = currentTier();
+    const max = TIER_MAX_BRANDS[tier];
+    if (brandBlocks().length >= max) return;
+    const node = template.content.firstElementChild.cloneNode(true);
+    brandsContainer.appendChild(node);
+    reindexBrands();
+    attachCounter(node);
+    attachRemove(node);
+    updateAddBrandVisibility();
+  }
+
+  function recountAllCounters() {
+    brandBlocks().forEach(block => {
+      const textarea = block.querySelector('textarea[data-field="buyer_questions"]');
+      textarea.dispatchEvent(new Event("input"));
+    });
+  }
+
+  function validateForm() {
+    const tier = currentTier();
+    const blocks = brandBlocks();
+
+    let errors = [];
+    if (tier === "Pulse" || tier === "Audit") {
+      if (blocks.length !== 1) errors.push("Pulse and Audit require exactly 1 brand.");
+    } else if (tier === "Enterprise") {
+      if (blocks.length < 1 || blocks.length > 3) errors.push("Enterprise requires 1, 2, or 3 brands.");
+    }
+
+    blocks.forEach((block, idx) => {
+      const textarea = block.querySelector('textarea[data-field="buyer_questions"]');
+      const lines = textarea.value.split("\n").map(s => s.trim()).filter(Boolean).length;
+      const cap = TIER_MAX_PROMPTS_PER_BRAND[tier];
+      if (lines > cap) {
+        errors.push("Brand " + (idx + 1) + " has " + lines + " buyer questions; the " + tier + " tier supports up to " + cap + " per brand.");
+      }
+    });
+
+    if (errors.length) {
+      formError.hidden = false;
+      formError.textContent = errors[0];
+      submitBtn.disabled = true;
+    } else {
+      formError.hidden = true;
+      formError.textContent = "";
+      submitBtn.disabled = false;
+    }
+  }
+
+  // Tier change handler
+  form.querySelectorAll('input[name="tier"]').forEach(input => {
+    input.addEventListener("change", () => {
+      // Tier change preserves Brand 1 data; switching to Pulse/Audit hides
+      // blocks 2 and 3 if present.
+      const blocks = brandBlocks();
+      if (currentTier() !== "Enterprise" && blocks.length > 1) {
+        if (confirm("Switching to " + currentTier() + " will remove brands 2 and 3. Continue?")) {
+          blocks.slice(1).forEach(b => b.remove());
+          reindexBrands();
+        } else {
+          // revert
+          const enterprise = form.querySelector('input[name="tier"][value="Enterprise"]');
+          if (enterprise) enterprise.checked = true;
+        }
+      }
+      updateAddBrandVisibility();
+      recountAllCounters();
+    });
+  });
+
+  addBrandBtn.addEventListener("click", addBrandBlock);
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    validateForm();
+    if (submitBtn.disabled) return;
+    // Serialize per-brand data
+    const payload = {
+      tier: currentTier(),
+      first_name: form.first_name.value,
+      last_name: form.last_name.value,
+      email: form.email.value,
+      audit_type: "Own brand",
+      acknowledgement: "yes",
+      brands: brandBlocks().map(block => ({
+        company: block.querySelector('[data-field="company"]').value,
+        website: block.querySelector('[data-field="website"]').value,
+        business_one_liner: block.querySelector('[data-field="business_one_liner"]').value,
+        brand_qualifier: block.querySelector('[data-field="brand_qualifier"]').value,
+        buyer_questions: block.querySelector('[data-field="buyer_questions"]').value,
+        competitors: block.querySelector('[data-field="competitors"]').value,
+        primary_market: block.querySelector('[data-field="primary_market"]').value,
+        local_presence: block.querySelector('[data-field="local_presence"]').value,
+      })),
+    };
+    alert("MOCKUP: would POST to /intake with payload:\n\n" + JSON.stringify(payload, null, 2));
+  });
+
+  // Initial render: 1 brand block at page load
+  addBrandBlock();
+  validateForm();
+</script>
+
+</body>
+</html>
