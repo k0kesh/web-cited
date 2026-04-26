@@ -1,5 +1,5 @@
 #!/bin/bash
-# privacy-audit.sh — Detect whether any data-relevant code has changed
+# privacy-audit.sh: Detect whether any data-relevant code has changed
 # across the three Web Cited repos since privacy.html was last updated.
 #
 # Exits 0 in both cases; drift/no-drift is signalled via $GITHUB_OUTPUT:
@@ -10,11 +10,11 @@
 # for the notify step to pick up.
 #
 # Allowlist rationale:
-#   web-cited            — any HTML/JS/CSS that could introduce a browser
+#   web-cited           : any HTML/JS/CSS that could introduce a browser
 #                          tracker, embed a third-party widget, or change
 #                          what the intake form collects.
-#   web-cited-api        — all Worker source (every route touches PII).
-#   web-cited-pipeline   — the files that handle PII or configure
+#   web-cited-api       : all Worker source (every route touches PII).
+#   web-cited-pipeline  : the files that handle PII or configure
 #                          subprocessors; crawler/analytics files are
 #                          intentionally excluded because they don't
 #                          transmit user-submitted data.
@@ -62,6 +62,9 @@ if [ -n "$DRIFT" ]; then
 fi
 
 # ---- web-cited-pipeline (audit pipeline) ----
+# engines/ and llm_clients/ are watched because a new audit-content
+# backend (a new LLM, a new SERP provider) is a new subprocessor and
+# triggers a privacy disclosure under the Third parties section.
 DRIFT=$(cd /tmp/web-cited-pipeline && git log --since="$CUTOFF_ISO" \
   --pretty=format:'- `%h` %s _(%cs, %an)_' \
   --no-merges \
@@ -74,9 +77,49 @@ DRIFT=$(cd /tmp/web-cited-pipeline && git log --since="$CUTOFF_ISO" \
   src/pipeline/intake.py \
   src/pipeline/mailer.py \
   src/pipeline/stripe_client.py \
+  src/pipeline/engines \
+  src/pipeline/llm_clients \
   2>/dev/null || true)
 if [ -n "$DRIFT" ]; then
   printf '### web-cited-pipeline (audit pipeline)\n\n%s\n\n' "$DRIFT" >> "$REPORT"
+fi
+
+# ---- Public-host drift check ----
+# The privacy policy makes explicit hosting claims (GitHub Pages,
+# Fastly, Cloudflare). If the live "server" header for either endpoint
+# names a host that is NOT mentioned anywhere in privacy.html, that is
+# a host-migration signal that should trigger a privacy review on its
+# own, even when no source code drifted.
+HOSTING_DRIFT=""
+check_host_against_policy() {
+  local url="$1"
+  local label="$2"
+  local server token
+  server=$(curl -sI --max-time 10 "$url" 2>/dev/null \
+    | awk -F': ' 'tolower($1)=="server"{sub(/\r$/,"",$2); print tolower($2); exit}')
+  [ -z "$server" ] && return 0
+  # Normalize: take the first whitespace-separated token, strip a
+  # trailing version suffix (e.g. "github.com/4.2" -> "github.com").
+  token=$(printf '%s' "$server" | awk '{print $1}' | awk -F'/' '{print $1}')
+  if ! grep -qi -- "$token" privacy.html; then
+    HOSTING_DRIFT+="- ${label} (\`${url}\`) is served by \`${token}\`, which is not mentioned in privacy.html"$'\n'
+  fi
+}
+check_host_against_policy "https://web-cited.com/"     "Public site"
+check_host_against_policy "https://api.web-cited.com/" "Intake API"
+if [ -n "$HOSTING_DRIFT" ]; then
+  printf '### Public-host drift\n\nA hosting provider that is currently serving traffic is **not described** in the policy. This usually means the site or API has been migrated to a new host since the policy was last updated.\n\n%s\n' "$HOSTING_DRIFT" >> "$REPORT"
+fi
+
+# ---- Public-host fingerprint (appended when any drift was found) ----
+# Whenever the report has any content, also include the live response
+# headers from both endpoints. Gives the human reviewer a complete
+# infrastructure picture alongside whatever drift was flagged above.
+if [ -s "$REPORT" ]; then
+  HOSTING=$( bash "$(dirname "$0")/hosting-facts.sh" || true )
+  if [ -n "$HOSTING" ]; then
+    printf '%s\n' "$HOSTING" >> "$REPORT"
+  fi
 fi
 
 # ---- Emit outputs + step summary ----

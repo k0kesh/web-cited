@@ -1,33 +1,45 @@
-name: Privacy policy drift check
+name: Terms of Service drift check
 
-# Monthly check for drift between the shipped data pipeline and the live
-# privacy policy. Fires on the 1st of every month and on manual dispatch.
+# Monthly check for drift between the shipped product and the live
+# Terms of Service. Fires on the 15th of every month and on manual
+# dispatch. Half-month offset from the privacy-audit workflow (which
+# fires on the 1st) so the two reviews land in different weeks and
+# the operator does not get two assignment-emails on the same morning.
+#
 # When drift is detected, files a GitHub Issue and emails NOTIFY_EMAIL.
 # When no drift is detected, exits clean: no issue, no email.
 #
-# Required secrets (set at the repo level):
+# Required secrets (shared with privacy-audit.yml; set at the repo
+# level):
 #   DEPLOY_KEY_API       Private half of a read-only ed25519 deploy key
-#                        registered on k0kesh/web-cited-api. Used only to
-#                        clone that repo.
+#                        registered on k0kesh/web-cited-api. Used only
+#                        to clone that repo.
 #   DEPLOY_KEY_PIPELINE  Same, for k0kesh/web-cited-pipeline.
 #
-# GITHUB_TOKEN is auto-provided by Actions and scoped below to issues:write.
-# Deploy keys are per-repo and read-only: narrowest possible blast radius.
+# GITHUB_TOKEN is auto-provided by Actions and scoped below to
+# issues:write. Deploy keys are per-repo and read-only: narrowest
+# possible blast radius.
 #
 # Notification: when drift is detected, the notify step opens a GitHub
 # Issue assigned to k0kesh. GitHub's built-in assignment email delivers
 # the alert; there is no separate transactional email.
+#
+# Host-migration note: this workflow runs in GitHub Actions and depends
+# on the source repos staying on GitHub. If the source moves off GitHub
+# (Railway, Vercel, GitLab, anywhere else), this workflow stops firing
+# and an equivalent monthly cron must be set up on the new platform.
+# The audit logic itself (in tos-audit.sh) is portable: it shells out
+# to git and curl only.
 
 on:
   schedule:
-    # 1st of every month at 13:17 UTC (~9:17 AM ET). Intentionally off
-    # the :00 minute mark so this fleet-wide job doesn't pile up with
-    # every other "hourly-at-top-of-hour" cron.
-    - cron: '17 13 1 * *'
+    # 15th of every month at 13:17 UTC (~9:17 AM ET). Same minute as
+    # the privacy audit, fourteen days offset.
+    - cron: '17 13 15 * *'
   workflow_dispatch:
     inputs:
       since:
-        description: 'Optional cutoff override (ISO date, e.g. 2026-01-01). Defaults to last privacy.html commit.'
+        description: 'Optional cutoff override (ISO date, e.g. 2026-01-01). Defaults to last terms.html commit.'
         required: false
         default: ''
 
@@ -39,7 +51,7 @@ jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout web-cited (full history: need privacy.html log)
+      - name: Checkout web-cited (full history, need terms.html log)
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
@@ -64,7 +76,7 @@ jobs:
       - name: Clone sibling private repos via deploy keys
         run: |
           # IdentitiesOnly=yes forces each clone to use only its matched
-          # key: otherwise SSH might present the wrong key first and
+          # key. Otherwise SSH might present the wrong key first and
           # waste a rate-limited attempt.
           GIT_SSH_COMMAND="ssh -i ~/.ssh/deploy-api -o IdentitiesOnly=yes" \
             git clone --depth 100 --quiet git@github.com:k0kesh/web-cited-api.git /tmp/web-cited-api
@@ -75,11 +87,11 @@ jobs:
         id: audit
         env:
           FORCE_CUTOFF_ISO: ${{ inputs.since }}
-        run: bash .github/scripts/privacy-audit.sh
+        run: bash .github/scripts/tos-audit.sh
 
       - name: Notify on drift (open Issue)
         if: steps.audit.outputs.drift == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CUTOFF: ${{ steps.audit.outputs.cutoff }}
-        run: bash .github/scripts/privacy-notify.sh
+        run: bash .github/scripts/tos-notify.sh
