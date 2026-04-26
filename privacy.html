@@ -55,7 +55,7 @@
         "about": { "@id": "https://web-cited.com/#organization" },
         "inLanguage": "en-US",
         "datePublished": "2026-04-17",
-        "dateModified": "2026-04-21"
+        "dateModified": "2026-04-25"
       },
       {
         "@type": "BreadcrumbList",
@@ -107,8 +107,11 @@
 
           <div class="meta-row">
             <span>Effective date · 2026-04-21</span>
-            <span>Last updated · 2026-04-21</span>
+            <span>Last updated · 2026-04-25</span>
+            <span>Related · <a href="terms.html">Terms of Service</a></span>
           </div>
+
+          <p>Use of the Site and Services is also governed by the <a href="terms.html">Terms of Service</a>. The two documents are intended to be read together; the Terms of Service control on non-privacy matters and incorporate this Privacy Policy by reference (Terms §10).</p>
 
           <h2>The short version</h2>
           <ul>
@@ -133,15 +136,34 @@
           <p>The intake form at <a href="start.html">/start</a> sends the fields you fill in - first and last name, work email, company, website, the primary market you serve, whether you have a storefront or service area, a short business description, the buyer questions you want us to test, your competitor list, the audit tier you've selected, and your explicit consent acknowledgment - to our own API at <code>api.web-cited.com</code>. From there, your submission is recorded as a contact and deal in our CRM, a scope-confirmation email is sent to you automatically through our email-delivery service, and an invoice is generated through our payment processor with a hosted-checkout link. If you pay, a kickoff email is sent automatically and we begin the audit. If you don't, the record stays in our CRM and we close it out. "Contact" links elsewhere on the site open a standard <code>mailto:</code> in your email client, which transmits your email address to our inbox directly.</p>
           <p>We use anything you send us solely to reply, to scope the engagement, and - if you become a client - to deliver the audit. We do not add you to a marketing list. We do not share, sell, or transfer your information to any third party beyond the service providers listed in the "Third parties" section below. If you ask us to delete your record and any associated data, we will - see "Your rights" for the process and timeline.</p>
 
+          <h2>Deliverable retention</h2>
+          <p>Once your audit is delivered, the audit report PDF is sent to you and is yours to keep, and the Schema Pack is delivered to you as a downloadable <code>.zip</code>. The Playbook (Audit and Enterprise tiers) is hosted at a private URL for twelve (12) months from delivery. After 12 months, Web Cited may take the URL offline; we retain a copy of the rendered content in our archives for an additional twelve (12) months and can re-publish on request. After 24 months from delivery, the rendered Playbook content may be deleted from Web Cited's systems unless a separate retention agreement applies. The full retention schedule for deliverables is in <a href="terms.html">Terms of Service §6.1</a>.</p>
+
           <h2>Hosting</h2>
           <p>This site is a static collection of HTML, CSS, JavaScript, and images served by GitHub Pages. GitHub may retain access logs (including IP addresses) at the infrastructure level as described in the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">GitHub General Privacy Statement</a>. The intake API at <code>api.web-cited.com</code> runs on an edge-compute platform that may retain its own access logs, again at the infrastructure level. We do not have access to either provider's infrastructure logs and do not request them.</p>
 
           <h2>Third parties</h2>
-          <p>When you submit the intake form, your data flows through a short list of service providers we need to actually deliver the audit: an edge-compute platform that runs our intake API and stores at-rest operational data, a CRM that holds your contact and deal record, an email-delivery service that sends the scope and kickoff emails, and - if you choose to pay - a payment processor that handles billing and runs the hosted checkout you get redirected to. Each acts as a data processor under our instructions and is governed by its own privacy policy and our agreement with it. The current list of providers, with links to each privacy statement, is available on request at <a href="mailto:hello@web-cited.com?subject=Subprocessor%20list">hello@web-cited.com</a>.</p>
+          <p>When you submit the intake form, your data flows through a short list of service providers we need to actually deliver the audit. The full list mirrors Terms of Service §6.7 and is grouped by what each provider handles.</p>
+          <p><strong>Personal-data processors</strong> (handle your contact details, your company information, and your payment information):</p>
+          <ul>
+            <li><strong>Cloudflare</strong>: runs our intake API at <code>api.web-cited.com</code> and stores at-rest operational data.</li>
+            <li><strong>HubSpot</strong>: customer relationship management (CRM) system holding your contact record and deal record.</li>
+            <li><strong>Resend</strong>: email-delivery service for scope, kickoff, and follow-up emails.</li>
+            <li><strong>Stripe</strong>: payment processor for invoices and the hosted checkout you are redirected to. Web Cited never sees your card data.</li>
+          </ul>
+          <p><strong>Audit-content backends</strong> (process your Customer Content, meaning the buyer questions, brand and competitor list, and URLs you submit on intake; do not directly receive your name, email, or other contact details):</p>
+          <ul>
+            <li><strong>OpenAI</strong>, <strong>Anthropic</strong>, <strong>Google</strong> (Gemini), and <strong>Perplexity</strong>: large language model (LLM) backends queried with your buyer questions to test how each engine answers.</li>
+            <li><strong>DataForSEO</strong>: structured search-engine and SERP (search engine results page) data provider.</li>
+          </ul>
+          <p>Each provider acts as a data processor under our instructions and is governed by its own privacy policy and our data-processing agreement with it. We do not share, sell, or transfer your information to any third party beyond this list. For links to each provider's current privacy statement, email <a href="mailto:hello@web-cited.com?subject=Subprocessor%20list">hello@web-cited.com</a>.</p>
           <p>Outside of that pipeline, this site uses no analytics, no ad networks, no chat widgets, no embedded video, no marketing pixels, and no fingerprinting. We use the system font stack rather than a third-party font service. We do not embed YouTube, Vimeo, X/Twitter, Calendly, Intercom, or any other widget. Outside of form submission, the only outbound network call you'll make from any page on this site is to follow a link you click yourself.</p>
 
+          <h2>Publicity</h2>
+          <p>Per <a href="terms.html">Terms of Service §11</a>, Web Cited may identify you as a customer (by name and logo) on the Site, in marketing materials, and in case studies, in factual descriptions of the engagement and without disclosing Confidential Information. To opt out at any time, email <a href="mailto:hello@web-cited.com?subject=Publicity%20opt-out">hello@web-cited.com</a> with the subject "Publicity opt-out". Following an opt-out, Web Cited will use commercially reasonable efforts to remove or redact references on assets Web Cited controls within thirty (30) days; see Terms §11 for the full mechanism.</p>
+
           <h2>Children</h2>
-          <p>This site is intended for an adult business audience. We do not knowingly collect any information from anyone under the age of 16.</p>
+          <p>This site is intended for an adult business audience. We do not knowingly collect any information from anyone under the age of 18, consistent with <a href="terms.html">Terms of Service §1</a>.</p>
 
           <h2>Automated decision-making</h2>
           <p>When you submit the intake form, it receives a simple scope-fit score before anything else happens. The score gates only one thing: whether a scope-confirmation email and invoice are generated automatically, or whether your intake is held back for a human to review first. Either way, a human sees every intake - the score doesn't accept or reject anyone on its own. Under GDPR Article 22, this does not qualify as "solely automated decision-making with legal or similarly significant effects." We disclose it here in the interest of full transparency. If you'd prefer your intake be reviewed manually rather than scored, reply to the scope email when you receive it, or email <a href="mailto:hello@web-cited.com?subject=Manual%20intake%20review">hello@web-cited.com</a> before submitting.</p>
