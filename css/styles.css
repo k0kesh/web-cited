@@ -755,6 +755,29 @@ h4 {
 .faq {
   border-top: var(--rule);
 }
+
+/* Glossary list on support.html. Plain dl/dt/dd; dt is the term, dd is the
+ * definition. Slight indent on dd, accent line on dt. */
+.glossary {
+  margin: 1.5rem 0 2.5rem;
+  border-top: var(--rule);
+}
+.glossary dt {
+  font-weight: 700;
+  margin: 1.25rem 0 0.4rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--slate-300);
+  font-size: clamp(1rem, 0.95rem + 0.2vw, 1.1rem);
+}
+.glossary dt:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.glossary dd {
+  margin: 0 0 0.5rem 0;
+  color: var(--slate-700);
+  line-height: 1.6;
+}
 details.faq__item {
   border-bottom: var(--rule);
   padding: 1.25rem 0;
