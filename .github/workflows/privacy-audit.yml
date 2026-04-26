@@ -39,7 +39,7 @@ jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout web-cited (full history: need privacy.html log)
+      - name: Checkout web-cited (full history, need privacy.html log)
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
