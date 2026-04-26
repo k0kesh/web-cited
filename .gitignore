@@ -3,3 +3,11 @@ node_modules/
 .idea/
 .vscode/
 *.log
+
+# Local agent artifacts (Claude Code session caches, generated docs,
+# audit reports). These are local-machine working-state, not part of
+# the deployable site. Keep out of git.
+.superpowers/
+CLAUDE.md
+docs/superpowers/
+reports/

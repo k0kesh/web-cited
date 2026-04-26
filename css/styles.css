@@ -756,6 +756,25 @@ h4 {
   border-top: var(--rule);
 }
 
+/* Support page section dividers (Audit logistics, Scope changes, Methodology,
+ * etc.) Plain h2 inherits the global clamp(1.6rem,...,4rem) which is too big
+ * when used as a SUBSECTION divider inside the FAQ stack: the categories ran
+ * together with no breathing room. This class scopes a smaller font-size and
+ * generous top margin so groups read as discrete sections. */
+.support-section__title {
+  font-size: clamp(1.35rem, 1.5vw + 0.7rem, 1.75rem);
+  letter-spacing: -0.01em;
+  margin-top: 3.5rem;
+  margin-bottom: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--slate-300);
+}
+.support-section__title:first-of-type {
+  margin-top: 1rem;
+  padding-top: 0;
+  border-top: 0;
+}
+
 /* Glossary list on support.html. Plain dl/dt/dd; dt is the term, dd is the
  * definition. Slight indent on dd, accent line on dt. */
 .glossary {
