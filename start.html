@@ -27,6 +27,65 @@
   <meta name="twitter:image" content="https://web-cited.com/og/pricing.png" />
 
   <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* Brand-repeater (Phase 2). Scoped to start.html so the change stays
+       in one file. Uses existing design tokens defined in css/styles.css
+       (--ink, --paper, --accent, --slate-500) with var() fallbacks for
+       safety in case the linked stylesheet ever fails to load. */
+    .brands-fieldset { display: block; }
+    .brand-block {
+      border: 1.5px solid var(--ink, #000);
+      background: #fff;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+    .brand-block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 0 16px;
+    }
+    .brand-block-header .brand-label {
+      font-family: "Helvetica Neue", "Arial Black", Helvetica, sans-serif;
+      font-size: 18px;
+      margin: 0;
+    }
+    .brand-block-header .remove-brand {
+      background: none;
+      border: 1px solid var(--slate-500, #6e6e6e);
+      color: var(--slate-500, #6e6e6e);
+      padding: 4px 12px;
+      font-size: 11px;
+      cursor: pointer;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .brand-block-header .remove-brand:hover {
+      border-color: var(--accent, #CC0000);
+      color: var(--accent, #CC0000);
+    }
+    .add-brand-btn {
+      display: block;
+      width: 100%;
+      border: 1.5px dashed var(--ink, #000);
+      background: transparent;
+      padding: 16px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+    .add-brand-btn:hover {
+      background: var(--paper, #f4f3ef);
+      border-color: var(--accent, #CC0000);
+      color: var(--accent, #CC0000);
+    }
+    .add-brand-btn[hidden] { display: none; }
+    .field-counter.over-cap { color: var(--accent, #CC0000); font-weight: 600; }
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -126,7 +185,7 @@
                   <span class="tier-opt__dot" aria-hidden="true"></span>
                   <span>
                     <span class="tier-opt__label">Pulse</span>
-                    <span class="tier-opt__scope">Single brand · up to 10 URLs · up to 10 buyer questions across 4 LLM engines · Bing/Google AI Overview brand-presence checks · 3 business day turnaround</span>
+                    <span class="tier-opt__scope">Single brand, up to 10 URLs, up to 10 buyer questions, 4 LLM (Large Language Model) engines plus Bing AI Overview and Google AIO presence checks, 3 business day turnaround</span>
                   </span>
                   <span class="tier-opt__price">$1,500</span>
                 </span>
@@ -137,7 +196,7 @@
                   <span class="tier-opt__dot" aria-hidden="true"></span>
                   <span>
                     <span class="tier-opt__label">SXO Audit <span class="tier-opt__badge">- most teams pick this</span></span>
-                    <span class="tier-opt__scope">Full SEO + AEO + GEO + entity + off-site · up to 25 URLs · up to 25 buyer questions across 4 LLM engines · Bing/Google AI Overview brand-presence checks · fix backlog · schema pack · 30-day Q&amp;A · 5 business day turnaround</span>
+                    <span class="tier-opt__scope">Single brand, up to 25 URLs, up to 25 buyer questions, up to 4 competitors, 4 LLM engines plus Bing AI Overview and Google AIO, 5 business day turnaround</span>
                   </span>
                   <span class="tier-opt__price">$5,000</span>
                 </span>
@@ -148,7 +207,7 @@
                   <span class="tier-opt__dot" aria-hidden="true"></span>
                   <span>
                     <span class="tier-opt__label">Enterprise</span>
-                    <span class="tier-opt__scope">Up to 3 brands · up to 25 URLs per brand · up to 25 buyer questions per brand across 4 LLM engines · Bing/Google AI Overview brand-presence checks per brand · 60-day Q&amp;A · 10 business day turnaround</span>
+                    <span class="tier-opt__scope">Up to 3 brands, up to 25 URLs per brand, up to 25 buyer questions per brand, up to 4 competitors per brand, 4 LLM engines plus Bing AI Overview and Google AIO, 10 business day turnaround</span>
                   </span>
                   <span class="tier-opt__price">$12,500</span>
                 </span>
@@ -187,19 +246,6 @@
 
           <div class="form__row form__row--split">
             <div>
-              <label for="company">Company</label>
-              <input id="company"
-                     name="company"
-                     type="text"
-                     inputmode="text"
-                     autocomplete="organization"
-                     required
-                     placeholder="Acme Inc." />
-            </div>
-          </div>
-
-          <div class="form__row form__row--split">
-            <div>
               <label for="email">Work email</label>
               <input id="email"
                      name="email"
@@ -212,127 +258,15 @@
                      required
                      placeholder="jane@acme.com" />
             </div>
-            <div>
-              <label for="website">Website URL</label>
-              <input id="website"
-                     name="website"
-                     type="url"
-                     inputmode="url"
-                     autocomplete="url"
-                     autocapitalize="off"
-                     autocorrect="off"
-                     spellcheck="false"
-                     aria-describedby="website-hint"
-                     required
-                     placeholder="https://acme.com" />
-              <p id="website-hint" class="hint">Your homepage. The audit crawls deeper pages from here, or from the URL list below if you provide one.</p>
+          </div>
+
+          <fieldset class="form__row brands-fieldset">
+            <legend>Your business info</legend>
+            <div id="brands-container">
+              <!-- Brand blocks rendered by JS on page load. -->
             </div>
-          </div>
-
-          <div class="form__row">
-            <label for="urls">URLs to audit (optional)</label>
-            <textarea id="urls"
-                      name="urls"
-                      rows="6"
-                      inputmode="url"
-                      autocapitalize="off"
-                      autocorrect="off"
-                      spellcheck="false"
-                      aria-describedby="urls-hint urls-counter"
-                      placeholder="One per line, e.g.&#10;https://acme.com/&#10;https://acme.com/services/heat-pump-installation&#10;https://acme.com/case-studies/denver-furnace-replacement&#10;https://acme.com/pricing"></textarea>
-            <p id="urls-hint" class="hint">
-              Paste the priority pages you want audited (homepage plus the commercial / category / case-study URLs that matter most). Leave it blank and we will crawl from your homepage. Caps by tier: <strong>Pulse</strong> up to 10 URLs &middot; <strong>SXO Audit</strong> up to 25 URLs &middot; <strong>Enterprise</strong> up to 25 URLs per brand (up to 3 brands).
-              <span class="urls-enterprise-note" hidden><br><em>Enterprise multi-brand intake: submit your primary brand here; we will follow up by email to scope brands 2 and 3.</em></span>
-            </p>
-            <p class="field-counter" id="urls-counter">
-              <span id="urls-counter-text">0 / 10</span> URLs entered
-            </p>
-          </div>
-
-          <div class="form__row">
-            <label for="business_one_liner">What does your business do? (one sentence)</label>
-            <textarea id="business_one_liner"
-                      name="business_one_liner"
-                      rows="2"
-                      autocapitalize="sentences"
-                      required
-                      placeholder="We install and service residential HVAC systems across the Denver metro area."></textarea>
-          </div>
-
-          <div class="form__row">
-            <label for="brand_qualifier">Brand qualifier (optional, 1-3 words)</label>
-            <input id="brand_qualifier"
-                   name="brand_qualifier"
-                   type="text"
-                   inputmode="text"
-                   maxlength="60"
-                   autocomplete="off"
-                   placeholder="HVAC contractor" />
-            <p class="hint">Only if your brand name collides with a common word (e.g. Apple the company vs apple the fruit, Cepheid the company vs Cepheid the variable star). Adds a short category tag to entity-graph and SERP lookups so the audit resolves to the right entity.</p>
-          </div>
-
-          <div class="form__row">
-            <label for="buyer_questions">Top buyer questions (3 to 5)</label>
-            <textarea id="buyer_questions"
-                      name="buyer_questions"
-                      rows="5"
-                      autocapitalize="sentences"
-                      required
-                      placeholder="One per line, e.g.&#10;How much does it cost to replace a home furnace?&#10;Which heating and cooling company has the best reviews in Denver?&#10;Is Acme better than Competitor X?"></textarea>
-            <p class="hint">These drive the citation tests across ChatGPT, Perplexity, Gemini, and Claude. The sharper your questions, the sharper your report.</p>
-          </div>
-
-          <div class="form__row">
-            <label for="competitors">Primary competitors</label>
-            <textarea id="competitors"
-                      name="competitors"
-                      rows="3"
-                      required
-                      inputmode="url"
-                      autocapitalize="off"
-                      autocorrect="off"
-                      spellcheck="false"
-                      aria-describedby="competitors-hint competitors-counter"
-                      placeholder="One per line - use domain URLs, e.g.&#10;https://competitor1.com&#10;https://competitor2.com"></textarea>
-            <p id="competitors-hint" class="hint">
-              Caps by tier: <strong>Pulse</strong> up to 2 competitors &middot; <strong>SXO Audit</strong> 2 to 4 primary competitors &middot; <strong>Enterprise</strong> 2 to 4 primary competitors per brand.
-            </p>
-            <p class="field-counter" id="competitors-counter">
-              <span id="competitors-counter-text">0 / 2</span> competitors entered
-            </p>
-          </div>
-
-          <div class="form__row">
-            <label for="geo_focus">Primary market</label>
-            <input id="geo_focus"
-                   name="geo_focus"
-                   type="text"
-                   inputmode="text"
-                   autocomplete="off"
-                   maxlength="80"
-                   required
-                   placeholder="e.g. USA, EU, APAC" />
-            <p class="hint">Audits currently run against English-language answer engines only. Non-English markets are available as a custom-scoped engagement. <a href="contact.html">Send us a note</a> and we will price it.</p>
-          </div>
-
-          <div class="form__row">
-            <fieldset class="radio-group">
-              <legend>Local presence</legend>
-              <p class="hint">Tells us whether to audit your Google Business Profile and local search pack.</p>
-              <label class="radio">
-                <input type="radio" name="local_presence" value="storefront" required>
-                <span class="radio__label"><strong>Storefront</strong> &mdash; Customers come to a physical address (retail, restaurant, clinic, service hub).</span>
-              </label>
-              <label class="radio">
-                <input type="radio" name="local_presence" value="service_area" required>
-                <span class="radio__label"><strong>Service area</strong> &mdash; You travel to customers within a defined region (plumber, installer, mobile service, regional consultant).</span>
-              </label>
-              <label class="radio">
-                <input type="radio" name="local_presence" value="online_only" required>
-                <span class="radio__label"><strong>Online-only</strong> &mdash; No physical customer touchpoint. Discovery is national or global.</span>
-              </label>
-            </fieldset>
-          </div>
+            <button type="button" id="add-brand-btn" class="add-brand-btn" hidden aria-label="Add another brand">+ Add another brand</button>
+          </fieldset>
 
           <div class="form__row">
             <label for="audit_type">What are you auditing?</label>
@@ -368,6 +302,84 @@
             <button class="btn btn--primary btn--lg" type="submit">Submit intake</button>
             <span class="submit-note">We reply inside 1 business day</span>
           </div>
+
+          <template id="brand-block-template">
+            <div class="brand-block" data-brand-idx="">
+              <div class="brand-block-header">
+                <h3 class="brand-label">Brand 1</h3>
+                <button type="button" class="remove-brand" hidden aria-label="Remove brand">Remove brand</button>
+              </div>
+
+              <div class="form__row">
+                <label for="brand-__IDX__-company">Company</label>
+                <input id="brand-__IDX__-company" data-field="company" type="text" required autocomplete="organization">
+              </div>
+
+              <div class="form__row">
+                <label for="brand-__IDX__-website">Website</label>
+                <input id="brand-__IDX__-website" data-field="website" type="url" inputmode="url" placeholder="https://..." required>
+                <p class="hint">Your homepage. The audit crawls deeper pages from here, or from the URL list below if you provide one.</p>
+              </div>
+
+              <div class="form__row">
+                <label for="brand-__IDX__-urls">URLs (optional)</label>
+                <textarea id="brand-__IDX__-urls" data-field="urls" rows="4" placeholder="One URL per line."></textarea>
+                <p class="hint">Optional. If you list URLs here, the audit pipeline uses them as the seed instead of crawling from the homepage.</p>
+                <p class="field-counter" data-counter="urls">
+                  <span data-counter-text>0 / 10</span> URLs entered
+                </p>
+              </div>
+
+              <div class="form__row">
+                <label for="brand-__IDX__-business_one_liner">Business one-liner</label>
+                <textarea id="brand-__IDX__-business_one_liner" data-field="business_one_liner" rows="2" required placeholder="What does this brand do, in one sentence?"></textarea>
+              </div>
+
+              <div class="form__row">
+                <label for="brand-__IDX__-brand_qualifier">Brand qualifier (optional)</label>
+                <input id="brand-__IDX__-brand_qualifier" data-field="brand_qualifier" type="text" maxlength="60" placeholder="e.g. molecular diagnostics">
+                <p class="hint">A short qualifier to disambiguate brands with common names. Up to 60 characters.</p>
+              </div>
+
+              <div class="form__row">
+                <label for="brand-__IDX__-buyer_questions">Buyer questions</label>
+                <textarea id="brand-__IDX__-buyer_questions" data-field="buyer_questions" rows="6" required placeholder="One per line. Each is run against four LLM (Large Language Model) engines."></textarea>
+                <p class="field-counter" data-counter="buyer_questions">
+                  <span data-counter-text>0 / 10</span> buyer questions entered
+                </p>
+              </div>
+
+              <div class="form__row">
+                <label for="brand-__IDX__-competitors">Competitors (optional)</label>
+                <textarea id="brand-__IDX__-competitors" data-field="competitors" rows="3" placeholder="One per line. URLs or brand names."></textarea>
+                <p class="hint">For citation-share comparison. Pulse: up to 2. SXO Audit and Enterprise: up to 4.</p>
+                <p class="field-counter" data-counter="competitors">
+                  <span data-counter-text>0 / 2</span> competitors entered
+                </p>
+              </div>
+
+              <div class="form__row">
+                <label for="brand-__IDX__-geo_focus">Geographic focus</label>
+                <input id="brand-__IDX__-geo_focus" data-field="geo_focus" type="text" required placeholder="e.g. United States, Denver metro, DACH region">
+              </div>
+
+              <fieldset class="radio-group brand-local-presence" data-field-group="local_presence">
+                <legend>Local presence</legend>
+                <label class="radio">
+                  <input type="radio" data-field="local_presence" value="storefront" required>
+                  Storefront (customers come to you)
+                </label>
+                <label class="radio">
+                  <input type="radio" data-field="local_presence" value="service_area" required>
+                  Service area (you go to customers)
+                </label>
+                <label class="radio">
+                  <input type="radio" data-field="local_presence" value="online_only" required>
+                  Online only
+                </label>
+              </fieldset>
+            </div>
+          </template>
 
         </form>
 
@@ -429,7 +441,7 @@
         </div>
       </div>
       <div class="footer__meta">
-        <span>© <span id="year">2026</span> Web Cited</span>
+        <span>&copy; <span id="year">2026</span> Web Cited</span>
         <span>Search Experience Optimization</span>
         <span><a href="privacy.html">Privacy</a></span>
         <span><a href="terms.html">Terms</a></span>
@@ -438,24 +450,12 @@
   </footer>
 
   <script>
-    // Tier-aware caps for the URL list field.
-    //
-    // Source of truth (mirror these exact values when changing):
-    //   web-cited-api/src/types.ts          (api validator caps)
-    //   web-cited-pipeline/src/pipeline/...  (pipeline tier_limits, on enterprise foundation branch)
-    //
-    // Today's interim Path B: the form is single-brand for all three tiers,
-    // so the Enterprise cap displayed here is 25 (one brand). The "per brand
-    // for up to 3 brands" framing lives in the field hint and the
-    // Enterprise-specific subtle note. When Phase 1 v2 lands the multi-brand
-    // backend + repeater UI, this cap becomes per-brand.
-    var TIER_MAX_URLS = { Pulse: 10, Audit: 25, Enterprise: 25 };
-
-    // Tier-aware caps for the competitors list. Marketing positions Pulse at
-    // "up to 2" and SXO Audit / Enterprise at "2 to 4 primary competitors" as
-    // a deliberate upgrade-driving signal. Mirror these exact values in
-    // web-cited-api/src/types.ts (TIER_MAX_COMPETITORS) when changing.
+    // Tier limits, mirror of web-cited-api/src/types.ts and
+    // web-cited-pipeline/src/pipeline/tier_limits.py. Keep in sync.
+    var TIER_MAX_URLS_PER_BRAND = { Pulse: 10, Audit: 25, Enterprise: 25 };
+    var TIER_MAX_PROMPTS_PER_BRAND = { Pulse: 10, Audit: 25, Enterprise: 25 };
     var TIER_MAX_COMPETITORS = { Pulse: 2, Audit: 4, Enterprise: 4 };
+    var TIER_MAX_BRANDS = { Pulse: 1, Audit: 1, Enterprise: 3 };
 
     // Pre-select tier from ?tier=pulse|audit|enterprise
     (function () {
@@ -468,99 +468,25 @@
       }
     }());
 
-    // Tier-driven UI for the URLs field: cap counter + Enterprise note.
-    (function () {
-      var form = document.getElementById('intake-form');
-      var urls = document.getElementById('urls');
-      var counterText = document.getElementById('urls-counter-text');
-      var enterpriseNote = form ? form.querySelector('.urls-enterprise-note') : null;
-      if (!form || !urls || !counterText) return;
-
-      function currentTier() {
-        var checked = form.querySelector('input[name="tier"]:checked');
-        return checked ? checked.value : null;
-      }
-
-      function countUrls() {
-        return urls.value
-          .split('\n')
-          .map(function (s) { return s.trim(); })
-          .filter(Boolean)
-          .length;
-      }
-
-      function renderCounter() {
-        var tier = currentTier();
-        var cap = tier ? TIER_MAX_URLS[tier] : 10;
-        var n = countUrls();
-        counterText.textContent = n + ' / ' + cap;
-        var counterEl = document.getElementById('urls-counter');
-        if (counterEl) counterEl.classList.toggle('field-counter--over', n > cap);
-        if (enterpriseNote) enterpriseNote.hidden = (tier !== 'Enterprise');
-      }
-
-      urls.addEventListener('input', renderCounter);
-      // Recount when tier changes; cap value differs.
-      form.querySelectorAll('input[name="tier"]').forEach(function (r) {
-        r.addEventListener('change', renderCounter);
-      });
-      // Initial paint
-      renderCounter();
-    }());
-
-    // Tier-driven UI for the competitors field: cap counter (mirrors URLs).
-    (function () {
-      var form = document.getElementById('intake-form');
-      var competitors = document.getElementById('competitors');
-      var counterText = document.getElementById('competitors-counter-text');
-      if (!form || !competitors || !counterText) return;
-
-      function currentTier() {
-        var checked = form.querySelector('input[name="tier"]:checked');
-        return checked ? checked.value : null;
-      }
-
-      function countCompetitors() {
-        return competitors.value
-          .split('\n')
-          .map(function (s) { return s.trim(); })
-          .filter(Boolean)
-          .length;
-      }
-
-      function renderCounter() {
-        var tier = currentTier();
-        var cap = tier ? TIER_MAX_COMPETITORS[tier] : 2;
-        var n = countCompetitors();
-        counterText.textContent = n + ' / ' + cap;
-        var counterEl = document.getElementById('competitors-counter');
-        if (counterEl) counterEl.classList.toggle('field-counter--over', n > cap);
-      }
-
-      competitors.addEventListener('input', renderCounter);
-      form.querySelectorAll('input[name="tier"]').forEach(function (r) {
-        r.addEventListener('change', renderCounter);
-      });
-      renderCounter();
-    }());
-
     // Stamp the time the form rendered. Submissions faster than ~3s are almost always bots.
     (function () {
       var ts = document.getElementById('ts_loaded');
       if (ts) ts.value = String(Date.now());
     }());
 
-    // AJAX submission to the web-cited intake Worker (api.web-cited.com/intake).
+    // ----- Brand-repeater + submission handling -----
     //
-    // Three failure modes are surfaced inline (no more generic alerts):
-    //   1. Pre-submit: form.checkValidity() per field → inline messages
-    //      under each invalid input, scroll + focus first, live-region
-    //      announce, summary banner above submit.
-    //   2. Server 400: worker returns `{ok:false, error:"<field>: <reason>"}`.
-    //      We parse it, look up a friendly sentence for the (field, reason)
-    //      pair, and anchor it to the correct input the same way (1) does.
-    //   3. Fetch rejected / 5xx: dedicated retry panel with "Try again"
-    //      button. Form stays populated so the user can resubmit as-is.
+    // Refactor for Phase 2: nine per-brand fields (company, website, urls,
+    // business_one_liner, brand_qualifier, buyer_questions, competitors,
+    // geo_focus, local_presence) live inside a brand block cloned from
+    // <template id="brand-block-template">. Pulse and SXO Audit cap at 1
+    // brand; Enterprise allows up to 3. Add/Remove buttons reindex blocks
+    // and re-run validation. Submit serializes to payload.brands[].
+    //
+    // Wire format aligns with the Phase 1 v2 backend foundation merged
+    // 2026-04-26 (api commit 476495f, pipeline commit 3a443e0). The api
+    // validateIntake accepts both the new brands[] shape and the legacy
+    // flat shape; we always emit the new shape.
     (function () {
       var form = document.getElementById('intake-form');
       var success = document.getElementById('intake-success');
@@ -569,143 +495,345 @@
       var summary = document.getElementById('intake-error-summary');
       var summaryList = document.getElementById('intake-error-summary-list');
       var live = document.getElementById('intake-live');
-      if (!form || !success || !retryPanel || !retryButton || !summary || !summaryList || !live) return;
+      var brandsContainer = document.getElementById('brands-container');
+      var addBrandBtn = document.getElementById('add-brand-btn');
+      var template = document.getElementById('brand-block-template');
+      if (!form || !success || !retryPanel || !retryButton || !summary || !summaryList || !live || !brandsContainer || !addBrandBtn || !template) return;
 
-      // ---- field label map: the user-visible name, singular noun phrase ----
-      var FIELD_LABELS = {
+      // Engagement-level fields (those outside the brand block).
+      var ENGAGEMENT_FIELD_LABELS = {
         tier: 'Audit tier',
         first_name: 'First name',
         last_name: 'Last name',
-        company: 'Company',
         email: 'Work email',
-        website: 'Website URL',
-        urls: 'URLs to audit',
-        business_one_liner: 'Business description',
-        brand_qualifier: 'Brand qualifier',
-        buyer_questions: 'Top buyer questions',
-        competitors: 'Primary competitors',
-        geo_focus: 'Primary market',
-        local_presence: 'Local presence',
         audit_type: 'What are you auditing',
         acknowledgement: 'Acknowledgement'
       };
 
-      // ---- one error container per named field ----
-      // Build at load time so aria-describedby is stable for assistive tech.
-      // The container is inserted into the same structural parent as the
-      // input so it flows naturally with page layout.
-      var ERROR_EL = {};           // name -> <p class="field-error">
-      var FIELD_ROOT = {};         // name -> wrapping element (for radio fieldsets + single inputs)
-      var FIRST_FOCUSABLE = {};    // name -> the element to focus/scroll on error
+      // Per-brand fields (those inside each brand block).
+      var BRAND_FIELD_LABELS = {
+        company: 'Company',
+        website: 'Website',
+        urls: 'URLs',
+        business_one_liner: 'Business one-liner',
+        brand_qualifier: 'Brand qualifier',
+        buyer_questions: 'Buyer questions',
+        competitors: 'Competitors',
+        geo_focus: 'Geographic focus',
+        local_presence: 'Local presence'
+      };
 
-      (function installErrorContainers() {
-        // Deduplicate by field name, radios share a name.
-        var seen = {};
-        var inputs = form.querySelectorAll('[name]');
-        for (var i = 0; i < inputs.length; i++) {
-          var el = inputs[i];
-          var name = el.name;
-          if (!name || name === '_gotcha' || name === 'ts_loaded') continue;
-          if (seen[name]) continue;
-          seen[name] = true;
+      // ---- helpers ----
+      function brandBlocks() {
+        return Array.prototype.slice.call(brandsContainer.querySelectorAll('.brand-block'));
+      }
+      function currentTier() {
+        var checked = form.querySelector('input[name="tier"]:checked');
+        return checked ? checked.value : null;
+      }
+      function tierDisplay(tier) {
+        return tier === 'Audit' ? 'SXO Audit' : tier;
+      }
+      function countLines(el) {
+        if (!el) return 0;
+        return el.value
+          .split('\n')
+          .map(function (s) { return s.trim(); })
+          .filter(Boolean)
+          .length;
+      }
 
-          var errEl = document.createElement('p');
-          errEl.className = 'field-error';
-          errEl.id = 'err-' + name;
-          errEl.hidden = true;
+      // ---- reindex brand blocks ----
+      // Walks live blocks in DOM order, sets data-brand-idx on each, and
+      // updates the visible "Brand N" label. Hides the Remove button on
+      // Brand 1, shows on the rest.
+      function reindexBrands() {
+        var blocks = brandBlocks();
+        blocks.forEach(function (block, i) {
+          block.setAttribute('data-brand-idx', String(i));
+          var label = block.querySelector('.brand-label');
+          if (label) label.textContent = 'Brand ' + (i + 1);
+          var remove = block.querySelector('.remove-brand');
+          if (remove) remove.hidden = (i === 0);
+        });
+      }
 
-          // Error container placement:
-          //   - radio: appended inside the fieldset (after the last <label.radio>)
-          //   - checkbox (acknowledgement): after the wrapping <label.check>
-          //   - everything else: immediately after the input so it sits
-          //     under the control inside whatever wrapper exists (.form__row
-          //     or .form__row--split > div).
-          if (el.type === 'radio') {
-            var fs = el.closest('fieldset');
-            fs.appendChild(errEl);
-          } else if (el.type === 'checkbox') {
-            var lbl = el.closest('label') || el;
-            lbl.parentNode.insertBefore(errEl, lbl.nextSibling);
-          } else {
-            el.parentNode.insertBefore(errEl, el.nextSibling);
+      function updateAddBrandVisibility() {
+        var tier = currentTier();
+        var max = (tier && TIER_MAX_BRANDS[tier]) || 1;
+        addBrandBtn.hidden = !(tier === 'Enterprise' && brandBlocks().length < max);
+      }
+
+      // ---- counters ----
+      function attachCounters(block) {
+        var counterDefs = [
+          { field: 'urls', cap: TIER_MAX_URLS_PER_BRAND, label: 'URLs entered' },
+          { field: 'buyer_questions', cap: TIER_MAX_PROMPTS_PER_BRAND, label: 'buyer questions entered' },
+          { field: 'competitors', cap: TIER_MAX_COMPETITORS, label: 'competitors entered' }
+        ];
+        counterDefs.forEach(function (def) {
+          var ta = block.querySelector('[data-field="' + def.field + '"]');
+          var counterP = block.querySelector('.field-counter[data-counter="' + def.field + '"]');
+          if (!ta || !counterP) return;
+          var counterText = counterP.querySelector('[data-counter-text]');
+          if (!counterText) return;
+          function render() {
+            var tier = currentTier();
+            var capVal = tier ? def.cap[tier] : def.cap.Pulse;
+            var n = countLines(ta);
+            counterText.textContent = n + ' / ' + capVal;
+            counterP.classList.toggle('over-cap', n > capVal);
+            counterP.classList.toggle('field-counter--over', n > capVal);
           }
+          ta.addEventListener('input', function () {
+            render();
+            // Live validation reset: clear stale errors when the user edits.
+            // Full re-validation happens at submit time.
+          });
+          // Store the render function on the element so tier change can
+          // re-trigger it for every counter without a full DOM re-walk.
+          ta.__renderCounter = render;
+          render();
+        });
+      }
 
-          // Wire aria-describedby, preserve any existing ids (hints use them indirectly
-          // via proximity, but some inputs may have aria-describedby set explicitly).
-          var describers = (el.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
-          if (describers.indexOf(errEl.id) === -1) describers.push(errEl.id);
-          // For radio groups, set describedby on every radio so focus order works.
-          if (el.type === 'radio') {
-            var radios = form.querySelectorAll('input[name="' + name + '"]');
-            for (var r = 0; r < radios.length; r++) {
-              var rd = (radios[r].getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
-              if (rd.indexOf(errEl.id) === -1) rd.push(errEl.id);
-              radios[r].setAttribute('aria-describedby', rd.join(' '));
-            }
-          } else {
-            el.setAttribute('aria-describedby', describers.join(' '));
-          }
+      function recountAllCounters() {
+        brandBlocks().forEach(function (block) {
+          var fields = ['urls', 'buyer_questions', 'competitors'];
+          fields.forEach(function (f) {
+            var ta = block.querySelector('[data-field="' + f + '"]');
+            if (ta && typeof ta.__renderCounter === 'function') ta.__renderCounter();
+          });
+        });
+      }
 
-          ERROR_EL[name] = errEl;
-          FIELD_ROOT[name] = (el.type === 'radio') ? el.closest('fieldset') : el;
-          FIRST_FOCUSABLE[name] = el; // first input for this name, radios: first radio
+      // ---- remove-brand ----
+      function attachRemove(block) {
+        var btn = block.querySelector('.remove-brand');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+          block.remove();
+          reindexBrands();
+          updateAddBrandVisibility();
+          recountAllCounters();
+        });
+      }
 
-          // Clear error as user fixes it. `input` covers text/textarea/select;
-          // `change` covers radios/checkboxes/selects across browsers.
-          (function (fieldName) {
-            function handler() { clearFieldError(fieldName); }
-            if (el.type === 'radio' || el.type === 'checkbox' || el.tagName === 'SELECT') {
-              var same = form.querySelectorAll('[name="' + fieldName + '"]');
-              for (var k = 0; k < same.length; k++) same[k].addEventListener('change', handler);
-            } else {
-              el.addEventListener('input', handler);
-            }
-          }(name));
+      // ---- add-brand ----
+      function addBrandBlock() {
+        var max = (currentTier() && TIER_MAX_BRANDS[currentTier()]) || 1;
+        if (brandBlocks().length >= max) return;
+        var nextIdx = brandBlocks().length;
+        var clone = template.content.cloneNode(true);
+        // Replace __IDX__ in id attributes.
+        var withId = clone.querySelectorAll('[id]');
+        for (var i = 0; i < withId.length; i++) {
+          withId[i].id = withId[i].id.replace('__IDX__', String(nextIdx));
         }
-      }());
+        // Replace __IDX__ in for attributes.
+        var withFor = clone.querySelectorAll('[for]');
+        for (var j = 0; j < withFor.length; j++) {
+          withFor[j].setAttribute('for', withFor[j].getAttribute('for').replace('__IDX__', String(nextIdx)));
+        }
+        brandsContainer.appendChild(clone);
+        var newBlock = brandBlocks()[brandBlocks().length - 1];
+        attachCounters(newBlock);
+        attachRemove(newBlock);
+        reindexBrands();
+        updateAddBrandVisibility();
+      }
 
-      function setFieldError(name, message) {
-        var errEl = ERROR_EL[name];
-        if (!errEl) return;
-        errEl.textContent = message;
-        errEl.hidden = false;
-        var root = FIELD_ROOT[name];
-        if (root) {
-          root.classList.add('field--invalid');
-          // For single inputs, mark aria-invalid. For fieldsets, mark every radio.
-          if (root.tagName === 'FIELDSET') {
+      // ---- tier change handler ----
+      form.querySelectorAll('input[name="tier"]').forEach(function (radio) {
+        radio.addEventListener('change', function () {
+          var tier = currentTier();
+          var blocks = brandBlocks();
+          if (tier !== 'Enterprise' && blocks.length > 1) {
+            var ok = window.confirm(
+              'Switching to ' + tierDisplay(tier) +
+              ' will remove brands 2 and 3. Continue?'
+            );
+            if (!ok) {
+              var enterprise = form.querySelector('input[name="tier"][value="Enterprise"]');
+              if (enterprise) enterprise.checked = true;
+              return;
+            }
+            blocks.slice(1).forEach(function (b) { b.remove(); });
+            reindexBrands();
+          }
+          updateAddBrandVisibility();
+          recountAllCounters();
+        });
+      });
+
+      addBrandBtn.addEventListener('click', function () {
+        addBrandBlock();
+      });
+
+      // ---- error summary plumbing ----
+      // Errors come in two shapes:
+      //   - engagement-level: { name: 'email', message: '...' }
+      //   - per-brand:        { brandIdx: 0, field: 'website', message: '...' }
+      //
+      // For per-brand errors, we look up the form input by id
+      // (brand-{idx}-{field}) and the offending label as
+      // "Brand N {field-label}: {message}".
+
+      function engagementInput(name) {
+        if (name === 'tier' || name === 'acknowledgement') {
+          return form.querySelector('[name="' + name + '"]');
+        }
+        return form.querySelector('#' + name);
+      }
+      function brandInput(brandIdx, field) {
+        // Radio groups (local_presence) return the first radio in the group.
+        return form.querySelector('#brand-' + brandIdx + '-' + field) ||
+               form.querySelector('.brand-block[data-brand-idx="' + brandIdx + '"] [data-field="' + field + '"]');
+      }
+      function brandFieldErrorContainer(brandIdx, field) {
+        var input = brandInput(brandIdx, field);
+        if (!input) return null;
+        var existing = input.parentNode.querySelector('.field-error[data-brand-idx="' + brandIdx + '"][data-field="' + field + '"]');
+        if (existing) return existing;
+        var errEl = document.createElement('p');
+        errEl.className = 'field-error';
+        errEl.setAttribute('data-brand-idx', String(brandIdx));
+        errEl.setAttribute('data-field', field);
+        errEl.hidden = true;
+        // For radio groups (local_presence), append inside the fieldset.
+        if (input.type === 'radio') {
+          var fs = input.closest('fieldset');
+          if (fs) fs.appendChild(errEl);
+        } else {
+          input.parentNode.insertBefore(errEl, input.nextSibling);
+        }
+        return errEl;
+      }
+      function engagementFieldErrorContainer(name) {
+        var input = engagementInput(name);
+        if (!input) return null;
+        var existing = form.querySelector('.field-error[data-engagement="' + name + '"]');
+        if (existing) return existing;
+        var errEl = document.createElement('p');
+        errEl.className = 'field-error';
+        errEl.setAttribute('data-engagement', name);
+        errEl.hidden = true;
+        if (input.type === 'radio' || input.type === 'checkbox') {
+          var fs = input.closest('fieldset') || input.closest('label');
+          if (fs && fs.parentNode) fs.parentNode.insertBefore(errEl, fs.nextSibling);
+        } else {
+          input.parentNode.insertBefore(errEl, input.nextSibling);
+        }
+        return errEl;
+      }
+
+      function setEngagementError(name, msg) {
+        var errEl = engagementFieldErrorContainer(name);
+        if (errEl) {
+          errEl.textContent = msg;
+          errEl.hidden = false;
+        }
+        var input = engagementInput(name);
+        if (input) {
+          var root = input.type === 'radio' ? input.closest('fieldset') : input;
+          if (root) root.classList.add('field--invalid');
+          if (root && root.tagName === 'FIELDSET') {
             var radios = root.querySelectorAll('input');
             for (var i = 0; i < radios.length; i++) radios[i].setAttribute('aria-invalid', 'true');
-          } else {
+          } else if (root) {
             root.setAttribute('aria-invalid', 'true');
           }
         }
       }
-      function clearFieldError(name) {
-        var errEl = ERROR_EL[name];
-        if (!errEl) return;
-        errEl.hidden = true;
-        errEl.textContent = '';
-        var root = FIELD_ROOT[name];
-        if (root) {
-          root.classList.remove('field--invalid');
-          if (root.tagName === 'FIELDSET') {
+      function setBrandError(brandIdx, field, msg) {
+        var errEl = brandFieldErrorContainer(brandIdx, field);
+        if (errEl) {
+          errEl.textContent = msg;
+          errEl.hidden = false;
+        }
+        var input = brandInput(brandIdx, field);
+        if (input) {
+          var root = input.type === 'radio' ? input.closest('fieldset') : input;
+          if (root) root.classList.add('field--invalid');
+          if (root && root.tagName === 'FIELDSET') {
             var radios = root.querySelectorAll('input');
-            for (var i = 0; i < radios.length; i++) radios[i].removeAttribute('aria-invalid');
-          } else {
-            root.removeAttribute('aria-invalid');
+            for (var i = 0; i < radios.length; i++) radios[i].setAttribute('aria-invalid', 'true');
+          } else if (root) {
+            root.setAttribute('aria-invalid', 'true');
           }
         }
       }
       function clearAllErrors() {
-        for (var name in ERROR_EL) if (Object.prototype.hasOwnProperty.call(ERROR_EL, name)) clearFieldError(name);
+        var allErr = form.querySelectorAll('.field-error');
+        for (var i = 0; i < allErr.length; i++) {
+          allErr[i].textContent = '';
+          allErr[i].hidden = true;
+        }
+        var invalid = form.querySelectorAll('.field--invalid');
+        for (var j = 0; j < invalid.length; j++) {
+          invalid[j].classList.remove('field--invalid');
+        }
+        var ariaInvalid = form.querySelectorAll('[aria-invalid="true"]');
+        for (var k = 0; k < ariaInvalid.length; k++) {
+          ariaInvalid[k].removeAttribute('aria-invalid');
+        }
         summary.hidden = true;
         summaryList.innerHTML = '';
       }
 
-      // ---- message map: (field, reason) -> friendly sentence ----
+      function announce(msg) {
+        live.textContent = '';
+        setTimeout(function () { live.textContent = msg; }, 50);
+      }
+
+      function focusEngagement(name) {
+        var input = engagementInput(name);
+        if (!input) return;
+        try { input.focus({ preventScroll: true }); } catch (e) { input.focus(); }
+        var scrollTarget = input.type === 'radio' ? input.closest('fieldset') : input;
+        if (scrollTarget && typeof scrollTarget.scrollIntoView === 'function') {
+          scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+      function focusBrand(brandIdx, field) {
+        var input = brandInput(brandIdx, field);
+        if (!input) return;
+        try { input.focus({ preventScroll: true }); } catch (e) { input.focus(); }
+        var scrollTarget = input.type === 'radio' ? input.closest('fieldset') : input;
+        if (scrollTarget && typeof scrollTarget.scrollIntoView === 'function') {
+          scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+
+      function showSummary(errors) {
+        summaryList.innerHTML = '';
+        for (var i = 0; i < errors.length; i++) {
+          var err = errors[i];
+          var li = document.createElement('li');
+          var a = document.createElement('a');
+          var hrefId;
+          if (err.brandIdx != null) {
+            hrefId = 'brand-' + err.brandIdx + '-' + err.field;
+          } else {
+            hrefId = err.name;
+          }
+          a.href = '#' + hrefId;
+          a.textContent = err.message;
+          a.addEventListener('click', (function (e) {
+            return function (ev) {
+              ev.preventDefault();
+              if (e.brandIdx != null) focusBrand(e.brandIdx, e.field);
+              else focusEngagement(e.name);
+            };
+          }(err)));
+          li.appendChild(a);
+          summaryList.appendChild(li);
+        }
+        summary.hidden = false;
+      }
+
+      // ---- pre-submit validation ----
       function messageForPreSubmit(el, label) {
-        // Prefer specific HTML5 ValidityState flags over the generic :invalid.
         var v = el.validity;
         if (!v) return 'Please fill in ' + label + '.';
         if (v.valueMissing) {
@@ -723,184 +851,172 @@
         if (v.patternMismatch) return 'Please check the format of ' + label + '.';
         return 'Please review ' + label + '.';
       }
-      function messageForServer(name, reason, label) {
-        // Worker ValidationError reasons (from src/index.ts):
-        //   "required string", "too short (N < M)", "too long (N > M)",
-        //   "must be a string", "must be 'yes'",
-        //   "unknown tier: X", "unknown: X" (audit_type / local_presence)
-        //   "too many URLs (N > M for tier T)", "invalid URL on line K"
-        if (/required string/i.test(reason)) return 'Please fill in ' + label + '.';
-        if (/too short/i.test(reason))       return label + ' is too short, please expand it a bit.';
-        if (/too long/i.test(reason))        return label + ' is too long, please shorten it.';
-        if (/must be 'yes'/i.test(reason))   return 'Please acknowledge the audit terms to continue.';
-        if (/must be a string/i.test(reason))return 'Please enter text for ' + label + '.';
-        if (/unknown tier/i.test(reason))    return 'Please choose one of the three audit tiers.';
-        if (/^unknown:/i.test(reason) && name === 'audit_type')     return 'Please choose one of the listed audit types.';
-        if (/^unknown:/i.test(reason) && name === 'local_presence') return 'Please choose one of the three local-presence options.';
-        if (/too many URLs/i.test(reason) && name === 'urls')       return reason.charAt(0).toUpperCase() + reason.slice(1) + '. Trim the list before submitting.';
-        if (/invalid URL/i.test(reason) && name === 'urls')         return reason.charAt(0).toUpperCase() + reason.slice(1) + '. Each URL must start with http:// or https://.';
-        if (/too many competitors/i.test(reason) && name === 'competitors') return reason.charAt(0).toUpperCase() + reason.slice(1) + '. Trim the list before submitting.';
-        // Generic fallback, still field-specific.
-        return 'Please review ' + label + ' (' + reason + ').';
-      }
 
-      // ---- summary-above-submit builder ----
-      // Each invalid field shows up as a bullet that links to the field.
-      // Clicking the bullet scrolls + focuses the input the same way a
-      // native <label for=""> does.
-      function showSummary(errors) {
-        summaryList.innerHTML = '';
-        for (var i = 0; i < errors.length; i++) {
-          var li = document.createElement('li');
-          var a = document.createElement('a');
-          a.href = '#' + (FIRST_FOCUSABLE[errors[i].name].id || 'err-' + errors[i].name);
-          a.textContent = errors[i].message;
-          a.addEventListener('click', (function (name) {
-            return function (ev) {
-              ev.preventDefault();
-              focusField(name);
-            };
-          }(errors[i].name)));
-          li.appendChild(a);
-          summaryList.appendChild(li);
-        }
-        summary.hidden = false;
-      }
-
-      function focusField(name) {
-        var target = FIRST_FOCUSABLE[name];
-        if (!target) return;
-        try { target.focus({ preventScroll: true }); } catch (e) { target.focus(); }
-        var scrollTarget = FIELD_ROOT[name].tagName === 'FIELDSET' ? FIELD_ROOT[name] : target;
-        scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-
-      function announce(msg) {
-        // Toggle the text to force SR re-announcement even on identical msgs.
-        live.textContent = '';
-        setTimeout(function () { live.textContent = msg; }, 50);
-      }
-
-      // ---- pre-submit validation ----
       function validateBeforeSubmit() {
         clearAllErrors();
         var errors = [];
-        // Iterate every named field in declared order so the summary matches page order.
-        var seen = {};
-        var inputs = form.querySelectorAll('[name]');
-        for (var i = 0; i < inputs.length; i++) {
-          var el = inputs[i];
-          var name = el.name;
-          if (!name || name === '_gotcha' || name === 'ts_loaded') continue;
-          if (seen[name]) continue;
-          // For radio groups, check across all same-name inputs, checkValidity()
-          // on a single radio only reports valueMissing when no sibling is checked,
-          // so one check is enough.
-          if (el.type === 'radio') {
-            var group = form.querySelectorAll('input[name="' + name + '"]');
-            var groupValid = Array.prototype.some.call(group, function (g) { return g.checked; });
-            if (!groupValid && el.required) {
-              seen[name] = true;
-              var msg = messageForPreSubmit(el, FIELD_LABELS[name] || name);
-              setFieldError(name, msg);
+
+        // Engagement-level fields.
+        var engagementOrder = ['tier', 'first_name', 'last_name', 'email', 'audit_type', 'acknowledgement'];
+        engagementOrder.forEach(function (name) {
+          var label = ENGAGEMENT_FIELD_LABELS[name] || name;
+          if (name === 'tier') {
+            var tierChecked = form.querySelector('input[name="tier"]:checked');
+            if (!tierChecked) {
+              var msg = 'Please choose an option for ' + label + '.';
+              setEngagementError(name, msg);
               errors.push({ name: name, message: msg });
-              continue;
             }
-            seen[name] = true;
-            continue;
+            return;
           }
-          seen[name] = true;
-          if (!el.checkValidity()) {
-            var m = messageForPreSubmit(el, FIELD_LABELS[name] || name);
-            setFieldError(name, m);
-            errors.push({ name: name, message: m });
+          if (name === 'acknowledgement') {
+            var ack = form.querySelector('input[name="acknowledgement"]');
+            if (ack && !ack.checked) {
+              var amsg = 'Please check ' + label + ' to continue.';
+              setEngagementError(name, amsg);
+              errors.push({ name: name, message: amsg });
+            }
+            return;
           }
-        }
-        // URL list: optional field, but if filled in, enforce per-tier cap and
-        // basic shape validation (http/https). Mirror these rules in
-        // web-cited-api/src/index.ts validateIntake() to keep the client and
-        // server messages aligned.
-        var urlsEl = form.querySelector('textarea[name="urls"]');
-        if (urlsEl && urlsEl.value.trim()) {
-          var tierVal = (form.querySelector('input[name="tier"]:checked') || {}).value;
-          var capMap = { Pulse: 10, Audit: 25, Enterprise: 25 };
-          var lines = urlsEl.value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
-          if (tierVal && lines.length > capMap[tierVal]) {
-            var tooManyMsg = 'Too many URLs for the ' + tierVal + ' tier (' + lines.length + ' entered, ' + capMap[tierVal] + ' max). Trim the list before submitting.';
-            setFieldError('urls', tooManyMsg);
-            errors.push({ name: 'urls', message: tooManyMsg });
-          } else {
-            // Shape check: every non-empty line must look like an http(s) URL.
-            for (var u = 0; u < lines.length; u++) {
-              if (!/^https?:\/\/[^\s]+$/i.test(lines[u])) {
-                var bad = 'Line ' + (u + 1) + ' is not a valid URL. Each URL must start with http:// or https:// and have no spaces.';
-                setFieldError('urls', bad);
-                errors.push({ name: 'urls', message: bad });
-                break;
+          var el = engagementInput(name);
+          if (el && !el.checkValidity()) {
+            var emsg = messageForPreSubmit(el, label);
+            setEngagementError(name, emsg);
+            errors.push({ name: name, message: emsg });
+          }
+        });
+
+        // Per-brand fields.
+        var tier = currentTier();
+        var blocks = brandBlocks();
+        blocks.forEach(function (block, brandIdx) {
+          var brandLabel = 'Brand ' + (brandIdx + 1);
+          var requiredFields = ['company', 'website', 'business_one_liner', 'buyer_questions', 'geo_focus'];
+          requiredFields.forEach(function (field) {
+            var input = brandInput(brandIdx, field);
+            if (!input) return;
+            if (!input.checkValidity()) {
+              var fieldLabel = BRAND_FIELD_LABELS[field] || field;
+              var msg = messageForPreSubmit(input, fieldLabel);
+              setBrandError(brandIdx, field, msg);
+              errors.push({ brandIdx: brandIdx, field: field, message: brandLabel + ' ' + fieldLabel.toLowerCase() + ': ' + msg });
+            }
+          });
+          // local_presence: at least one radio in the group must be checked.
+          var lpChecked = block.querySelector('[data-field="local_presence"]:checked');
+          if (!lpChecked) {
+            var lpMsg = 'Please choose an option for Local presence.';
+            setBrandError(brandIdx, 'local_presence', lpMsg);
+            errors.push({ brandIdx: brandIdx, field: 'local_presence', message: brandLabel + ' local presence: ' + lpMsg });
+          }
+          // urls: optional, but enforce per-tier cap + http(s) shape.
+          var urlsEl = block.querySelector('[data-field="urls"]');
+          if (urlsEl && urlsEl.value.trim()) {
+            var urlCap = tier ? TIER_MAX_URLS_PER_BRAND[tier] : 10;
+            var urlLines = urlsEl.value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+            if (urlLines.length > urlCap) {
+              var capMsg = 'Too many URLs for the ' + tierDisplay(tier) + ' tier (' + urlLines.length + ' entered, ' + urlCap + ' max). Trim the list before submitting.';
+              setBrandError(brandIdx, 'urls', capMsg);
+              errors.push({ brandIdx: brandIdx, field: 'urls', message: brandLabel + ' URLs: ' + capMsg });
+            } else {
+              for (var u = 0; u < urlLines.length; u++) {
+                if (!/^https?:\/\/[^\s]+$/i.test(urlLines[u])) {
+                  var badMsg = 'Line ' + (u + 1) + ' is not a valid URL. Each URL must start with http:// or https:// and have no spaces.';
+                  setBrandError(brandIdx, 'urls', badMsg);
+                  errors.push({ brandIdx: brandIdx, field: 'urls', message: brandLabel + ' URLs: ' + badMsg });
+                  break;
+                }
               }
             }
           }
-        }
-
-        // Competitors list: required field with per-tier cap. Mirror these
-        // rules in web-cited-api/src/index.ts validateCompetitors() to keep
-        // the client and server messages aligned. Pulse caps at 2; SXO Audit
-        // and Enterprise cap at 4.
-        var competitorsEl = form.querySelector('textarea[name="competitors"]');
-        if (competitorsEl && competitorsEl.value.trim()) {
-          var compTier = (form.querySelector('input[name="tier"]:checked') || {}).value;
-          var compCapMap = { Pulse: 2, Audit: 4, Enterprise: 4 };
-          var compLines = competitorsEl.value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
-          if (compTier && compLines.length > compCapMap[compTier]) {
-            var compTooManyMsg = 'Too many competitors for the ' + compTier + ' tier (' + compLines.length + ' entered, ' + compCapMap[compTier] + ' max). Trim the list before submitting.';
-            setFieldError('competitors', compTooManyMsg);
-            errors.push({ name: 'competitors', message: compTooManyMsg });
+          // buyer_questions: required, enforce per-tier cap on entries.
+          var bqEl = block.querySelector('[data-field="buyer_questions"]');
+          if (bqEl && bqEl.value.trim()) {
+            var bqCap = tier ? TIER_MAX_PROMPTS_PER_BRAND[tier] : 10;
+            var bqLines = bqEl.value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+            if (bqLines.length > bqCap) {
+              var bqCapMsg = 'Too many buyer questions for the ' + tierDisplay(tier) + ' tier (' + bqLines.length + ' entered, ' + bqCap + ' max). Trim the list before submitting.';
+              setBrandError(brandIdx, 'buyer_questions', bqCapMsg);
+              errors.push({ brandIdx: brandIdx, field: 'buyer_questions', message: brandLabel + ' buyer questions: ' + bqCapMsg });
+            }
           }
-        }
+          // competitors: optional, enforce per-tier cap.
+          var compEl = block.querySelector('[data-field="competitors"]');
+          if (compEl && compEl.value.trim()) {
+            var compCap = tier ? TIER_MAX_COMPETITORS[tier] : 2;
+            var compLines = compEl.value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+            if (compLines.length > compCap) {
+              var compCapMsg = 'Too many competitors for the ' + tierDisplay(tier) + ' tier (' + compLines.length + ' entered, ' + compCap + ' max). Trim the list before submitting.';
+              setBrandError(brandIdx, 'competitors', compCapMsg);
+              errors.push({ brandIdx: brandIdx, field: 'competitors', message: brandLabel + ' competitors: ' + compCapMsg });
+            }
+          }
+        });
 
         if (errors.length > 0) {
           showSummary(errors);
           announce(errors.length === 1
             ? 'One field needs attention.'
             : errors.length + ' fields need attention.');
-          focusField(errors[0].name);
+          var first = errors[0];
+          if (first.brandIdx != null) focusBrand(first.brandIdx, first.field);
+          else focusEngagement(first.name);
           return false;
         }
         return true;
       }
 
       // ---- server 400 handler ----
-      // Expected shape: { ok: false, error: "<field>: <reason>" }
+      // Server returns either:
+      //   - { ok: false, error: "<field>: <reason>" }            (legacy / engagement)
+      //   - { ok: false, error: "brands[N].<field>: <reason>" }  (per-brand)
       function surfaceServerError(payload) {
         clearAllErrors();
         var raw = (payload && payload.error) || '';
-        var match = /^([a-z_]+):\s*(.+)$/.exec(String(raw));
+        var rawStr = String(raw);
+
+        // Per-brand error: "brands[N].<field>: <reason>"
+        var brandMatch = /^brands\[(\d+)\]\.([a-z_]+):\s*(.+)$/.exec(rawStr);
+        if (brandMatch) {
+          var bIdx = parseInt(brandMatch[1], 10);
+          var bField = brandMatch[2];
+          var bReason = brandMatch[3];
+          var bLabel = BRAND_FIELD_LABELS[bField] || bField;
+          var bMsg = 'Brand ' + (bIdx + 1) + ' ' + bLabel.toLowerCase() + ': ' + bReason;
+          setBrandError(bIdx, bField, bReason);
+          showSummary([{ brandIdx: bIdx, field: bField, message: bMsg }]);
+          focusBrand(bIdx, bField);
+          announce(bMsg);
+          return { brandIdx: bIdx, field: bField, message: bMsg };
+        }
+
+        // Engagement-level error: "<field>: <reason>"
+        var match = /^([a-z_]+):\s*(.+)$/.exec(rawStr);
         if (match) {
           var name = match[1];
           var reason = match[2];
           if (name === '_root') {
             announce('Something was off with the submission. Please review and try again.');
-            return { name: null, message: raw };
+            return { name: null, message: rawStr };
           }
-          var label = FIELD_LABELS[name] || name;
-          var msg = messageForServer(name, reason, label);
-          if (ERROR_EL[name]) {
-            setFieldError(name, msg);
+          var label = ENGAGEMENT_FIELD_LABELS[name] || BRAND_FIELD_LABELS[name] || name;
+          var msg = 'Please review ' + label + ' (' + reason + ').';
+          if (ENGAGEMENT_FIELD_LABELS[name]) {
+            setEngagementError(name, msg);
             showSummary([{ name: name, message: msg }]);
-            focusField(name);
+            focusEngagement(name);
             announce(msg);
             return { name: name, message: msg };
           }
         }
-        // Fallback: server returned an unknown shape. Surface on the summary
-        // banner only, don't pin to a field we can't identify.
+        // Fallback: server returned an unknown shape.
         summaryList.innerHTML = '';
         var li = document.createElement('li');
-        li.textContent = 'Something was off with the submission: ' + (raw || 'unknown error') + '.';
+        li.textContent = 'Something was off with the submission: ' + (rawStr || 'unknown error') + '.';
         summaryList.appendChild(li);
         summary.hidden = false;
         announce('Something was off with the submission. Please review and try again.');
-        return { name: null, message: raw };
+        return { name: null, message: rawStr };
       }
 
       // ---- network-failure panel ----
@@ -916,8 +1032,6 @@
       }
       retryButton.addEventListener('click', function () {
         hideRetryPanel();
-        // Programmatically re-fire submit so the normal path runs (including
-        // pre-submit validation, which is fine, payload hasn't changed).
         if (typeof form.requestSubmit === 'function') form.requestSubmit();
         else form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
       });
@@ -933,20 +1047,49 @@
         var ts = parseInt((tsEl && tsEl.value) || '0', 10);
         if (ts && (Date.now() - ts) < 3000) {
           e.preventDefault();
-          // Treat as a field-level nudge rather than an alert().
           announce('Please take a moment to review your answers before submitting.');
           return;
         }
 
         e.preventDefault();
 
-        // Pre-submit validation, never hits the network if the form's invalid.
         if (!validateBeforeSubmit()) return;
 
         var submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
 
-        var payload = Object.fromEntries(new FormData(form));
+        function v(block, field) {
+          var el = block.querySelector('[data-field="' + field + '"]');
+          return el ? el.value.trim() : '';
+        }
+        function vRadio(block, field) {
+          var el = block.querySelector('[data-field="' + field + '"]:checked');
+          return el ? el.value : '';
+        }
+
+        var payload = {
+          tier: currentTier(),
+          first_name: form.first_name.value.trim(),
+          last_name: form.last_name.value.trim(),
+          email: form.email.value.trim(),
+          audit_type: form.audit_type.value,
+          acknowledgement: 'yes',
+          _gotcha: form._gotcha.value,
+          ts_loaded: form.ts_loaded.value,
+          brands: brandBlocks().map(function (block) {
+            return {
+              company: v(block, 'company'),
+              website: v(block, 'website'),
+              urls: v(block, 'urls'),
+              business_one_liner: v(block, 'business_one_liner'),
+              brand_qualifier: v(block, 'brand_qualifier'),
+              buyer_questions: v(block, 'buyer_questions'),
+              competitors: v(block, 'competitors'),
+              geo_focus: v(block, 'geo_focus'),
+              local_presence: vRadio(block, 'local_presence')
+            };
+          })
+        };
 
         fetch(form.action, {
           method: 'POST',
@@ -964,8 +1107,6 @@
             return;
           }
           if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit intake'; }
-          // Attempt to parse JSON. A 400 from the worker is application/json;
-          // a 5xx or CDN error page may not parse, fall through to retry panel.
           if (resp.status >= 400 && resp.status < 500) {
             resp.json().then(surfaceServerError).catch(function () {
               surfaceServerError({ error: 'server returned ' + resp.status });
@@ -978,6 +1119,10 @@
           showRetryPanel();
         });
       });
+
+      // ---- initial render ----
+      addBrandBlock();              // Render Brand 1.
+      updateAddBrandVisibility();
     }());
   </script>
   <script src="js/script.js" defer></script>
