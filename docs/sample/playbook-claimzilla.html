@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Claimzilla Playbook - Web Cited</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <style>
+    /* Brutalist tokens, mirrored from web-cited.com/css/styles.css. */
+    :root {
+      --ink: #000000;
+      --paper: #f4f3ef;
+      --paper-white: #ffffff;
+      --accent: #cc0000;
+      --accent-ink: #8b0000;
+      --slate-700: #5a5a5a;
+      --rule: 1.5px solid var(--ink);
+      --rule-thick: 3px solid var(--ink);
+      --pass: #2a7d31;
+      --warn: #b07b00;
+      --fail: var(--accent);
+      --skip: #5a5a5a;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.55;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--ink); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+    a:hover { text-decoration-color: var(--accent); color: var(--accent); }
+
+    /* Top bar */
+    .pb-top {
+      background: var(--ink);
+      color: var(--paper-white);
+      padding: 14px 28px;
+      border-bottom: var(--rule-thick);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .pb-brand {
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      font-size: 14px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .pb-brand-mark {
+      width: 28px; height: 28px;
+      background: var(--paper-white);
+      color: var(--ink);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 13px;
+    }
+    .pb-meta { font-size: 12px; color: #d6d6d6; letter-spacing: 0.4px; }
+    .pb-meta strong { color: var(--paper-white); }
+    .pb-tabs {
+      background: var(--paper);
+      border-bottom: var(--rule);
+      padding: 0 28px;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+    }
+    .pb-tab {
+      padding: 16px 22px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--slate-700);
+      text-decoration: none;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+    }
+    .pb-tab.is-active {
+      color: var(--ink);
+      border-bottom-color: var(--accent);
+      background: linear-gradient(to bottom, transparent 0%, transparent 92%, rgba(204,0,0,0.08) 100%);
+    }
+    .pb-tab:hover { color: var(--ink); }
+
+    /* Page wrap */
+    .pb-wrap { max-width: 1180px; margin: 0 auto; padding: 28px; }
+    .pb-eyebrow {
+      font-size: 12px; letter-spacing: 0.7px; text-transform: uppercase;
+      color: var(--slate-700); margin-bottom: 8px;
+    }
+    .pb-title { font-size: 38px; font-weight: 900; letter-spacing: -0.5px; margin: 0 0 8px; line-height: 1.1; }
+    .pb-lede { font-size: 18px; max-width: 780px; color: var(--ink); margin-bottom: 28px; }
+
+    /* KPI strip */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: var(--rule-thick);
+      margin-bottom: 28px;
+      background: var(--paper-white);
+    }
+    .kpi-cell {
+      padding: 22px 20px;
+      border-right: var(--rule);
+    }
+    .kpi-cell:last-child { border-right: 0; }
+    .kpi-label {
+      font-size: 11px; letter-spacing: 0.7px; text-transform: uppercase;
+      color: var(--slate-700); margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-size: 36px; font-weight: 900; line-height: 1; letter-spacing: -1px;
+    }
+    .kpi-value .accent { color: var(--accent); }
+    .kpi-delta {
+      font-size: 13px; color: var(--slate-700); margin-top: 8px; line-height: 1.45;
+    }
+
+    /* Engine grid */
+    .engine-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: var(--rule-thick);
+      margin-bottom: 28px;
+      background: var(--paper-white);
+    }
+    .engine-cell {
+      padding: 18px 18px 16px;
+      border-right: var(--rule);
+      position: relative;
+    }
+    .engine-cell:last-child { border-right: 0; }
+    .engine-name { font-weight: 800; font-size: 15px; letter-spacing: 0.4px; }
+    .engine-vendor { font-size: 11px; color: var(--slate-700); margin-top: 2px; }
+    .engine-bar-wrap { margin-top: 12px; height: 8px; background: #e2e0d6; border: 1px solid var(--ink); }
+    .engine-bar { height: 100%; background: var(--accent); }
+    .engine-stat { font-size: 12px; color: var(--ink); margin-top: 6px; font-variant-numeric: tabular-nums; }
+
+    /* Section heading */
+    .section-head {
+      font-size: 26px; font-weight: 900; letter-spacing: -0.3px;
+      margin: 36px 0 14px; padding-bottom: 8px; border-bottom: var(--rule);
+    }
+
+    /* Findings cards */
+    .findings-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .finding-card {
+      background: var(--paper-white);
+      border: var(--rule);
+      padding: 18px 20px;
+      position: relative;
+    }
+    .finding-card.is-fail { border-left: 6px solid var(--fail); }
+    .finding-card.is-warn { border-left: 6px solid var(--warn); }
+    .finding-card.is-pass { border-left: 6px solid var(--pass); }
+    .finding-card.is-skip { border-left: 6px solid var(--skip); }
+    .finding-head {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+    }
+    .finding-title { font-weight: 800; font-size: 15px; letter-spacing: 0.2px; }
+    .chip {
+      display: inline-block; padding: 2px 8px;
+      font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase;
+      font-weight: 800;
+      border: 1px solid var(--ink); background: var(--paper);
+    }
+    .chip.is-fail { background: var(--fail); color: var(--paper-white); border-color: var(--fail); }
+    .chip.is-warn { background: var(--warn); color: var(--paper-white); border-color: var(--warn); }
+    .chip.is-pass { background: var(--pass); color: var(--paper-white); border-color: var(--pass); }
+    .chip.is-skip { background: var(--skip); color: var(--paper-white); border-color: var(--skip); }
+    .finding-summary { font-size: 14px; color: var(--ink); margin: 4px 0 8px; }
+    .finding-fix {
+      font-size: 13px; color: var(--ink);
+      background: rgba(204,0,0,0.04);
+      border-left: 2px solid var(--accent);
+      padding: 8px 12px; margin-top: 6px;
+    }
+    .finding-fix-label {
+      font-size: 10px; letter-spacing: 0.7px; text-transform: uppercase;
+      color: var(--accent-ink); font-weight: 800; margin-bottom: 2px;
+    }
+
+    /* Priority matrix */
+    .priority-matrix {
+      background: var(--paper-white);
+      border: var(--rule-thick);
+      padding: 24px;
+      margin: 14px 0 28px;
+    }
+    .pm-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      border: var(--rule);
+      background: var(--paper);
+    }
+    .pm-cell {
+      border-right: var(--rule);
+      padding: 14px 12px;
+      min-height: 92px;
+      position: relative;
+    }
+    .pm-cell:last-child { border-right: 0; }
+    .pm-rank {
+      font-weight: 900; font-size: 36px; line-height: 1; letter-spacing: -1px;
+      color: var(--accent);
+    }
+    .pm-task { font-size: 12px; margin-top: 8px; line-height: 1.35; }
+    .pm-effort {
+      font-size: 10px; color: var(--slate-700); letter-spacing: 0.6px;
+      text-transform: uppercase; margin-top: 6px;
+    }
+
+    /* Schema code blocks */
+    .schema-block {
+      background: var(--ink);
+      color: #f0f0f0;
+      padding: 18px 20px;
+      font-family: "SF Mono", "Menlo", monospace;
+      font-size: 12.5px; line-height: 1.55;
+      overflow-x: auto;
+      border: var(--rule);
+      margin: 10px 0 18px;
+    }
+    .schema-block .key { color: #79c0ff; }
+    .schema-block .str { color: #a5d6a7; }
+    .schema-block .com { color: #888; font-style: italic; }
+    .schema-card-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 22px; margin-bottom: 6px;
+    }
+    .schema-card-head h3 { margin: 0; font-size: 17px; font-weight: 800; }
+    .copy-pill {
+      font-size: 10px; letter-spacing: 0.7px; text-transform: uppercase;
+      font-weight: 800;
+      border: 1.5px solid var(--ink); padding: 4px 10px; background: var(--paper-white);
+    }
+
+    /* Prompt grid */
+    .prompt-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+    }
+    .prompt-card {
+      background: var(--paper-white); border: var(--rule);
+      padding: 18px 20px;
+    }
+    .prompt-tag {
+      font-size: 10px; letter-spacing: 0.7px; text-transform: uppercase;
+      font-weight: 800; color: var(--accent-ink); margin-bottom: 6px;
+    }
+    .prompt-q { font-size: 15px; font-weight: 700; line-height: 1.4; }
+    .prompt-q:before { content: "\201c"; color: var(--accent); margin-right: 4px; }
+    .prompt-q:after { content: "\201d"; color: var(--accent); margin-left: 2px; }
+    .prompt-meta { font-size: 12px; color: var(--slate-700); margin-top: 10px; }
+
+    /* Resources list */
+    .resource-list {
+      list-style: none; padding: 0; margin: 0;
+      border: var(--rule); background: var(--paper-white);
+    }
+    .resource-row {
+      display: grid;
+      grid-template-columns: 200px 1fr 130px;
+      align-items: baseline;
+      padding: 14px 18px;
+      border-bottom: 1px solid #e1e0d8;
+      gap: 16px;
+    }
+    .resource-row:last-child { border-bottom: 0; }
+    .resource-term { font-weight: 800; font-size: 14px; }
+    .resource-def { font-size: 13px; color: var(--ink); line-height: 1.5; }
+    .resource-tag {
+      font-size: 10px; letter-spacing: 0.7px; text-transform: uppercase;
+      color: var(--slate-700);
+      text-align: right;
+    }
+
+    /* Hide non-active tabs - exec is the default; clicking other tabs reveals
+       them via :target. Designed to look great as static screenshots so the
+       Services page can capture the most interesting frame. */
+    .pb-section { display: none; }
+    .pb-section.is-active { display: block; }
+  </style>
+</head>
+<body>
+  <!-- Top bar -->
+  <header class="pb-top" role="banner">
+    <div class="pb-brand">
+      <span class="pb-brand-mark">WC</span>
+      Web Cited Playbook
+    </div>
+    <div class="pb-meta">
+      <strong>Claimzilla</strong> &middot; SXO Audit &middot; Engagement #2-9847-3918-4271 &middot; Generated 2026-04-27
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="pb-tabs" role="navigation" aria-label="Playbook sections">
+    <a class="pb-tab is-active" href="#exec">01 Executive Summary</a>
+    <a class="pb-tab" href="#scorecard">02 Scorecard</a>
+    <a class="pb-tab" href="#all-checks">03 All Checks</a>
+    <a class="pb-tab" href="#priority-1">04 Priority 1 Fixes</a>
+    <a class="pb-tab" href="#schema-pack">05 Schema Pack</a>
+    <a class="pb-tab" href="#prompt-grid">06 Prompt Grid</a>
+    <a class="pb-tab" href="#resources">07 Resources</a>
+  </nav>
+
+  <main class="pb-wrap">
+    <!-- 01 Executive Summary -->
+    <section class="pb-section is-active" id="exec">
+      <div class="pb-eyebrow">Section 01 &middot; Executive Summary</div>
+      <h1 class="pb-title">Claimzilla is cited 40% of the time.<br>Insurify is cited 80%.</h1>
+      <p class="pb-lede">
+        Across 10 buyer-question prompts run against ChatGPT, Claude, Gemini, and
+        Perplexity, Claimzilla earns the citation 4 times. Insurify earns it 8.
+        The gap is concentrated in 3 themes: AI Overview placement, llms.txt
+        absence, and Wikipedia article depth. Two of the three are a single
+        afternoon of work. The third is a 2-week editorial push.
+      </p>
+
+      <div class="kpi-strip">
+        <div class="kpi-cell">
+          <div class="kpi-label">You cited</div>
+          <div class="kpi-value">40<span class="accent">%</span></div>
+          <div class="kpi-delta">4 of 10 buyer queries; 4 LLM engines.</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-label">Leader cited</div>
+          <div class="kpi-value">80<span class="accent">%</span></div>
+          <div class="kpi-delta">Insurify across the same prompt grid.</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-label">Findings</div>
+          <div class="kpi-value">17</div>
+          <div class="kpi-delta">4 PASS, 5 WARN, 4 FAIL, 4 SKIP.</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-label">Priority</div>
+          <div class="kpi-value">5</div>
+          <div class="kpi-delta">Top 5 fixes ranked in section 04.</div>
+        </div>
+      </div>
+
+      <div class="engine-grid">
+        <div class="engine-cell">
+          <div class="engine-name">ChatGPT</div>
+          <div class="engine-vendor">OpenAI</div>
+          <div class="engine-bar-wrap"><div class="engine-bar" style="width: 40%;"></div></div>
+          <div class="engine-stat">4 / 10 queries cited</div>
+        </div>
+        <div class="engine-cell">
+          <div class="engine-name">Claude</div>
+          <div class="engine-vendor">Anthropic</div>
+          <div class="engine-bar-wrap"><div class="engine-bar" style="width: 50%;"></div></div>
+          <div class="engine-stat">5 / 10 queries cited</div>
+        </div>
+        <div class="engine-cell">
+          <div class="engine-name">Gemini</div>
+          <div class="engine-vendor">Google</div>
+          <div class="engine-bar-wrap"><div class="engine-bar" style="width: 10%;"></div></div>
+          <div class="engine-stat">1 / 10 queries cited</div>
+        </div>
+        <div class="engine-cell">
+          <div class="engine-name">Perplexity</div>
+          <div class="engine-vendor">Perplexity</div>
+          <div class="engine-bar-wrap"><div class="engine-bar" style="width: 60%;"></div></div>
+          <div class="engine-stat">6 / 10 queries cited</div>
+        </div>
+      </div>
+
+      <h2 class="section-head">The three patterns moving the needle</h2>
+      <div class="findings-grid">
+        <div class="finding-card is-fail">
+          <div class="finding-head">
+            <span class="chip is-fail">High</span>
+            <div class="finding-title">Google AI Overview slot is held by competitors</div>
+          </div>
+          <p class="finding-summary">
+            0 of 8 commercial buyer queries surfaced Claimzilla in the AIO. Insurify
+            holds 5 of 8; The Zebra holds 2; NerdWallet holds 1.
+          </p>
+          <div class="finding-fix">
+            <div class="finding-fix-label">Fix</div>
+            Earn FAQPage rich result + answer-first paragraphs (90 to 110 words) on
+            the 8 missed queries. AIO draws from FAQ-marked content disproportionately.
+          </div>
+        </div>
+        <div class="finding-card is-fail">
+          <div class="finding-head">
+            <span class="chip is-fail">High</span>
+            <div class="finding-title">/llms.txt is missing</div>
+          </div>
+          <p class="finding-summary">
+            Crawlers fall back to robots.txt heuristics when /llms.txt is absent.
+            That sampling tends to grab low-value comparison-form pages instead of
+            the homepage + how-it-works + research hub.
+          </p>
+          <div class="finding-fix">
+            <div class="finding-fix-label">Fix</div>
+            Publish /llms.txt at the site root with 8 to 12 priority URLs. Most
+            LLM crawlers honor it within 14 days.
+          </div>
+        </div>
+        <div class="finding-card is-warn">
+          <div class="finding-head">
+            <span class="chip is-warn">Medium</span>
+            <div class="finding-title">Wikipedia article depth is below LLM-grounding threshold</div>
+          </div>
+          <p class="finding-summary">
+            240 words + 2 third-party citations. Competitors range 8 to 21 cites.
+            Anthropic + OpenAI weight Wikipedia depth heavily when deciding whether
+            to name a brand vs name a competitor.
+          </p>
+          <div class="finding-fix">
+            <div class="finding-fix-label">Fix</div>
+            Editorial push: 600+ words covering history / model / funding / market
+            position. 5+ third-party reliable sources cited. ~2 weeks of work.
+          </div>
+        </div>
+        <div class="finding-card is-pass">
+          <div class="finding-head">
+            <span class="chip is-pass">Clean</span>
+            <div class="finding-title">Wikidata Q-ID + 11 typed claims</div>
+          </div>
+          <p class="finding-summary">
+            Q12399847 with instance-of, industry, founded, headquarters, social
+            identifiers all populated. This is the strongest entity-graph signal
+            in the audit; it directly lifts Claude's citation rate.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 Priority 1 Fixes -->
+    <section class="pb-section" id="priority-1">
+      <div class="pb-eyebrow">Section 04 &middot; Priority 1 Fixes</div>
+      <h1 class="pb-title">5 fixes to ship in the next 30 days.</h1>
+      <p class="pb-lede">
+        Ranked by citation impact divided by effort. Each row links to the
+        relevant All Checks library entry for the full how-to. Ship in order;
+        re-audit at 30 days to measure lift.
+      </p>
+
+      <div class="priority-matrix">
+        <div class="pm-grid">
+          <div class="pm-cell">
+            <div class="pm-rank">01</div>
+            <div class="pm-task">Publish /llms.txt with 8 to 12 priority URLs.</div>
+            <div class="pm-effort">~1 hour &middot; HIGH IMPACT</div>
+          </div>
+          <div class="pm-cell">
+            <div class="pm-rank">02</div>
+            <div class="pm-task">Add FAQPage JSON-LD to /faq covering 14 Q&amp;A blocks.</div>
+            <div class="pm-effort">~2 hours &middot; HIGH IMPACT</div>
+          </div>
+          <div class="pm-cell">
+            <div class="pm-rank">03</div>
+            <div class="pm-task">Author answer-first paragraphs (90 to 110 words) for the 8 missed AIO queries.</div>
+            <div class="pm-effort">~3 days &middot; HIGH IMPACT</div>
+          </div>
+          <div class="pm-cell">
+            <div class="pm-rank">04</div>
+            <div class="pm-task">Submit Schema.org Organization update with sameAs + founder + foundingDate.</div>
+            <div class="pm-effort">~2 hours &middot; MEDIUM IMPACT</div>
+          </div>
+          <div class="pm-cell">
+            <div class="pm-rank">05</div>
+            <div class="pm-task">Editorial push: expand Wikipedia article to 600+ words with 5+ external citations.</div>
+            <div class="pm-effort">~2 weeks &middot; HIGH IMPACT</div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section-head">Expected lift at 30 days, if all 5 ship</h2>
+      <p>
+        Modeled against 32 prior audits with similar before-state. Median lift:
+        you-cited rate 40% to 64% (+24 points), Gemini citation rate 10% to 35%
+        (+25 points), AIO captures 0 to 3 of 8 buyer queries.
+      </p>
+    </section>
+
+    <!-- 05 Schema Pack -->
+    <section class="pb-section" id="schema-pack">
+      <div class="pb-eyebrow">Section 05 &middot; Schema Pack</div>
+      <h1 class="pb-title">Copy-paste JSON-LD per priority page.</h1>
+      <p class="pb-lede">
+        Three schemas you can drop into the &lt;head&gt; today. Each is a complete,
+        validated payload generated from your audit; no placeholder text. Run
+        them through Google's Rich Results Test before merging.
+      </p>
+
+      <div class="schema-card-head">
+        <h3>Homepage &middot; Organization + WebSite (combined @graph)</h3>
+        <span class="copy-pill">Copy</span>
+      </div>
+      <pre class="schema-block">{
+  <span class="key">"@context"</span>: <span class="str">"https://schema.org"</span>,
+  <span class="key">"@graph"</span>: [
+    {
+      <span class="key">"@type"</span>: <span class="str">"Organization"</span>,
+      <span class="key">"@id"</span>: <span class="str">"https://claimzilla.example/#organization"</span>,
+      <span class="key">"name"</span>: <span class="str">"Claimzilla"</span>,
+      <span class="key">"url"</span>: <span class="str">"https://claimzilla.example/"</span>,
+      <span class="key">"foundingDate"</span>: <span class="str">"2019-03-01"</span>,
+      <span class="key">"sameAs"</span>: [
+        <span class="str">"https://www.linkedin.com/company/claimzilla"</span>,
+        <span class="str">"https://www.crunchbase.com/organization/claimzilla"</span>,
+        <span class="str">"https://en.wikipedia.org/wiki/Claimzilla"</span>,
+        <span class="str">"https://www.wikidata.org/wiki/Q12399847"</span>
+      ]
+    },
+    {
+      <span class="key">"@type"</span>: <span class="str">"WebSite"</span>,
+      <span class="key">"@id"</span>: <span class="str">"https://claimzilla.example/#website"</span>,
+      <span class="key">"url"</span>: <span class="str">"https://claimzilla.example/"</span>,
+      <span class="key">"name"</span>: <span class="str">"Claimzilla"</span>,
+      <span class="key">"publisher"</span>: { <span class="key">"@id"</span>: <span class="str">"https://claimzilla.example/#organization"</span> }
+    }
+  ]
+}</pre>
+
+      <div class="schema-card-head">
+        <h3>/faq &middot; FAQPage (14 Q&amp;A blocks, abbreviated to 3 here)</h3>
+        <span class="copy-pill">Copy</span>
+      </div>
+      <pre class="schema-block">{
+  <span class="key">"@context"</span>: <span class="str">"https://schema.org"</span>,
+  <span class="key">"@type"</span>: <span class="str">"FAQPage"</span>,
+  <span class="key">"mainEntity"</span>: [
+    {
+      <span class="key">"@type"</span>: <span class="str">"Question"</span>,
+      <span class="key">"name"</span>: <span class="str">"Is Claimzilla legit for getting auto insurance quotes?"</span>,
+      <span class="key">"acceptedAnswer"</span>: { <span class="key">"@type"</span>: <span class="str">"Answer"</span>, <span class="key">"text"</span>: <span class="str">"Yes. Claimzilla is licensed as a digital insurance producer in all 50 states ..."</span> }
+    },
+    {
+      <span class="key">"@type"</span>: <span class="str">"Question"</span>,
+      <span class="key">"name"</span>: <span class="str">"Does comparing insurance quotes online affect my credit score?"</span>,
+      <span class="key">"acceptedAnswer"</span>: { <span class="key">"@type"</span>: <span class="str">"Answer"</span>, <span class="key">"text"</span>: <span class="str">"No. Quotes pulled through Claimzilla use soft inquiries that do not affect ..."</span> }
+    },
+    <span class="com">// 12 more Q&amp;A blocks; full payload in your downloadable schema-pack.zip</span>
+  ]
+}</pre>
+    </section>
+
+    <!-- 06 Prompt Grid -->
+    <section class="pb-section" id="prompt-grid">
+      <div class="pb-eyebrow">Section 06 &middot; Prompt Grid</div>
+      <h1 class="pb-title">Run these prompts against your own pages.</h1>
+      <p class="pb-lede">
+        Five copy-paste prompts that give you a fast, free signal between
+        re-audits. Run them in ChatGPT, Claude, or Perplexity weekly.
+      </p>
+
+      <div class="prompt-grid">
+        <div class="prompt-card">
+          <div class="prompt-tag">Answer-first extraction</div>
+          <div class="prompt-q">For each question below, write the 90 to 110 word answer-first paragraph that should sit in the H1 paragraph of the matching page on claimzilla.example.</div>
+          <div class="prompt-meta">Use after Priority Fix 03.</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-tag">LLM citation rewrite</div>
+          <div class="prompt-q">Given this draft answer, rewrite to maximize the chance an LLM will cite claimzilla.example as the source. Maintain factual accuracy; surface 2 third-party sources to triangulate.</div>
+          <div class="prompt-meta">Use after Priority Fix 03 + 05.</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-tag">FAQ schema draft</div>
+          <div class="prompt-q">Convert the 14 Q&amp;A blocks on /faq into Schema.org FAQPage JSON-LD. Output as a single, validated payload. Cite the schema.org spec for the FAQPage type.</div>
+          <div class="prompt-meta">Use during Priority Fix 02.</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-tag">40-word knowledge card</div>
+          <div class="prompt-q">Summarize Claimzilla in exactly 40 words for an LLM knowledge card. Lead with the category, then the differentiator, then the geographic scope. No marketing fluff.</div>
+          <div class="prompt-meta">Use to draft KG / Wikipedia summary copy.</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-tag">Heading hierarchy eval</div>
+          <div class="prompt-q">Audit this HTML for heading hierarchy (single H1, no skip-level H1 to H3 without H2, semantic nesting). Output a list of fixes per heading.</div>
+          <div class="prompt-meta">Run quarterly; pairs with the on_site_seo finding.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 Resources -->
+    <section class="pb-section" id="resources">
+      <div class="pb-eyebrow">Section 07 &middot; Resources</div>
+      <h1 class="pb-title">Glossary &amp; reference links.</h1>
+      <p class="pb-lede">
+        Six terms that recur in the audit, with one-line definitions and the
+        canonical reference link.
+      </p>
+
+      <ul class="resource-list">
+        <li class="resource-row">
+          <span class="resource-term">AIO</span>
+          <span class="resource-def">Google AI Overview: the multi-source summary that appears at the top of Google search results.</span>
+          <span class="resource-tag">Section 04</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">FAQPage schema</span>
+          <span class="resource-def">Schema.org type that marks Q&amp;A content as structured data, eligible for FAQ-rich-result and AIO inclusion.</span>
+          <span class="resource-tag">Section 05</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">llms.txt</span>
+          <span class="resource-def">Public spec for telling LLM crawlers which URLs to prioritize. One URL per line at the site root.</span>
+          <span class="resource-tag">Section 04</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">Knowledge Graph</span>
+          <span class="resource-def">Google's entity database; appears as the right-rail Knowledge Panel for branded queries.</span>
+          <span class="resource-tag">Section 03</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">Wikidata Q-ID</span>
+          <span class="resource-def">Stable identifier (e.g., Q12399847) tying a brand to typed claims feeding LLM entity graphs.</span>
+          <span class="resource-tag">Section 03</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">Citation share</span>
+          <span class="resource-def">Percent of buyer-question prompts where at least one of the four LLM engines names your domain in the answer.</span>
+          <span class="resource-tag">Section 01</span>
+        </li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
