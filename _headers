@@ -1,0 +1,41 @@
+# Cloudflare Pages headers config.
+# Docs: https://developers.cloudflare.com/pages/configuration/headers/
+
+/*
+  # HSTS, intentional ramp:
+  #   Today (initial Cloudflare Pages cutover): max-age=300 (5 minutes).
+  #     Lets us roll back fast if any TLS / hosting issue surfaces in the
+  #     first day. Browsers honoring this won't be locked into HTTPS
+  #     beyond the 5-minute window.
+  #   After 24 hours of stable behavior: bump to 86400 (1 day).
+  #   After 7 days of stable behavior: bump to 31536000 (1 year).
+  #   After 30 days of stable behavior: bump to 63072000 (2 years).
+  #   At 2-year max-age + 30+ days of stability: submit to https://hstspreload.org.
+  # The includeSubDomains flag is safe today: every web-cited subdomain
+  # (api, audit, artifacts) already uses HTTPS.
+  Strict-Transport-Security: max-age=300; includeSubDomains
+
+  # Standard security headers.
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+
+  # Cache HTML for 5 minutes at the edge, allow revalidation.
+  Cache-Control: public, max-age=300, must-revalidate
+
+# Long-cache static assets (CSS, fonts, images, favicons).
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/og/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/favicon.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+
+/robots.txt
+  Cache-Control: public, max-age=3600
