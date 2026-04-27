@@ -11,6 +11,12 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <meta name="color-scheme" content="light" />
 
+  <!-- The form POSTs to api.web-cited.com on submit; warm the DNS + TLS
+       handshake on page load so submit latency is 50-200ms faster on
+       first interaction. -->
+  <link rel="preconnect" href="https://api.web-cited.com" crossorigin />
+  <link rel="dns-prefetch" href="//api.web-cited.com" />
+
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Web Cited" />
   <meta property="og:title" content="Start Your SXO Audit - Web Cited" />
