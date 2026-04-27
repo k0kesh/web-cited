@@ -21,7 +21,18 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
 
-  # Cache HTML for 5 minutes at the edge, allow revalidation.
+# NOTE on Cache-Control: Cloudflare Pages _headers is ADDITIVE: a global
+# Cache-Control on /* would append to per-path rules below and (because
+# browsers honor the first max-age) silently shorten the cache of every
+# long-cache asset. We therefore set Cache-Control per path (HTML + assets
+# below) rather than once at /*.
+
+# HTML pages: 5-minute edge cache, must-revalidate.
+/*.html
+  Cache-Control: public, max-age=300, must-revalidate
+
+# Clean URLs (Cloudflare Pages auto-redirects .html to clean URL).
+/
   Cache-Control: public, max-age=300, must-revalidate
 
 # Long-cache static assets (CSS, fonts, images, favicons).
