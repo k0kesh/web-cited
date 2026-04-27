@@ -28,6 +28,47 @@
   <meta name="twitter:image" content="https://web-cited.com/og/home.png" />
 
   <link rel="stylesheet" href="css/styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://web-cited.com/#organization",
+        "name": "Web Cited",
+        "url": "https://web-cited.com/",
+        "email": "hello@web-cited.com"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://web-cited.com/#website",
+        "url": "https://web-cited.com/",
+        "name": "Web Cited",
+        "publisher": { "@id": "https://web-cited.com/#organization" },
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://web-cited.com/terms.html#webpage",
+        "url": "https://web-cited.com/terms.html",
+        "name": "Terms of Service - Web Cited",
+        "description": "Web Cited Terms of Service: governing law, arbitration, liability, intellectual property, and other contract terms governing use of the Site and Services.",
+        "isPartOf": { "@id": "https://web-cited.com/#website" },
+        "about": { "@id": "https://web-cited.com/#organization" },
+        "inLanguage": "en-US",
+        "datePublished": "2026-04-17",
+        "dateModified": "2026-04-26"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://web-cited.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Terms", "item": "https://web-cited.com/terms.html" }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
