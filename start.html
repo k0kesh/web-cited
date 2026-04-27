@@ -84,7 +84,6 @@
       color: var(--accent, #CC0000);
     }
     .add-brand-btn[hidden] { display: none; }
-    .field-counter.over-cap { color: var(--accent, #CC0000); font-weight: 600; }
   </style>
   <script type="application/ld+json">
   {
@@ -582,13 +581,10 @@
             var capVal = tier ? def.cap[tier] : def.cap.Pulse;
             var n = countLines(ta);
             counterText.textContent = n + ' / ' + capVal;
-            counterP.classList.toggle('over-cap', n > capVal);
             counterP.classList.toggle('field-counter--over', n > capVal);
           }
           ta.addEventListener('input', function () {
             render();
-            // Live validation reset: clear stale errors when the user edits.
-            // Full re-validation happens at submit time.
           });
           // Store the render function on the element so tier change can
           // re-trigger it for every counter without a full DOM re-walk.
