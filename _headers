@@ -28,12 +28,18 @@
 # below) rather than once at /*.
 
 # HTML pages: 5-minute edge cache, must-revalidate.
+# Plus a Link: rel=preload header for the stylesheet so supporting browsers
+# fetch CSS in parallel with HTML parse instead of waiting until the
+# `<link rel=stylesheet>` tag is seen. Same effect as adding the preload
+# tag inline, but applied centrally to every HTML route.
 /*.html
   Cache-Control: public, max-age=300, must-revalidate
+  Link: </css/styles.css>; rel=preload; as=style
 
 # Clean URLs (Cloudflare Pages auto-redirects .html to clean URL).
 /
   Cache-Control: public, max-age=300, must-revalidate
+  Link: </css/styles.css>; rel=preload; as=style
 
 # Long-cache static assets (CSS, fonts, images, favicons).
 /css/*
