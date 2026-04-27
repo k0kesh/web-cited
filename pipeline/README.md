@@ -1,7 +1,7 @@
-# Web Cited — audit pipeline (stub)
+# Web Cited: audit pipeline (stub)
 
 This directory is the operational backbone for delivering an SXO audit report.
-Right now it's a **stub** — fixtures in place of a real crawl, deterministic
+Right now it's a **stub**: fixtures in place of a real crawl, deterministic
 placeholder prose in place of Claude-generated narrative. The template,
 rollups, and output format are production-shape.
 

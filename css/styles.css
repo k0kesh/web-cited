@@ -1560,11 +1560,11 @@ details.faq__item p {
 
 /* ---------- Radio group (local_presence on /start) -------------------
  * Reset the eyebrow-style inheritance from `.form label, .form legend`
- * the same way `.form .check` does for the acknowledgement checkbox —
+ * the same way `.form .check` does for the acknowledgement checkbox -
  * radio descriptions are body text, not uppercase-mono caps. */
 .radio-group { border: 0; padding: 0; margin: 0; }
 .radio-group > legend {
-  /* Match the baseline .form legend weight (700) — was 600, visibly
+  /* Match the baseline .form legend weight (700): was 600, visibly
    * lighter than every other legend on the page. */
   font-weight: 700;
   margin-bottom: 4px;
