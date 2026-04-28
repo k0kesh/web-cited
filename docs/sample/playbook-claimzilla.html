@@ -237,6 +237,22 @@
     .schema-block .key { color: #79c0ff; }
     .schema-block .str { color: #a5d6a7; }
     .schema-block .com { color: #888; font-style: italic; }
+
+    /* WeasyPrint PDF render: hide interactive UI that has no use in
+       a printed/exported document, and let JSON-LD wrap so long
+       string values don't overflow off the right edge of the dark
+       code block. WeasyPrint's default media is "print" so these
+       rules apply only during PDF rendering, not the live HTML
+       view. */
+    @media print {
+      .copy-pill { display: none !important; }
+      .pb-toast  { display: none !important; }
+      .schema-block {
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-x: visible;
+      }
+    }
     .schema-card-head {
       display: flex; align-items: center; justify-content: space-between;
       margin-top: 22px; margin-bottom: 6px;
