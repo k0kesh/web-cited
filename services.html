@@ -303,109 +303,160 @@
           <p class="lead">Every SXO Audit produces two artifacts: a printable PDF and an interactive Playbook with seven tabs of remediation depth. Snippets below are from a sample audit run against <code>claimzilla.example</code>, a fabricated B2C insurance comparison site. Want the full sample? <a href="/contact.html">Email us</a> and we'll send the PDF + Playbook URL.</p>
         </div>
 
-        <ul class="thumb-grid" id="sampleThumbs">
-          <li>
-            <button type="button" class="thumb"
-              data-img="og/sample-gallery/01-audit-cover-hero.webp"
-              data-w="1146" data-h="761"
-              data-title="The cover tells the story in one number"
-              data-detail="Where the leader sits on your buyer-question prompt grid. The body of the report tells you why and how to close the gap.">
-              <img src="og/sample-gallery/01-audit-cover-hero.webp" alt="SXO Audit PDF cover with the headline citation share." width="1146" height="761" loading="lazy" decoding="async" />
-              <span class="thumb-cap">Cover</span>
-            </button>
-          </li>
-          <li>
-            <button type="button" class="thumb"
-              data-img="og/sample-gallery/02-audit-top-patterns.webp"
-              data-w="1146" data-h="832"
-              data-title="The three patterns moving the needle"
-              data-detail="Not a 200-row spreadsheet. The audit picks the three highest-leverage patterns and writes the narrative your stakeholders can read.">
-              <img src="og/sample-gallery/02-audit-top-patterns.webp" alt="Numbered top patterns with summary." width="1146" height="832" loading="lazy" decoding="async" />
-              <span class="thumb-cap">Top patterns</span>
-            </button>
-          </li>
-          <li>
-            <button type="button" class="thumb"
-              data-img="og/sample-gallery/03-audit-findings-cards.webp"
-              data-w="1146" data-h="832"
-              data-title="Every finding, ranked by severity"
-              data-detail="Numbered, themed, severity-graded. Your team works the list top-to-bottom; nothing escapes triage.">
-              <img src="og/sample-gallery/03-audit-findings-cards.webp" alt="Findings card list with severity badges." width="1146" height="832" loading="lazy" decoding="async" />
-              <span class="thumb-cap">Findings</span>
-            </button>
-          </li>
-          <li>
-            <button type="button" class="thumb"
-              data-img="og/sample-gallery/04-audit-priority-roadmap.webp"
-              data-w="1146" data-h="904"
-              data-title="The 30 &middot; 60 &middot; 90 priority roadmap"
-              data-detail="Four moves, ranked by impact divided by effort. Each row names the finding, cites the specific fix from your Playbook, and tells you when to ship it.">
-              <img src="og/sample-gallery/04-audit-priority-roadmap.webp" alt="Priority roadmap ladder with this-month / quarter / next-quarter rows." width="1146" height="904" loading="lazy" decoding="async" />
-              <span class="thumb-cap">Roadmap</span>
-            </button>
-          </li>
-          <li>
-            <button type="button" class="thumb"
-              data-img="og/sample-gallery/05-audit-schema-pack.webp"
-              data-w="1146" data-h="904"
-              data-title="Schema coverage, at a glance"
-              data-detail="Per-page JSON-LD generated from your audit. Coverage percent + present / missing breakdown. Drop the head-paste-ready blocks into your &lt;head&gt;, validate via Google Rich Results Test, ship.">
-              <img src="og/sample-gallery/05-audit-schema-pack.webp" alt="Schema pack panel showing coverage stat and present/missing breakdown." width="1146" height="904" loading="lazy" decoding="async" />
-              <span class="thumb-cap">Schema</span>
-            </button>
-          </li>
-          <li>
-            <button type="button" class="thumb"
-              data-img="og/sample-gallery/06-playbook-exec-top.webp"
-              data-w="1146" data-h="1294"
-              data-title="The Playbook is your remediation desk"
-              data-detail="Seven tabs. Executive summary, scorecard, every check, priority fixes, schema pack, prompt grid, glossary. Linkable per section so your engineering and content teams hit the same source of truth.">
-              <img src="og/sample-gallery/06-playbook-exec-top.webp" alt="Playbook executive summary with KPI strip and per-engine bar chart." width="1146" height="1294" loading="lazy" decoding="async" />
-              <span class="thumb-cap">Playbook overview</span>
-            </button>
-          </li>
-          <li>
-            <button type="button" class="thumb"
-              data-img="og/sample-gallery/07-playbook-content.webp"
-              data-w="1146" data-h="1294"
-              data-title="Severity-graded finding cards"
-              data-detail="High / medium / clean. Each card links into the Library tab for the universal best-practice entry behind the check.">
-              <img src="og/sample-gallery/07-playbook-content.webp" alt="Playbook severity-graded finding cards." width="1146" height="1294" loading="lazy" decoding="async" />
-              <span class="thumb-cap">Playbook checks</span>
-            </button>
-          </li>
-        </ul>
+        <div class="filmstrip" aria-roledescription="carousel" aria-label="Sample report screenshot gallery">
+          <button type="button" class="strip-nav strip-nav--prev" id="stripPrev" aria-label="Scroll thumbnails left" aria-controls="sampleThumbs">&#x2039;</button>
+          <ul class="strip-track" id="sampleThumbs">
+            <li>
+              <button type="button" class="thumb"
+                data-img="og/sample-gallery/01-cover.webp"
+                data-w="1146" data-h="761"
+                data-title="Cover &middot; Page 1 of the SXO Audit"
+                data-detail="The single metric that lands first: where you stand in AI-driven answers today, benchmarked against the category leader. Across 10 buyer questions, four engines, three competitors. The body of the report tells you why and how to close the gap.">
+                <img src="og/sample-gallery/01-cover.webp" alt="SXO Audit cover showing 40% citation share and 80% leader share." width="1146" height="761" loading="lazy" decoding="async" />
+                <span class="thumb-cap">Cover</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="thumb"
+                data-img="og/sample-gallery/02-patterns.webp"
+                data-w="1146" data-h="872"
+                data-title="Patterns &middot; Audit Section 1"
+                data-detail="The three highest-leverage patterns moving the citation number, ranked by impact divided by effort. What an executive reads in 60 seconds before flipping to the technical body.">
+                <img src="og/sample-gallery/02-patterns.webp" alt="Three numbered patterns with high-severity badges." width="1146" height="872" loading="lazy" decoding="async" />
+                <span class="thumb-cap">Patterns</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="thumb"
+                data-img="og/sample-gallery/03-findings.webp"
+                data-w="1146" data-h="1157"
+                data-title="Findings &middot; Audit Section 4"
+                data-detail="Severity-graded findings grouped under the twelve themes that determine where engines pull their answers. Each card names what we observed, why it matters, and points back into the Playbook for the universal best-practice entry behind the check.">
+                <img src="og/sample-gallery/03-findings.webp" alt="E-E-A-T theme cluster with four severity-graded finding cards." width="1146" height="1157" loading="lazy" decoding="async" />
+                <span class="thumb-cap">Findings</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="thumb"
+                data-img="og/sample-gallery/04-roadmap.webp"
+                data-w="1146" data-h="1157"
+                data-title="Roadmap &middot; Audit Section 5"
+                data-detail="A 30 / 60 / 90 / Beyond ladder of what to ship first, second, third, and after. Each rung names the finding, cites the specific fix, and tells you when to ship it. Plus an Always row of compound habits that keep the score climbing.">
+                <img src="og/sample-gallery/04-roadmap.webp" alt="Five-rung priority roadmap with this-month, this-quarter, next-quarter, beyond, and always rows." width="1146" height="1157" loading="lazy" decoding="async" />
+                <span class="thumb-cap">Roadmap</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="thumb"
+                data-img="og/sample-gallery/05-schema.webp"
+                data-w="1146" data-h="1236"
+                data-title="Schema &middot; Audit Section 6"
+                data-detail="Coverage at a glance. Useful types found vs. preferred types missing, with a single percentage. The Playbook ships ready-to-paste, validated JSON-LD for every gap, so your engineers can fix it the day they read it.">
+                <img src="og/sample-gallery/05-schema.webp" alt="Schema coverage 25 percent, with present and missing types listed." width="1146" height="1236" loading="lazy" decoding="async" />
+                <span class="thumb-cap">Schema</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="thumb"
+                data-img="og/sample-gallery/06-summary.webp"
+                data-w="1146" data-h="1116"
+                data-title="Summary &middot; Playbook Section 01"
+                data-detail="The same three patterns surfaced live in your shareable Playbook URL, with a four-stat KPI strip: you-cited, leader-cited, finding count, priority count. Tabs across the top jump to scorecard, library, priorities, schemas, prompts, resources.">
+                <img src="og/sample-gallery/06-summary.webp" alt="Playbook executive summary with KPI strip showing 40 percent and 80 percent." width="1146" height="1116" loading="lazy" decoding="async" />
+                <span class="thumb-cap">Summary</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="thumb"
+                data-img="og/sample-gallery/07-scorecard.webp"
+                data-w="1146" data-h="1521"
+                data-title="Scorecard &middot; Playbook Section 02"
+                data-detail="Every check color-coded by severity with a 0-to-100 score, plus the universal Library entry that explains what the check measures and how to fix it. The Playbook stays live for 12 months; numbers update at every re-audit.">
+                <img src="og/sample-gallery/07-scorecard.webp" alt="Playbook scorecard with three CLEAN rows and the Library section preface." width="1146" height="1521" loading="lazy" decoding="async" />
+                <span class="thumb-cap">Scorecard</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="thumb"
+                data-img="og/sample-gallery/08-code.webp"
+                data-w="1146" data-h="1521"
+                data-title="Code &middot; Playbook Section 05"
+                data-detail="Copy-paste JSON-LD per priority page. Each block is a complete, validated payload generated from your audit, no placeholder text. Run them through Google Rich Results Test before merging.">
+                <img src="og/sample-gallery/08-code.webp" alt="JSON-LD FAQPage code block ready to paste." width="1146" height="1521" loading="lazy" decoding="async" />
+                <span class="thumb-cap">Code</span>
+              </button>
+            </li>
+            <li>
+              <button type="button" class="thumb"
+                data-img="og/sample-gallery/09-prompts.webp"
+                data-w="1146" data-h="1521"
+                data-title="Prompts &middot; Playbook Section 06"
+                data-detail="Two prompt sets. The first five are working prompts you run against your draft content during remediation. The last five are validation prompts you run against your live site 7 to 14 days after each priority fix to verify lift before the next one ships.">
+                <img src="og/sample-gallery/09-prompts.webp" alt="Prompt grid with working prompts and post-fix validation prompts." width="1146" height="1521" loading="lazy" decoding="async" />
+                <span class="thumb-cap">Prompts</span>
+              </button>
+            </li>
+          </ul>
+          <button type="button" class="strip-nav strip-nav--next" id="stripNext" aria-label="Scroll thumbnails right" aria-controls="sampleThumbs">&#x203A;</button>
+        </div>
 
         <!-- Lightbox: hidden by default; click any thumbnail to open. -->
         <div class="lb" id="sampleLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="lbTitle">
-          <button type="button" class="lb-close" aria-label="Close">&times;</button>
+          <button type="button" class="lb-close" aria-label="Close gallery">&times;</button>
+          <button type="button" class="lb-nav lb-nav--prev" id="lbPrev" aria-label="Previous screenshot">&#x2039;</button>
+          <button type="button" class="lb-nav lb-nav--next" id="lbNext" aria-label="Next screenshot">&#x203A;</button>
           <div class="lb-frame">
             <img class="lb-img" id="lbImg" alt="" />
             <div class="lb-cap">
               <strong id="lbTitle"></strong>
               <span id="lbDetail"></span>
+              <span class="lb-counter" id="lbCounter" aria-live="polite"></span>
             </div>
           </div>
         </div>
 
         <script>
         (function () {
-          var thumbs = document.querySelectorAll('#sampleThumbs .thumb');
+          var thumbs = Array.prototype.slice.call(document.querySelectorAll('#sampleThumbs .thumb'));
+          var track = document.getElementById('sampleThumbs');
+          var stripPrev = document.getElementById('stripPrev');
+          var stripNext = document.getElementById('stripNext');
           var lb = document.getElementById('sampleLightbox');
           var img = document.getElementById('lbImg');
           var title = document.getElementById('lbTitle');
           var detail = document.getElementById('lbDetail');
+          var counter = document.getElementById('lbCounter');
           var closeBtn = lb.querySelector('.lb-close');
+          var lbPrev = document.getElementById('lbPrev');
+          var lbNext = document.getElementById('lbNext');
           var lastFocus = null;
+          var idx = 0;
 
-          function open(btn) {
-            lastFocus = btn;
+          // Strip horizontal scroll. Each click moves about one thumb width.
+          function strip(by) {
+            var t = thumbs[0];
+            var step = t ? (t.getBoundingClientRect().width + 14) * 2 : 320;
+            track.scrollBy({ left: by * step, behavior: 'smooth' });
+          }
+          stripPrev.addEventListener('click', function () { strip(-1); });
+          stripNext.addEventListener('click', function () { strip(1); });
+
+          function load(i) {
+            idx = (i + thumbs.length) % thumbs.length;
+            var btn = thumbs[idx];
             img.src = btn.getAttribute('data-img');
             img.alt = btn.querySelector('img').alt;
             img.width = +btn.getAttribute('data-w');
             img.height = +btn.getAttribute('data-h');
             title.innerHTML = btn.getAttribute('data-title');
             detail.textContent = btn.getAttribute('data-detail');
+            counter.textContent = (idx + 1) + ' / ' + thumbs.length;
+            // Scroll the strip to keep the matching thumb in view.
+            btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          }
+          function open(i) {
+            lastFocus = thumbs[i];
+            load(i);
             lb.classList.add('is-open');
             lb.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
@@ -419,13 +470,33 @@
             if (lastFocus) lastFocus.focus();
           }
           for (var i = 0; i < thumbs.length; i++) {
-            thumbs[i].addEventListener('click', (function (b) { return function () { open(b); }; })(thumbs[i]));
+            (function (j) {
+              thumbs[j].addEventListener('click', function () { open(j); });
+            })(i);
           }
           closeBtn.addEventListener('click', close);
+          lbPrev.addEventListener('click', function () { load(idx - 1); });
+          lbNext.addEventListener('click', function () { load(idx + 1); });
           lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
           document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && lb.classList.contains('is-open')) close();
+            if (!lb.classList.contains('is-open')) return;
+            if (e.key === 'Escape') close();
+            else if (e.key === 'ArrowLeft') load(idx - 1);
+            else if (e.key === 'ArrowRight') load(idx + 1);
           });
+
+          // Touch swipe inside the lightbox.
+          var touchX = null;
+          lb.addEventListener('touchstart', function (e) {
+            touchX = e.touches[0].clientX;
+          }, { passive: true });
+          lb.addEventListener('touchend', function (e) {
+            if (touchX === null) return;
+            var dx = e.changedTouches[0].clientX - touchX;
+            if (dx > 40) load(idx - 1);
+            else if (dx < -40) load(idx + 1);
+            touchX = null;
+          }, { passive: true });
         })();
         </script>
       </div>
