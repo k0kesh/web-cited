@@ -287,11 +287,86 @@
       text-align: right;
     }
 
-    /* Hide non-active tabs - exec is the default; clicking other tabs reveals
-       them via :target. Designed to look great as static screenshots so the
-       Services page can capture the most interesting frame. */
-    .pb-section { display: none; }
-    .pb-section.is-active { display: block; }
+    /* All sections render in vertical scroll; tab nav is anchor-link
+       scrollspy. The Web Cited Playbook ships every section in one
+       continuous page so customers can scroll through their full
+       remediation desk without tab-flipping. */
+    .pb-section { display: block; padding-top: 16px; padding-bottom: 36px; border-bottom: 1px solid #e1e0d8; scroll-margin-top: 100px; }
+    .pb-section:last-child { border-bottom: 0; }
+    .pb-tabs { position: sticky; top: 0; z-index: 10; background: var(--paper); }
+
+    /* Scorecard panel (section 02) */
+    .scorecard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: var(--rule-thick);
+      background: var(--paper-white);
+      margin-bottom: 24px;
+    }
+    .scorecard-cell {
+      padding: 18px 16px;
+      border-right: var(--rule);
+      text-align: center;
+    }
+    .scorecard-cell:last-child { border-right: 0; }
+    .scorecard-num {
+      font-size: 44px; font-weight: 900; letter-spacing: -1px; line-height: 1;
+    }
+    .scorecard-num.is-fail { color: var(--accent); }
+    .scorecard-num.is-warn { color: var(--warn); }
+    .scorecard-num.is-pass { color: var(--pass); }
+    .scorecard-label {
+      font-size: 11px; letter-spacing: 0.7px; text-transform: uppercase;
+      font-weight: 800; margin-top: 8px;
+    }
+    .scorecard-table {
+      width: 100%; border-collapse: collapse; background: var(--paper-white);
+      border: var(--rule-thick); font-size: 13px;
+    }
+    .scorecard-table th, .scorecard-table td {
+      padding: 10px 14px; border-bottom: 1px solid #e1e0d8; text-align: left;
+    }
+    .scorecard-table tr:last-child td { border-bottom: 0; }
+    .scorecard-table th {
+      background: var(--ink); color: var(--paper-white);
+      font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .scorecard-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .sev-chip {
+      display: inline-block; padding: 1px 7px; font-size: 10px;
+      font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;
+      border: 1px solid var(--ink);
+    }
+    .sev-chip.is-fail { background: var(--accent); color: var(--paper-w); border-color: var(--accent); }
+    .sev-chip.is-warn { background: var(--warn); color: var(--paper-w); border-color: var(--warn); }
+    .sev-chip.is-pass { background: var(--pass); color: var(--paper-w); border-color: var(--pass); }
+
+    /* All Checks library (section 03) */
+    .lib-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+    }
+    .lib-card {
+      background: var(--paper-white); border: var(--rule); padding: 18px 20px;
+    }
+    .lib-card h3 { margin: 0 0 4px; font-size: 16px; font-weight: 800; }
+    .lib-card .lib-theme {
+      font-size: 10px; letter-spacing: 0.7px; text-transform: uppercase;
+      color: var(--accent-ink); font-weight: 800; margin-bottom: 8px;
+    }
+    .lib-card p { font-size: 13px; line-height: 1.5; margin: 6px 0; }
+    .lib-card .lib-fix {
+      background: rgba(204,0,0,0.04);
+      border-left: 2px solid var(--accent);
+      padding: 8px 12px; margin-top: 8px; font-size: 12.5px;
+    }
+
+    @media (max-width: 720px) {
+      .lib-grid { grid-template-columns: 1fr; }
+      .scorecard-grid { grid-template-columns: 1fr 1fr; }
+      .scorecard-cell { border-right: 0; border-bottom: var(--rule); }
+      .scorecard-cell:nth-child(2), .scorecard-cell:last-child { border-right: 0; }
+    }
   </style>
 </head>
 <body>
@@ -306,9 +381,9 @@
     </div>
   </header>
 
-  <!-- Tabs -->
+  <!-- Tabs (sticky scroll-spy nav; click any tab to jump to that section) -->
   <nav class="pb-tabs" role="navigation" aria-label="Playbook sections">
-    <a class="pb-tab is-active" href="#exec">01 Executive Summary</a>
+    <a class="pb-tab" href="#exec">01 Executive Summary</a>
     <a class="pb-tab" href="#scorecard">02 Scorecard</a>
     <a class="pb-tab" href="#all-checks">03 All Checks</a>
     <a class="pb-tab" href="#priority-1">04 Priority 1 Fixes</a>
@@ -319,7 +394,7 @@
 
   <main class="pb-wrap">
     <!-- 01 Executive Summary -->
-    <section class="pb-section is-active" id="exec">
+    <section class="pb-section" id="exec">
       <div class="pb-eyebrow">Section 01 &middot; Executive Summary</div>
       <h1 class="pb-title">Claimzilla is cited 40% of the time.<br>Insurify is cited 80%.</h1>
       <p class="pb-lede">
@@ -344,7 +419,7 @@
         <div class="kpi-cell">
           <div class="kpi-label">Findings</div>
           <div class="kpi-value">17</div>
-          <div class="kpi-delta">4 PASS, 5 WARN, 4 FAIL, 4 SKIP.</div>
+          <div class="kpi-delta">4 PASS, 10 WARN, 3 FAIL.</div>
         </div>
         <div class="kpi-cell">
           <div class="kpi-label">Priority</div>
@@ -439,6 +514,233 @@
             identifiers all populated. This is the strongest entity-graph signal
             in the audit; it directly lifts Claude's citation rate.
           </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 Scorecard -->
+    <section class="pb-section" id="scorecard">
+      <div class="pb-eyebrow">Section 02 &middot; Scorecard</div>
+      <h1 class="pb-title">All 17 checks at a glance.</h1>
+      <p class="pb-lede">
+        Every audit check, color-coded by severity. Click any row to jump to
+        the All Checks library entry that explains the universal best
+        practice behind the check. Numbers update at every re-audit.
+      </p>
+
+      <div class="scorecard-grid">
+        <div class="scorecard-cell">
+          <div class="scorecard-num is-fail">3</div>
+          <div class="scorecard-label">High severity</div>
+        </div>
+        <div class="scorecard-cell">
+          <div class="scorecard-num is-warn">9</div>
+          <div class="scorecard-label">Medium severity</div>
+        </div>
+        <div class="scorecard-cell">
+          <div class="scorecard-num is-pass">5</div>
+          <div class="scorecard-label">Clean / pass</div>
+        </div>
+        <div class="scorecard-cell">
+          <div class="scorecard-num">17</div>
+          <div class="scorecard-label">Total checks</div>
+        </div>
+      </div>
+
+      <table class="scorecard-table">
+        <thead>
+          <tr>
+            <th>Check</th>
+            <th>Theme</th>
+            <th>Severity</th>
+            <th class="num">Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Gemini (Google) names the target domain</td><td>Citation</td><td><span class="sev-chip is-fail">High</span></td><td class="num">10%</td></tr>
+          <tr><td>llms.txt directive file at site root</td><td>Discoverability</td><td><span class="sev-chip is-fail">High</span></td><td class="num">0%</td></tr>
+          <tr><td>Google AI Overview surfaces target domain</td><td>SERP</td><td><span class="sev-chip is-fail">High</span></td><td class="num">0%</td></tr>
+          <tr><td>JSON-LD: Organization, WebSite, Service, FAQPage</td><td>Structured data</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">25%</td></tr>
+          <tr><td>OpenAI (ChatGPT) names the target domain</td><td>Citation</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">40%</td></tr>
+          <tr><td>Anthropic (Claude) names the target domain</td><td>Citation</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">50%</td></tr>
+          <tr><td>Perplexity (Sonar) names the target domain</td><td>Citation</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">60%</td></tr>
+          <tr><td>Wikipedia article + external citations</td><td>Entity</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">55%</td></tr>
+          <tr><td>Google Knowledge Graph entity entry</td><td>Entity</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">50%</td></tr>
+          <tr><td>YouTube embeds have transcripts</td><td>Media</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">40%</td></tr>
+          <tr><td>YouTube mentions in third-party content</td><td>Media</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">55%</td></tr>
+          <tr><td>Bing Copilot answer + organic rank</td><td>SERP</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">45%</td></tr>
+          <tr><td>Google Business Profile completeness</td><td>Entity</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">55%</td></tr>
+          <tr><td>Title, description, canonical, robots, viewport</td><td>SEO</td><td><span class="sev-chip is-pass">Clean</span></td><td class="num">100%</td></tr>
+          <tr><td>Open Graph + Twitter Card meta completeness</td><td>Meta &amp; social</td><td><span class="sev-chip is-pass">Clean</span></td><td class="num">100%</td></tr>
+          <tr><td>Wikidata Q-ID + typed claims</td><td>Entity</td><td><span class="sev-chip is-pass">Clean</span></td><td class="num">100%</td></tr>
+          <tr><td>Google organic rank for brand queries</td><td>SERP</td><td><span class="sev-chip is-pass">Clean</span></td><td class="num">100%</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 03 All Checks (Library) -->
+    <section class="pb-section" id="all-checks">
+      <div class="pb-eyebrow">Section 03 &middot; All Checks &middot; Universal Library</div>
+      <h1 class="pb-title">The "why this matters" behind every check.</h1>
+      <p class="pb-lede">
+        Universal best-practice entries for the 17 checks Web Cited runs.
+        Each entry explains what the check measures, why it moves LLM
+        citation, and how to fix it. Reusable reference for your team
+        regardless of how Claimzilla scored on this audit.
+      </p>
+
+      <div class="lib-grid">
+        <div class="lib-card">
+          <div class="lib-theme">Citation &middot; LLM</div>
+          <h3>OpenAI / Anthropic / Gemini / Perplexity citation rate</h3>
+          <p>
+            For each buyer question, send the same prompt to all four
+            engines and capture which engines name your domain in the
+            response. Aggregate across the prompt grid for a per-engine
+            score.
+          </p>
+          <p>
+            Why it matters: the four engines collectively cover ~95% of
+            generative-answer market share. A brand that's cited by 3 of
+            4 engines on the buyer's question is the de facto answer.
+          </p>
+          <div class="lib-fix">Fix levers: authoritative content matching the buyer's exact phrasing, third-party citations on Wikipedia + niche publications, FAQ schema, llms.txt with priority pages.</div>
+        </div>
+
+        <div class="lib-card">
+          <div class="lib-theme">Discoverability</div>
+          <h3>llms.txt at site root</h3>
+          <p>
+            Public spec for telling LLM crawlers what to prioritize and
+            what to skip. One URL per line, optional <code># notes</code>.
+            Most LLM crawlers (Anthropic, Perplexity, OpenAI's GPTBot)
+            honor it within 14 days of publication.
+          </p>
+          <div class="lib-fix">Fix: publish 8 to 12 priority URLs at <code>/llms.txt</code>. Include homepage, /how-it-works, /faq, top buyer-decision pages, and authoritative reference content.</div>
+        </div>
+
+        <div class="lib-card">
+          <div class="lib-theme">SERP &middot; AIO</div>
+          <h3>Google AI Overview placement</h3>
+          <p>
+            For commercial buyer queries, Google now shows an AI-generated
+            multi-source summary above organic results. The brands cited
+            in the AIO get the highest-conversion answer slot in Google
+            search. Coverage is the % of your buyer queries where your
+            domain appears.
+          </p>
+          <div class="lib-fix">Fix: earn FAQPage rich result eligibility (AIO draws from FAQ-marked content disproportionately), publish answer-first paragraphs (90 to 110 words) on the queries you want to capture, earn 2 to 3 mid-authority third-party citations per query topic.</div>
+        </div>
+
+        <div class="lib-card">
+          <div class="lib-theme">Structured data</div>
+          <h3>JSON-LD: Organization, WebSite, Service, FAQPage</h3>
+          <p>
+            Schema.org JSON-LD is the most reliable way to feed your
+            entity facts to LLM training pipelines + Google's Knowledge
+            Graph. Four priority shapes: Organization (who you are),
+            WebSite (your site as a publisher), Service or Product (what
+            you sell), FAQPage (your buyer's most-searched questions).
+          </p>
+          <div class="lib-fix">Fix: ship all four shapes on your homepage / category / FAQ pages. Validate via Google's Rich Results Test before merging. Per-page samples in your Schema Pack tab.</div>
+        </div>
+
+        <div class="lib-card">
+          <div class="lib-theme">Entity &middot; Knowledge Graph</div>
+          <h3>Google Knowledge Graph entity entry</h3>
+          <p>
+            Google maintains a graph of entities (companies, people,
+            places). Brands with a complete Knowledge Graph entry win
+            the right-rail Knowledge Panel on branded searches and feed
+            Gemini's grounding signal heavily.
+          </p>
+          <div class="lib-fix">Fix: submit a Schema.org Organization update with sameAs (LinkedIn, Crunchbase, Wikipedia, Wikidata), founder, foundingDate, address, contactPoint. Allow 14 to 30 days for KG to absorb.</div>
+        </div>
+
+        <div class="lib-card">
+          <div class="lib-theme">Entity &middot; Wikidata</div>
+          <h3>Wikidata Q-ID + typed claims</h3>
+          <p>
+            Wikidata is the multilingual structured-fact graph that feeds
+            both Wikipedia's right-rail panels and most LLM entity-grounding
+            pipelines. A Q-ID with typed claims (instance-of, industry,
+            founded, etc.) is the single strongest entity-graph signal
+            for Anthropic Claude.
+          </p>
+          <div class="lib-fix">Fix: open or expand a Wikidata item (community-edited; takes 2 to 3 weeks to settle). Populate at least 8 to 10 typed claims. Link sameAs identifiers (LinkedIn, Crunchbase, X handle).</div>
+        </div>
+
+        <div class="lib-card">
+          <div class="lib-theme">Entity &middot; Wikipedia</div>
+          <h3>Wikipedia article depth + external citations</h3>
+          <p>
+            LLMs weight Wikipedia article depth heavily when deciding
+            whether to name a brand by name vs by category. Articles
+            below 600 words with under 5 third-party citations rarely
+            survive LLM citation generation.
+          </p>
+          <div class="lib-fix">Fix: editorial push to expand the article to 600+ words covering history, model, funding, market position. Cite 5+ reliable third-party sources (industry publications, regulator filings, Forbes / TechCrunch / WSJ coverage). 2-week effort; lasting payoff.</div>
+        </div>
+
+        <div class="lib-card">
+          <div class="lib-theme">SEO &middot; Fundamentals</div>
+          <h3>Title, description, canonical, robots, viewport, H1, H2, lang</h3>
+          <p>
+            The eight on-page fundamentals every page must get right.
+            Title under 60 chars, description 130 to 160 chars, canonical
+            pointing to the preferred URL, robots index/follow, viewport
+            mobile-friendly, single H1 per page, hierarchical H2s, lang
+            attribute set on the html element.
+          </p>
+          <div class="lib-fix">Fix: a CMS template lock-down ensures every published page hits all 8. Audit existing top-50 traffic pages for compliance; the typical hit rate before lock-down is 60-70%.</div>
+        </div>
+
+        <div class="lib-card">
+          <div class="lib-theme">Meta &amp; social</div>
+          <h3>Open Graph + Twitter Card completeness</h3>
+          <p>
+            Nine OG tags + four Twitter Card tags drive how your link
+            previews render across Facebook, LinkedIn, Slack, iMessage,
+            X, Discord. Incomplete preview cards lose ~20% of share
+            click-through versus fully-populated ones.
+          </p>
+          <div class="lib-fix">Fix: validate every page-template via OpenGraph.xyz and LinkedIn Post Inspector before going live. Preview image must be 1200x630 px and under 1 MB.</div>
+        </div>
+
+        <div class="lib-card">
+          <div class="lib-theme">Media</div>
+          <h3>YouTube embed transcripts</h3>
+          <p>
+            Embedded videos without &lt;track&gt; caption files OR
+            visible transcript text below the video are invisible to LLM
+            crawlers (which can't transcribe video content). Critical for
+            video-heavy landing pages.
+          </p>
+          <div class="lib-fix">Fix: auto-generate captions in YouTube Studio, review for accuracy on industry terms, publish as a public caption track. Bonus: embed the transcript as visible page text in a collapsible &lt;details&gt; element.</div>
+        </div>
+
+        <div class="lib-card">
+          <div class="lib-theme">Media</div>
+          <h3>YouTube mentions in third-party content</h3>
+          <p>
+            Brand mentioned in titles, descriptions, or transcripts of
+            YouTube videos the brand <em>didn't</em> publish. Among the
+            single strongest signals for being named when an LLM is
+            asked an open-ended buyer question.
+          </p>
+          <div class="lib-fix">Fix: pitch product reviews / explainer videos to mid-tier YouTube personal-finance / industry channels (50K to 500K subscribers). Each video lifts both general-search citation and Perplexity grounding.</div>
+        </div>
+
+        <div class="lib-card">
+          <div class="lib-theme">SERP &middot; Bing</div>
+          <h3>Bing Copilot answer + organic rank</h3>
+          <p>
+            Bing has ~10% of US search and feeds Microsoft Copilot, which
+            is the second-largest source of LLM grounding traffic after
+            Google. Bing weights structured data + freshness more than
+            Google.
+          </p>
+          <div class="lib-fix">Fix: keep page lastmod headers + sitemap.xml lastmod fresh on every content update. Use the IndexNow API to push updates to Bing within minutes instead of waiting for the crawl cycle. Most comparison sites neglect IndexNow.</div>
         </div>
       </div>
     </section>
