@@ -1472,70 +1472,122 @@ details.faq__item p {
 .form-retry h2 { margin-top: 0; }
 .form-retry .submit-row { margin-top: 1.25rem; }
 
-/* ---------- Sample-report thumbnail gallery + lightbox ---------------- */
-.thumb-grid {
-  list-style: none;
+/* ---------- Sample-report film-strip gallery + lightbox ---------------- */
+/* Horizontal film strip with arrow controls. Each thumb is a fixed-width
+   tile inside a horizontally-scrollable track. The track scrolls
+   smoothly when the operator clicks the chevrons or uses the lightbox
+   prev/next while inside the modal. */
+.filmstrip {
+  position: relative;
   margin: 1.5rem 0 0;
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+.strip-track {
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0.25rem;
+  display: flex;
+  gap: 0.85rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto;
+  /* Reserve room for the cap so the focus ring + hover lift don't get
+     clipped by the scroll container's overflow. */
+  padding-bottom: 0.5rem;
+}
+.strip-track::-webkit-scrollbar { height: 6px; }
+.strip-track::-webkit-scrollbar-thumb { background: var(--slate-200); border-radius: 3px; }
+.strip-track li {
+  margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  flex: 0 0 auto;
+  scroll-snap-align: start;
 }
-@media (min-width: 720px) {
-  .thumb-grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (min-width: 1080px) {
-  .thumb-grid { grid-template-columns: repeat(4, 1fr); }
-}
-.thumb-grid li { margin: 0; padding: 0; }
 .thumb {
-  width: 100%;
+  width: 180px;
   background: var(--paper-white);
   border: var(--rule);
-  padding: 0.5rem 0.5rem 0.65rem;
+  padding: 0;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
   font-family: inherit;
-  text-align: center;
-  transition: transform 100ms ease, border-color 100ms ease;
+  text-align: left;
+  transition: transform 100ms ease, border-color 100ms ease, box-shadow 100ms ease;
+  overflow: hidden;
 }
 .thumb:hover, .thumb:focus-visible {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   border-color: var(--accent);
+  box-shadow: 0 4px 0 0 var(--ink);
   outline: none;
 }
 .thumb img {
   width: 100%;
-  height: 140px;
+  height: 132px;
   object-fit: cover;
   object-position: top center;
   display: block;
-  border: 1px solid var(--slate-200);
+  border-bottom: 1px solid var(--slate-200);
+  background: var(--paper);
 }
 .thumb-cap {
+  display: block;
+  padding: 0.5rem 0.65rem 0.55rem;
   font-size: 0.78rem;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--ink);
+  background: var(--paper-white);
+}
+.strip-nav {
+  flex: 0 0 auto;
+  width: 40px;
+  align-self: stretch;
+  background: var(--paper-white);
+  border: var(--rule);
+  color: var(--ink);
+  font-size: 1.7rem;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.strip-nav:hover, .strip-nav:focus-visible {
+  background: var(--accent);
+  color: var(--paper-white);
+  border-color: var(--accent);
+  outline: none;
+}
+@media (max-width: 540px) {
+  .strip-nav { display: none; }
+  .thumb { width: 150px; }
+  .thumb img { height: 110px; }
 }
 
+/* Lightbox */
 .lb {
   position: fixed; inset: 0;
-  background: rgba(0, 0, 0, 0.78);
+  background: rgba(0, 0, 0, 0.82);
   display: none;
   align-items: center;
   justify-content: center;
-  padding: clamp(1rem, 3vw, 2.5rem);
+  padding: clamp(0.75rem, 3vw, 2.5rem);
   z-index: 1000;
 }
 .lb.is-open { display: flex; }
 .lb-frame {
   background: var(--paper-white);
-  max-width: min(1100px, 95vw);
-  max-height: 90vh;
+  max-width: min(1100px, 92vw);
+  max-height: 92vh;
   display: flex;
   flex-direction: column;
   border: var(--rule);
@@ -1546,12 +1598,14 @@ details.faq__item p {
   height: auto;
   display: block;
   border-bottom: 1px solid var(--slate-200);
+  background: var(--paper);
 }
 .lb-cap {
   padding: 1rem 1.25rem 1.25rem;
   font-size: 0.95rem;
   line-height: 1.55;
   color: var(--slate-800);
+  position: relative;
 }
 .lb-cap strong {
   display: block;
@@ -1561,10 +1615,18 @@ details.faq__item p {
   margin-bottom: 0.35rem;
   letter-spacing: -0.005em;
 }
-.lb-close {
+.lb-counter {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--slate-600);
+}
+.lb-close,
+.lb-nav {
   position: absolute;
-  top: clamp(0.5rem, 1.5vw, 1rem);
-  right: clamp(0.75rem, 2vw, 1.25rem);
   background: var(--paper-white);
   color: var(--ink);
   border: var(--rule);
@@ -1577,12 +1639,24 @@ details.faq__item p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 }
-.lb-close:hover, .lb-close:focus-visible {
+.lb-close {
+  top: clamp(0.5rem, 1.5vw, 1rem);
+  right: clamp(0.75rem, 2vw, 1.25rem);
+}
+.lb-nav { top: 50%; transform: translateY(-50%); width: 48px; height: 48px; font-size: 1.6rem; }
+.lb-nav--prev { left: clamp(0.5rem, 1.5vw, 1rem); }
+.lb-nav--next { right: clamp(0.5rem, 1.5vw, 1rem); }
+.lb-close:hover, .lb-close:focus-visible,
+.lb-nav:hover, .lb-nav:focus-visible {
   background: var(--accent);
   color: var(--paper-white);
   border-color: var(--accent);
   outline: none;
+}
+@media (max-width: 540px) {
+  .lb-nav { width: 40px; height: 40px; font-size: 1.3rem; }
 }
 
 .case-card {
