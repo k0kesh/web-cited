@@ -1484,7 +1484,11 @@ details.faq__item p {
    network when the user clicks. Hero box has a fixed aspect ratio
    so swapping images of different shapes never produces CLS. */
 .gal {
-  margin: 1.5rem 0 0;
+  /* Capped at 880px so the hero reads as a deliverable artifact rather
+     than a full-bleed banner. ~20% smaller than the prior full-wrap
+     width, per operator feedback round 4. */
+  max-width: 880px;
+  margin: 1.5rem auto 0;
   padding: 0;
   background: var(--paper-white);
   border: var(--rule);
