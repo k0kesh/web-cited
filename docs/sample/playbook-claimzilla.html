@@ -246,7 +246,62 @@
       font-size: 10px; letter-spacing: 0.7px; text-transform: uppercase;
       font-weight: 800;
       border: 1.5px solid var(--ink); padding: 4px 10px; background: var(--paper-white);
+      cursor: pointer; transition: background 80ms, color 80ms, border-color 80ms;
     }
+    .copy-pill:hover { background: var(--ink); color: var(--paper-white); }
+    .copy-pill.is-copied { background: var(--pass); color: var(--paper-white); border-color: var(--pass); }
+
+    /* Toast for clipboard feedback */
+    .pb-toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--ink); color: var(--paper-white);
+      padding: 10px 22px; font-size: 13px; font-weight: 700; letter-spacing: 0.4px;
+      border: 1.5px solid var(--ink); box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+      opacity: 0; pointer-events: none; transition: opacity 180ms, transform 180ms;
+      z-index: 100;
+    }
+    .pb-toast.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Validation tools panel */
+    .tools-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0 24px;
+    }
+    .tool-card {
+      background: var(--paper-white); border: var(--rule); padding: 14px 18px;
+    }
+    .tool-card h4 { margin: 0 0 4px; font-size: 14px; font-weight: 800; }
+    .tool-card p { font-size: 12.5px; color: var(--slate-700); margin: 0 0 6px; line-height: 1.5; }
+    .tool-card a {
+      font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; font-weight: 700;
+      color: var(--accent-ink); text-decoration: underline; text-decoration-thickness: 1.5px;
+      text-underline-offset: 3px;
+    }
+
+    /* FAQ accordion */
+    .faq details {
+      background: var(--paper-white); border: var(--rule); padding: 12px 18px;
+      margin-bottom: 8px; cursor: pointer;
+    }
+    .faq summary {
+      font-weight: 800; font-size: 14px; letter-spacing: 0.1px; outline: none;
+      list-style: none; position: relative; padding-right: 20px;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary:after {
+      content: "+"; position: absolute; right: 0; top: 0; font-weight: 700;
+      transition: transform 120ms;
+    }
+    .faq details[open] summary:after { content: "\2212"; }
+    .faq details p { margin: 8px 0 0; font-size: 13px; color: var(--ink); line-height: 1.55; }
+
+    /* Footer */
+    .pb-foot {
+      max-width: 1180px; margin: 32px auto 0; padding: 22px 28px;
+      border-top: var(--rule); display: flex; flex-wrap: wrap; gap: 18px;
+      justify-content: space-between; font-size: 11px; color: var(--slate-700);
+      letter-spacing: 0.4px;
+    }
+    .pb-foot a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 
     /* Prompt grid */
     .prompt-grid {
@@ -805,9 +860,10 @@
 
       <div class="schema-card-head">
         <h3>Homepage &middot; Organization + WebSite (combined @graph)</h3>
-        <span class="copy-pill">Copy</span>
+        <button class="copy-pill" type="button" data-copy-target="schema-1">Copy</button>
       </div>
-      <pre class="schema-block">{
+      <pre class="schema-block" id="schema-1"><span class="com">&lt;script type=&quot;application/ld+json&quot;&gt;</span>
+{
   <span class="key">"@context"</span>: <span class="str">"https://schema.org"</span>,
   <span class="key">"@graph"</span>: [
     {
@@ -831,13 +887,15 @@
       <span class="key">"publisher"</span>: { <span class="key">"@id"</span>: <span class="str">"https://claimzilla.example/#organization"</span> }
     }
   ]
-}</pre>
+}
+<span class="com">&lt;/script&gt;</span></pre>
 
       <div class="schema-card-head">
         <h3>/faq &middot; FAQPage (14 Q&amp;A blocks, abbreviated to 3 here)</h3>
-        <span class="copy-pill">Copy</span>
+        <button class="copy-pill" type="button" data-copy-target="schema-2">Copy</button>
       </div>
-      <pre class="schema-block">{
+      <pre class="schema-block" id="schema-2"><span class="com">&lt;script type=&quot;application/ld+json&quot;&gt;</span>
+{
   <span class="key">"@context"</span>: <span class="str">"https://schema.org"</span>,
   <span class="key">"@type"</span>: <span class="str">"FAQPage"</span>,
   <span class="key">"mainEntity"</span>: [
@@ -853,7 +911,35 @@
     },
     <span class="com">// 12 more Q&amp;A blocks; full payload in your downloadable schema-pack.zip</span>
   ]
-}</pre>
+}
+<span class="com">&lt;/script&gt;</span></pre>
+
+      <div class="schema-card-head">
+        <h3>/products/auto-insurance &middot; Service schema</h3>
+        <button class="copy-pill" type="button" data-copy-target="schema-3">Copy</button>
+      </div>
+      <pre class="schema-block" id="schema-3"><span class="com">&lt;script type=&quot;application/ld+json&quot;&gt;</span>
+{
+  <span class="key">"@context"</span>: <span class="str">"https://schema.org"</span>,
+  <span class="key">"@type"</span>: <span class="str">"Service"</span>,
+  <span class="key">"name"</span>: <span class="str">"Auto insurance comparison"</span>,
+  <span class="key">"serviceType"</span>: <span class="str">"Insurance comparison platform"</span>,
+  <span class="key">"provider"</span>: { <span class="key">"@id"</span>: <span class="str">"https://claimzilla.example/#organization"</span> },
+  <span class="key">"areaServed"</span>: { <span class="key">"@type"</span>: <span class="str">"Country"</span>, <span class="key">"name"</span>: <span class="str">"United States"</span> },
+  <span class="key">"audience"</span>: { <span class="key">"@type"</span>: <span class="str">"Audience"</span>, <span class="key">"audienceType"</span>: <span class="str">"Auto insurance shoppers"</span> },
+  <span class="key">"offers"</span>: {
+    <span class="key">"@type"</span>: <span class="str">"AggregateOffer"</span>,
+    <span class="key">"offerCount"</span>: <span class="str">"40+"</span>,
+    <span class="key">"priceCurrency"</span>: <span class="str">"USD"</span>
+  }
+}
+<span class="com">&lt;/script&gt;</span></pre>
+
+      <p style="margin-top: 18px; font-size: 13px; color: var(--slate-700);">
+        <strong>22 more priority pages</strong> have per-URL schema recommendations in
+        your downloadable schema-pack.zip. Each row in the zip ships a JSON-LD
+        block ready to drop into the page <code>&lt;head&gt;</code>.
+      </p>
     </section>
 
     <!-- 06 Prompt Grid -->
@@ -861,10 +947,13 @@
       <div class="pb-eyebrow">Section 06 &middot; Prompt Grid</div>
       <h1 class="pb-title">Run these prompts against your own pages.</h1>
       <p class="pb-lede">
-        Five copy-paste prompts that give you a fast, free signal between
-        re-audits. Run them in ChatGPT, Claude, or Perplexity weekly.
+        Two prompt sets. The first five are <strong>working</strong> prompts you
+        run against your draft content during remediation. The last five are
+        <strong>validation</strong> prompts you run against your live site
+        after each fix to verify lift before the next re-audit.
       </p>
 
+      <h2 class="section-head">Working prompts</h2>
       <div class="prompt-grid">
         <div class="prompt-card">
           <div class="prompt-tag">Answer-first extraction</div>
@@ -892,50 +981,297 @@
           <div class="prompt-meta">Run quarterly; pairs with the on_site_seo finding.</div>
         </div>
       </div>
+
+      <h2 class="section-head">Post-fix validation prompts</h2>
+      <p style="font-size: 13px; color: var(--slate-700); margin-top: 4px; margin-bottom: 14px;">
+        Run these against ChatGPT, Claude, Gemini, and Perplexity 7 to 14 days
+        after each priority fix ships. Capture the answer + cited sources.
+        If Claimzilla appears among the cited sources, the fix worked. If
+        not, iterate and re-validate.
+      </p>
+      <div class="prompt-grid">
+        <div class="prompt-card">
+          <div class="prompt-tag">V1 &middot; Buyer-question coverage</div>
+          <div class="prompt-q">What is the cheapest car insurance for a 2018 Toyota Camry in Texas? Cite 3 sources.</div>
+          <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1).</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-tag">V2 &middot; Brand-recognition</div>
+          <div class="prompt-q">Compare Claimzilla, Insurify, The Zebra, and NerdWallet for getting auto insurance quotes online. Be specific about each company's claims-handling reputation.</div>
+          <div class="prompt-meta">Pass = factual claims about Claimzilla without hallucinations.</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-tag">V3 &middot; FAQ-rich-result lift</div>
+          <div class="prompt-q">Does comparing insurance quotes online affect my credit score? Cite 2 sources.</div>
+          <div class="prompt-meta">After Priority Fix 02 (FAQPage). Pass = Claimzilla in cited sources.</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-tag">V4 &middot; Knowledge Graph lift</div>
+          <div class="prompt-q">Tell me about Claimzilla in 100 words. Include founding year, headquarters, business model, and total carriers in network.</div>
+          <div class="prompt-meta">After Priority Fix 04 (KG update). Pass = LLM correctly states 2019 founding, Austin TX, 40+ carriers.</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-tag">V5 &middot; AIO appearance</div>
+          <div class="prompt-q">Open Google in an incognito window. Search: "is claimzilla legit for car insurance quotes". Note whether the AI Overview appears and which 3 sources it cites.</div>
+          <div class="prompt-meta">After Priority Fix 03 (answer-first content). Pass = Claimzilla in the AIO.</div>
+        </div>
+      </div>
     </section>
 
     <!-- 07 Resources -->
     <section class="pb-section" id="resources">
       <div class="pb-eyebrow">Section 07 &middot; Resources</div>
-      <h1 class="pb-title">Glossary &amp; reference links.</h1>
+      <h1 class="pb-title">Glossary, free validation tools, and FAQ.</h1>
       <p class="pb-lede">
-        Six terms that recur in the audit, with one-line definitions and the
-        canonical reference link.
+        Twenty terms that recur in the audit, eight free validation tools
+        for post-fix verification, and seven FAQ entries answering the
+        most-asked operator questions.
       </p>
 
+      <h2 class="section-head">Free validation tools</h2>
+      <p style="font-size: 13px; color: var(--slate-700); margin: 0 0 12px;">
+        After each priority fix ships, run the page through these tools
+        before re-running validation prompts. All free; no signup
+        required for most.
+      </p>
+      <div class="tools-grid">
+        <div class="tool-card">
+          <h4>Google Rich Results Test</h4>
+          <p>Validate JSON-LD structured data and confirm rich-result eligibility (FAQ, Article, Organization, etc.) before you ship.</p>
+          <a href="https://search.google.com/test/rich-results" target="_blank" rel="noopener">search.google.com/test/rich-results</a>
+        </div>
+        <div class="tool-card">
+          <h4>Schema.org Validator</h4>
+          <p>The canonical schema validator. Stricter than Google's; catches issues Rich Results Test passes.</p>
+          <a href="https://validator.schema.org/" target="_blank" rel="noopener">validator.schema.org</a>
+        </div>
+        <div class="tool-card">
+          <h4>PageSpeed Insights</h4>
+          <p>Google's Lighthouse-based perf + SEO audit. Use for Core Web Vitals + on-page SEO score.</p>
+          <a href="https://pagespeed.web.dev/" target="_blank" rel="noopener">pagespeed.web.dev</a>
+        </div>
+        <div class="tool-card">
+          <h4>OpenGraph.xyz</h4>
+          <p>Preview your Open Graph + Twitter Card render across Facebook, LinkedIn, Slack, iMessage, X.</p>
+          <a href="https://www.opengraph.xyz/" target="_blank" rel="noopener">opengraph.xyz</a>
+        </div>
+        <div class="tool-card">
+          <h4>LinkedIn Post Inspector</h4>
+          <p>Force-refresh LinkedIn's OG cache after fixing share-card metadata.</p>
+          <a href="https://www.linkedin.com/post-inspector/" target="_blank" rel="noopener">linkedin.com/post-inspector</a>
+        </div>
+        <div class="tool-card">
+          <h4>Bing IndexNow API</h4>
+          <p>Push priority-page updates directly to Bing within minutes (vs the multi-day crawl cycle).</p>
+          <a href="https://www.indexnow.org/" target="_blank" rel="noopener">indexnow.org</a>
+        </div>
+        <div class="tool-card">
+          <h4>Wikidata Query Service</h4>
+          <p>Verify your Wikidata Q-ID claims via SPARQL after edits propagate (typically 5 to 30 minutes).</p>
+          <a href="https://query.wikidata.org/" target="_blank" rel="noopener">query.wikidata.org</a>
+        </div>
+        <div class="tool-card">
+          <h4>Google Knowledge Graph API explorer</h4>
+          <p>Query your KG entry to confirm sameAs and claim updates have absorbed.</p>
+          <a href="https://developers.google.com/knowledge-graph" target="_blank" rel="noopener">developers.google.com/knowledge-graph</a>
+        </div>
+      </div>
+
+      <h2 class="section-head">Glossary</h2>
       <ul class="resource-list">
         <li class="resource-row">
+          <span class="resource-term">SXO</span>
+          <span class="resource-def">Search Experience Optimization. The umbrella discipline covering SEO + AEO + GEO; named so because end-state is buyer experience across every answer surface, not a single channel.</span>
+          <span class="resource-tag">Web Cited</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">SEO</span>
+          <span class="resource-def">Search Engine Optimization. Classical practice of ranking organic results in Google + Bing search engine results pages.</span>
+          <span class="resource-tag">Tab 03</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">AEO</span>
+          <span class="resource-def">Answer Engine Optimization. Optimizing for direct-answer surfaces like Google's AI Overview, Bing Copilot, and zero-click search results.</span>
+          <span class="resource-tag">Tab 03</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">GEO</span>
+          <span class="resource-def">Generative Engine Optimization. Optimizing for being cited by name when an LLM (ChatGPT, Claude, Gemini, Perplexity) generates an answer to a buyer's question.</span>
+          <span class="resource-tag">Tab 03</span>
+        </li>
+        <li class="resource-row">
           <span class="resource-term">AIO</span>
-          <span class="resource-def">Google AI Overview: the multi-source summary that appears at the top of Google search results.</span>
-          <span class="resource-tag">Section 04</span>
+          <span class="resource-def">Google AI Overview: the multi-source summary that appears above organic results in Google Search. Highest-conversion answer slot in Google today.</span>
+          <span class="resource-tag">Tab 04</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">FAQPage schema</span>
-          <span class="resource-def">Schema.org type that marks Q&amp;A content as structured data, eligible for FAQ-rich-result and AIO inclusion.</span>
-          <span class="resource-tag">Section 05</span>
+          <span class="resource-def">Schema.org type marking Q&amp;A content as structured data. Eligible for FAQ rich-result + AIO inclusion. One of the highest-leverage schemas to ship.</span>
+          <span class="resource-tag">Tab 05</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">JSON-LD</span>
+          <span class="resource-def">JavaScript Object Notation for Linked Data. The structured-data syntax Google + Bing prefer; lives in a <code>&lt;script type="application/ld+json"&gt;</code> tag in the page <code>&lt;head&gt;</code>.</span>
+          <span class="resource-tag">Tab 05</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">Schema.org</span>
+          <span class="resource-def">Multi-vendor consortium-maintained vocabulary for structured data on the web. Defines types like Organization, WebSite, Service, Article, FAQPage, etc.</span>
+          <span class="resource-tag">Tab 05</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">llms.txt</span>
-          <span class="resource-def">Public spec for telling LLM crawlers which URLs to prioritize. One URL per line at the site root.</span>
-          <span class="resource-tag">Section 04</span>
+          <span class="resource-def">Public spec for telling LLM crawlers which URLs to prioritize. One URL per line at the site root. Honored by Anthropic, Perplexity, OpenAI's GPTBot.</span>
+          <span class="resource-tag">Tab 04</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">Knowledge Graph</span>
-          <span class="resource-def">Google's entity database; appears as the right-rail Knowledge Panel for branded queries.</span>
-          <span class="resource-tag">Section 03</span>
+          <span class="resource-def">Google's structured database of entities (companies, people, places). Appears as the right-rail Knowledge Panel for branded queries; feeds Gemini's grounding.</span>
+          <span class="resource-tag">Tab 03</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">Wikidata Q-ID</span>
-          <span class="resource-def">Stable identifier (e.g., Q12399847) tying a brand to typed claims feeding LLM entity graphs.</span>
-          <span class="resource-tag">Section 03</span>
+          <span class="resource-def">Stable identifier (e.g., Q12399847) tying a brand to typed claims in Wikidata. Strongest entity-graph signal for Anthropic Claude.</span>
+          <span class="resource-tag">Tab 03</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">Citation share</span>
           <span class="resource-def">Percent of buyer-question prompts where at least one of the four LLM engines names your domain in the answer.</span>
-          <span class="resource-tag">Section 01</span>
+          <span class="resource-tag">Tab 01</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">Leader share</span>
+          <span class="resource-def">The same metric for the highest-cited competitor in your benchmark set. Usually one of the 2 to 4 competitors named at intake.</span>
+          <span class="resource-tag">Tab 01</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">BreadcrumbList</span>
+          <span class="resource-def">Schema.org type that marks page hierarchy (Home &raquo; Category &raquo; Page) so Google can show breadcrumbs in search results and feed them to LLMs.</span>
+          <span class="resource-tag">Tab 05</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">Open Graph</span>
+          <span class="resource-def">Facebook-originated meta-tag spec controlling how a URL renders when shared on social platforms. Now adopted across LinkedIn, Slack, iMessage, X, Discord.</span>
+          <span class="resource-tag">Tab 03</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">Twitter Card</span>
+          <span class="resource-def">X-specific share-preview meta tags. Augments Open Graph; <code>summary_large_image</code> is the default modern type.</span>
+          <span class="resource-tag">Tab 03</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">CWV (Core Web Vitals)</span>
+          <span class="resource-def">Google's three perceived-performance metrics: LCP (Largest Contentful Paint), INP (Interaction to Next Paint), CLS (Cumulative Layout Shift). Affects both ranking and perceived quality.</span>
+          <span class="resource-tag">Tab 03</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">SERP</span>
+          <span class="resource-def">Search Engine Results Page. The page Google or Bing returns for a query; mix of organic, AIO, ads, knowledge panels, image carousels.</span>
+          <span class="resource-tag">Tab 03</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">Severity ladder</span>
+          <span class="resource-def">High (failing signal that directly blocks citation), Medium (partial signal that reduces probability), Clean (signal present and well-formed), Info (observation, not scored).</span>
+          <span class="resource-tag">Tab 02</span>
+        </li>
+        <li class="resource-row">
+          <span class="resource-term">Buyer question</span>
+          <span class="resource-def">A real question your prospects ask LLMs (e.g., "What is the cheapest car insurance for X?"). Audit measures how often each LLM names your domain across the buyer-question grid.</span>
+          <span class="resource-tag">Tab 01</span>
         </li>
       </ul>
+
+      <h2 class="section-head">FAQ</h2>
+      <div class="faq">
+        <details>
+          <summary>How long does my Playbook stay accessible?</summary>
+          <p>12 months from delivery date. The URL is unguessable (16 random digits with hyphens; CSPRNG-minted) and the secret is the URL itself; no auth, no email gate. Share it freely with your SEO and engineering leads. After 12 months it returns 410 Gone.</p>
+        </details>
+        <details>
+          <summary>Can I share the Playbook URL?</summary>
+          <p>Yes. Treat it like any internal-only doc URL. Per the slug-entropy math (16 digits = 53 bits), brute-forcing a valid slug is computationally infeasible at any realistic attack scale, so the URL is safe to share inside your team without auth in front of it.</p>
+        </details>
+        <details>
+          <summary>How do I re-run the audit after fixing things?</summary>
+          <p>Re-audits are charged at the same tier as the original. <a href="https://web-cited.com/start" target="_blank" rel="noopener">Start a new audit</a> with the same brand details, and reference your prior engagement ID in the buyer-questions field so we can compare lift quantitatively. Cadence: re-audit twice a year.</p>
+        </details>
+        <details>
+          <summary>What's the difference between Pulse, SXO Audit, and Enterprise tiers?</summary>
+          <p>Pulse ($1500): per-page schema pack + PDF, 10 URLs audited, 3-business-day delivery. SXO Audit ($5000): adds the full Playbook, 25 URLs, 5-business-day delivery. Enterprise ($12,500): 1 to 3 brands at SXO Audit depth + a Portfolio Playbook tying the brand findings together, 10-business-day delivery.</p>
+        </details>
+        <details>
+          <summary>Why JSON-LD instead of microdata or RDFa?</summary>
+          <p>Google prefers JSON-LD; Bing accepts all three but treats JSON-LD as canonical when multiple are present. JSON-LD lives in a single <code>&lt;script&gt;</code> tag and doesn't require restructuring the page DOM, so it's the lowest-risk path to ship.</p>
+        </details>
+        <details>
+          <summary>How do I know if my fixes actually moved the needle?</summary>
+          <p>Run the 5 validation prompts in Tab 06 against ChatGPT, Claude, Gemini, and Perplexity 7 to 14 days after each fix ships. Record which engines cite Claimzilla (or your brand). When 3 of 4 engines cite you on a buyer-question prompt where they previously didn't, that's a confirmed lift.</p>
+        </details>
+        <details>
+          <summary>What if a check requires data we don't have access to?</summary>
+          <p>Reply to the delivery email with the missing data and we'll re-run that specific check. Common case: Google Business Profile audit on a private storefront chain we can't easily verify; you send us a screenshot of the GBP completeness dashboard from your back-office.</p>
+        </details>
+      </div>
     </section>
   </main>
+
+  <!-- Footer + toast + clipboard JS -->
+  <footer class="pb-foot">
+    <div>Slug: 2-9847-****-****-4271 &middot; Delivered 2026-04-27 &middot; Available through 2027-04-27</div>
+    <div><a href="claimzilla-sxo-audit.pdf">Download PDF</a> &middot; <a href="https://web-cited.com/start" target="_blank" rel="noopener">Start a new audit</a></div>
+  </footer>
+
+  <div class="pb-toast" id="pb-toast" role="status" aria-live="polite">Copied to clipboard</div>
+
+  <script>
+  (function () {
+    var toast = document.getElementById('pb-toast');
+    var toastTimer = null;
+    function showToast(msg) {
+      if (!toast) return;
+      toast.textContent = msg || 'Copied to clipboard';
+      toast.classList.add('is-visible');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { toast.classList.remove('is-visible'); }, 1600);
+    }
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest && e.target.closest('[data-copy-target]');
+      if (!btn) return;
+      var id = btn.getAttribute('data-copy-target');
+      var src = document.getElementById(id);
+      if (!src) { showToast('Copy target missing'); return; }
+      var text = src.textContent || src.innerText || '';
+      // Pre tags often have leading/trailing whitespace from indentation; trim.
+      text = text.replace(/^\s+|\s+$/g, '');
+      var done = function () {
+        var prev = btn.textContent;
+        btn.classList.add('is-copied');
+        btn.textContent = 'Copied';
+        setTimeout(function () {
+          btn.classList.remove('is-copied');
+          btn.textContent = prev || 'Copy';
+        }, 1600);
+        showToast('Copied to clipboard');
+      };
+      var fail = function (err) { showToast('Copy failed: ' + err); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(fail);
+      } else {
+        // Fallback: select + execCommand for older browsers.
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.setAttribute('readonly', '');
+          ta.style.position = 'absolute'; ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          done();
+        } catch (err) { fail(String(err)); }
+      }
+    });
+  })();
+  </script>
 </body>
 </html>
