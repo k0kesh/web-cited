@@ -1500,6 +1500,13 @@ details.faq__item p {
   border: var(--rule);
   display: flex;
   flex-direction: column;
+  /* content-visibility:auto keeps the gallery (which sits below the
+     fold) out of the initial layout/paint pipeline. Chrome won't
+     evaluate the 9 thumb <img>s as LCP candidates so the page-hero
+     <h1> wins the LCP cleanly. contain-intrinsic-size reserves the
+     box height during off-screen state so CLS stays at 0. */
+  content-visibility: auto;
+  contain-intrinsic-size: 700px 1200px;
 }
 .gal-hero {
   position: relative;
