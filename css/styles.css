@@ -1472,167 +1472,58 @@ details.faq__item p {
 .form-retry h2 { margin-top: 0; }
 .form-retry .submit-row { margin-top: 1.25rem; }
 
-/* ---------- Sample-report film-strip gallery + lightbox ---------------- */
-/* Horizontal film strip with arrow controls. Each thumb is a fixed-width
-   tile inside a horizontally-scrollable track. The track scrolls
-   smoothly when the operator clicks the chevrons or uses the lightbox
-   prev/next while inside the modal. */
-.filmstrip {
-  position: relative;
-  margin: 1.5rem 0 0;
-  display: flex;
-  align-items: stretch;
-  gap: 0.5rem;
-}
-.strip-track {
-  list-style: none;
-  margin: 0;
-  padding: 0.25rem 0.25rem;
-  display: flex;
-  gap: 0.85rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  scrollbar-width: thin;
-  -webkit-overflow-scrolling: touch;
-  flex: 1 1 auto;
-  /* Reserve room for the cap so the focus ring + hover lift don't get
-     clipped by the scroll container's overflow. */
-  padding-bottom: 0.5rem;
-}
-.strip-track::-webkit-scrollbar { height: 6px; }
-.strip-track::-webkit-scrollbar-thumb { background: var(--slate-200); border-radius: 3px; }
-.strip-track li {
-  margin: 0;
-  padding: 0;
-  flex: 0 0 auto;
-  scroll-snap-align: start;
-}
-.thumb {
-  width: 180px;
-  background: var(--paper-white);
-  border: var(--rule);
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  font-family: inherit;
-  text-align: left;
-  transition: transform 100ms ease, border-color 100ms ease, box-shadow 100ms ease;
-  overflow: hidden;
-}
-.thumb:hover, .thumb:focus-visible {
-  transform: translateY(-2px);
-  border-color: var(--accent);
-  box-shadow: 0 4px 0 0 var(--ink);
-  outline: none;
-}
-.thumb img {
-  width: 100%;
-  height: 132px;
-  object-fit: cover;
-  object-position: top center;
-  display: block;
-  border-bottom: 1px solid var(--slate-200);
-  background: var(--paper);
-}
-.thumb-cap {
-  display: block;
-  padding: 0.5rem 0.65rem 0.55rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-weight: 800;
-  color: var(--ink);
-  background: var(--paper-white);
-}
-.strip-nav {
-  flex: 0 0 auto;
-  width: 40px;
-  align-self: stretch;
-  background: var(--paper-white);
-  border: var(--rule);
-  color: var(--ink);
-  font-size: 1.7rem;
-  font-weight: 800;
-  line-height: 1;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.strip-nav:hover, .strip-nav:focus-visible {
-  background: var(--accent);
-  color: var(--paper-white);
-  border-color: var(--accent);
-  outline: none;
-}
-@media (max-width: 540px) {
-  .strip-nav { display: none; }
-  .thumb { width: 150px; }
-  .thumb img { height: 110px; }
-}
+/* ---------- Sample-report gallery (hero + thumb strip) ---------------- */
+/* Layout: a featured "hero" image on top, with a horizontal row of
+   thumbnails below. Click a thumbnail and the new image swaps into
+   the hero slot via the View Transitions API (Chrome / Safari TP /
+   Edge). Browsers without VT get a brief CSS fade fallback.
 
-/* Lightbox */
-.lb {
-  position: fixed; inset: 0;
-  background: rgba(0, 0, 0, 0.82);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(0.75rem, 3vw, 2.5rem);
-  z-index: 1000;
-}
-.lb.is-open { display: flex; }
-.lb-frame {
+   WCV friendly: only the first hero is eagerly fetched
+   (fetchpriority=high); thumbs are 240w so the strip is ~100 KB
+   total. Subsequent heroes are pulled on demand from cache or
+   network when the user clicks. Hero box has a fixed aspect ratio
+   so swapping images of different shapes never produces CLS. */
+.gal {
+  margin: 1.5rem 0 0;
+  padding: 0;
   background: var(--paper-white);
-  max-width: min(1100px, 92vw);
-  max-height: 92vh;
+  border: var(--rule);
   display: flex;
   flex-direction: column;
-  border: var(--rule);
-  overflow: auto;
 }
-.lb-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-bottom: 1px solid var(--slate-200);
-  background: var(--paper);
-}
-.lb-cap {
-  padding: 1rem 1.25rem 1.25rem;
-  font-size: 0.95rem;
-  line-height: 1.55;
-  color: var(--slate-800);
+.gal-hero {
   position: relative;
+  aspect-ratio: 16 / 10;
+  background: var(--paper);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: var(--rule);
 }
-.lb-cap strong {
+.gal-hero img {
   display: block;
-  color: var(--ink);
-  font-weight: 800;
-  font-size: 1.1rem;
-  margin-bottom: 0.35rem;
-  letter-spacing: -0.005em;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  /* View Transitions: tag the hero so the browser animates it
+     between layouts when src swaps inside startViewTransition. */
+  view-transition-name: gal-hero;
 }
-.lb-counter {
-  display: inline-block;
-  margin-top: 0.5rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: var(--slate-600);
-}
-.lb-close,
-.lb-nav {
+/* Fade fallback for browsers without View Transitions API. */
+.gal-hero img.is-flipping { opacity: 0.4; transition: opacity 200ms ease; }
+.gal-arrow {
   position: absolute;
-  background: var(--paper-white);
-  color: var(--ink);
-  border: var(--rule);
+  top: 50%;
+  transform: translateY(-50%);
   width: 44px;
   height: 44px;
-  font-size: 1.4rem;
+  background: var(--paper-white);
+  color: var(--ink);
+  border: var(--rule);
+  font-size: 1.6rem;
   font-weight: 800;
   line-height: 1;
   cursor: pointer;
@@ -1640,23 +1531,126 @@ details.faq__item p {
   align-items: center;
   justify-content: center;
   z-index: 1;
+  opacity: 0.85;
+  transition: opacity 100ms ease, background 100ms ease, color 100ms ease;
 }
-.lb-close {
-  top: clamp(0.5rem, 1.5vw, 1rem);
-  right: clamp(0.75rem, 2vw, 1.25rem);
-}
-.lb-nav { top: 50%; transform: translateY(-50%); width: 48px; height: 48px; font-size: 1.6rem; }
-.lb-nav--prev { left: clamp(0.5rem, 1.5vw, 1rem); }
-.lb-nav--next { right: clamp(0.5rem, 1.5vw, 1rem); }
-.lb-close:hover, .lb-close:focus-visible,
-.lb-nav:hover, .lb-nav:focus-visible {
+.gal-arrow:hover, .gal-arrow:focus-visible {
+  opacity: 1;
   background: var(--accent);
   color: var(--paper-white);
   border-color: var(--accent);
   outline: none;
 }
+.gal-arrow--prev { left: 0.75rem; }
+.gal-arrow--next { right: 0.75rem; }
+
+.gal-cap {
+  padding: 1rem 1.25rem 1.1rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--slate-800);
+  border-bottom: 1px solid var(--slate-200);
+}
+.gal-cap strong {
+  display: block;
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+  letter-spacing: -0.005em;
+}
+.gal-counter {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--slate-600);
+}
+
+.gal-thumbs {
+  list-style: none;
+  margin: 0;
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  gap: 0.6rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.gal-thumbs::-webkit-scrollbar { height: 6px; }
+.gal-thumbs::-webkit-scrollbar-thumb { background: var(--slate-200); border-radius: 3px; }
+.gal-thumbs li {
+  margin: 0;
+  padding: 0;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+.gal-thumb {
+  width: 110px;
+  background: var(--paper-white);
+  border: 1.5px solid var(--slate-200);
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  font-family: inherit;
+  text-align: left;
+  transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+  overflow: hidden;
+}
+.gal-thumb img {
+  width: 100%;
+  height: 70px;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  background: var(--paper);
+}
+.gal-thumb-cap {
+  display: block;
+  padding: 0.35rem 0.5rem 0.4rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--ink);
+  background: var(--paper-white);
+  border-top: 1.5px solid var(--slate-200);
+}
+.gal-thumb:hover {
+  border-color: var(--ink);
+  transform: translateY(-1px);
+}
+.gal-thumb:focus-visible {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.gal-thumb.is-active {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1.5px var(--accent);
+}
+.gal-thumb.is-active .gal-thumb-cap {
+  background: var(--accent);
+  color: var(--paper-white);
+  border-top-color: var(--accent);
+}
+
 @media (max-width: 540px) {
-  .lb-nav { width: 40px; height: 40px; font-size: 1.3rem; }
+  .gal-arrow { width: 38px; height: 38px; font-size: 1.3rem; }
+  .gal-thumb { width: 92px; }
+  .gal-thumb img { height: 58px; }
+}
+
+/* Honor reduced-motion preference: drop the flip transition and any
+   transform-based hover lifts. */
+@media (prefers-reduced-motion: reduce) {
+  .gal-thumb, .gal-thumbs, .gal-arrow, .gal-hero img { transition: none !important; }
+  .gal-hero img.is-flipping { opacity: 1; }
 }
 
 .case-card {
