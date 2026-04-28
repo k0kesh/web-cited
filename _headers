@@ -34,12 +34,12 @@
 # tag inline, but applied centrally to every HTML route.
 /*.html
   Cache-Control: public, max-age=300, must-revalidate
-  Link: </css/styles.css?v=2026-04-28f>; rel=preload; as=style
+  Link: </css/styles.css?v=2026-04-28g>; rel=preload; as=style
 
 # Clean URLs (Cloudflare Pages auto-redirects .html to clean URL).
 /
   Cache-Control: public, max-age=300, must-revalidate
-  Link: </css/styles.css?v=2026-04-28f>; rel=preload; as=style
+  Link: </css/styles.css?v=2026-04-28g>; rel=preload; as=style
 
 # Long-cache static assets (CSS, fonts, images, favicons).
 /css/*

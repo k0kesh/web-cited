@@ -1040,7 +1040,12 @@ details.faq__item p {
   overflow-wrap: break-word;
   hyphens: none;
   -webkit-hyphens: none;
-  text-wrap: balance;
+  /* text-wrap: balance was here; removed because it forces layout
+     to run multiple passes finding optimal line breaks, which can
+     leave the heading's bounding box unstable across the first
+     few frames and confuse LCP detection. The aesthetic gain isn't
+     worth a null Performance score on the page that markets the
+     audit. */
 }
 .banner .lead { margin-top: 1rem; }
 .banner__meta {

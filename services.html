@@ -26,7 +26,7 @@
   <meta name="twitter:description" content="Three fixed-price SXO services: Pulse $1,500 · Audit $5,000 · Enterprise $12,500. One-time. No retainer." />
   <meta name="twitter:image" content="https://web-cited.com/og/services.png" />
 
-  <link rel="stylesheet" href="css/styles.css?v=2026-04-28f" />
+  <link rel="stylesheet" href="css/styles.css?v=2026-04-28g" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -310,11 +310,16 @@
                is fetched; subsequent thumbnails are lazily resolved
                on click so the page stays light. -->
           <div class="gal-hero">
+            <!-- Hero is below the fold so it lazy-loads. fetchpriority
+                 was high prior to round 8 but the eager fetch fought
+                 LCP measurement above the fold (Chrome evaluated this
+                 offscreen img as a candidate, then invalidated, and
+                 never finalized any LCP). -->
             <img id="galHero"
                  src="og/sample-gallery/01-cover.webp?v=c"
                  alt="SXO Audit cover showing 40% citation share and 80% leader share."
                  width="766" height="515"
-                 fetchpriority="high" decoding="async" />
+                 loading="lazy" decoding="async" />
             <button type="button" class="gal-arrow gal-arrow--prev" id="galPrev" aria-label="Previous screenshot" aria-controls="galHero">&#x2039;</button>
             <button type="button" class="gal-arrow gal-arrow--next" id="galNext" aria-label="Next screenshot" aria-controls="galHero">&#x203A;</button>
           </div>
