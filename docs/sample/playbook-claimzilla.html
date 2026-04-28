@@ -252,6 +252,28 @@
         word-break: break-word;
         overflow-x: visible;
       }
+
+      /* Marketing-screenshot redaction. The Services page surfaces a
+         crop of the Prompts section (Playbook section 06) so prospects
+         can see that working prompts + validation prompts ship with
+         the audit. Black-bar the actual prompt body so they can see
+         the structure (label, count, "Use after Priority Fix N"
+         workflow integration) without seeing the proprietary prompt
+         text itself. Live customers reading the Playbook in their
+         browser are unaffected; this only applies during PDF render.
+
+         Pseudo-element quotes around .prompt-q also blanked so the
+         curly-quote characters don't bleed past the black bar. */
+      .prompt-q {
+        background: var(--ink);
+        color: var(--ink);
+        border-radius: 2px;
+        user-select: none;
+      }
+      .prompt-q::before,
+      .prompt-q::after {
+        color: var(--ink) !important;
+      }
     }
     .schema-card-head {
       display: flex; align-items: center; justify-content: space-between;
