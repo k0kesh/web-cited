@@ -1513,8 +1513,12 @@ details.faq__item p {
   width: auto;
   height: auto;
   object-fit: contain;
-  /* View Transitions: tag the hero so the browser animates it
-     between layouts when src swaps inside startViewTransition. */
+}
+/* View Transitions: only tag the hero element after first paint, so
+   the browser doesn't snapshot it during the initial render and
+   invalidate the page's LCP candidate. The .vt-armed class is added
+   right after DOMContentLoaded by the gallery script. */
+.gal-hero img.vt-armed {
   view-transition-name: gal-hero;
 }
 /* Fade fallback for browsers without View Transitions API. */
