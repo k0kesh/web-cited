@@ -1484,10 +1484,11 @@ details.faq__item p {
    network when the user clicks. Hero box has a fixed aspect ratio
    so swapping images of different shapes never produces CLS. */
 .gal {
-  /* Capped at 880px so the hero reads as a deliverable artifact rather
-     than a full-bleed banner. ~20% smaller than the prior full-wrap
-     width, per operator feedback round 4. */
-  max-width: 880px;
+  /* Capped at 704px (round 5: another 20% reduction from 880 so the
+     hero reads as a quoted deliverable, not a banner). Hero source
+     WebPs are now rendered at 720w native, so display is near-1:1
+     with no oversize bandwidth waste. */
+  max-width: 704px;
   margin: 1.5rem auto 0;
   padding: 0;
   background: var(--paper-white);
