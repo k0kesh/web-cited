@@ -26,7 +26,7 @@
   <meta name="twitter:description" content="Three fixed-price SXO services: Pulse $1,500 · Audit $5,000 · Enterprise $12,500. One-time. No retainer." />
   <meta name="twitter:image" content="https://web-cited.com/og/services.png" />
 
-  <link rel="stylesheet" href="css/styles.css?v=2026-04-28d" />
+  <link rel="stylesheet" href="css/styles.css?v=2026-04-28e" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -324,8 +324,8 @@
             <span class="gal-counter" id="galCounter" aria-live="polite">1 / 7</span>
           </figcaption>
 
-          <ul class="gal-thumbs" id="galThumbs" role="tablist" aria-label="Gallery thumbnails">
-            <li><button type="button" class="gal-thumb is-active" role="tab" aria-selected="true"
+          <ul class="gal-thumbs" id="galThumbs" aria-label="Sample report screenshot thumbnails">
+            <li><button type="button" class="gal-thumb is-active" aria-current="true"
               data-hero="og/sample-gallery/01-cover.webp?v=c" data-w="766" data-h="515"
               data-alt="SXO Audit cover showing 40% citation share and 80% leader share."
               data-title="Cover &middot; Page 1 of the SXO Audit"
@@ -333,7 +333,7 @@
               <img src="og/sample-gallery/thumbs/01-cover.webp?v=c" alt="" width="240" height="155" loading="lazy" decoding="async" />
               <span class="gal-thumb-cap">Cover</span>
             </button></li>
-            <li><button type="button" class="gal-thumb" role="tab" aria-selected="false"
+            <li><button type="button" class="gal-thumb"
               data-hero="og/sample-gallery/02-patterns.webp?v=e" data-w="766" data-h="484"
               data-alt="Three numbered patterns with high-severity badges."
               data-title="Patterns &middot; Audit Section 1"
@@ -341,7 +341,7 @@
               <img src="og/sample-gallery/thumbs/02-patterns.webp?v=e" alt="" width="240" height="144" loading="lazy" decoding="async" />
               <span class="gal-thumb-cap">Patterns</span>
             </button></li>
-            <li><button type="button" class="gal-thumb" role="tab" aria-selected="false"
+            <li><button type="button" class="gal-thumb"
               data-hero="og/sample-gallery/04-roadmap.webp?v=e" data-w="766" data-h="650"
               data-alt="Priority roadmap showing four numbered moves: this month, this quarter, next quarter, and beyond."
               data-title="Roadmap &middot; Audit Section 5"
@@ -349,7 +349,7 @@
               <img src="og/sample-gallery/thumbs/04-roadmap.webp?v=e" alt="" width="240" height="200" loading="lazy" decoding="async" />
               <span class="gal-thumb-cap">Roadmap</span>
             </button></li>
-            <li><button type="button" class="gal-thumb" role="tab" aria-selected="false"
+            <li><button type="button" class="gal-thumb"
               data-hero="og/sample-gallery/05-schema.webp?v=c" data-w="766" data-h="826"
               data-alt="Schema coverage 25 percent, with present and missing types listed."
               data-title="Schema &middot; Audit Section 6"
@@ -357,7 +357,7 @@
               <img src="og/sample-gallery/thumbs/05-schema.webp?v=c" alt="" width="240" height="258" loading="lazy" decoding="async" />
               <span class="gal-thumb-cap">Schema</span>
             </button></li>
-            <li><button type="button" class="gal-thumb" role="tab" aria-selected="false"
+            <li><button type="button" class="gal-thumb"
               data-hero="og/sample-gallery/07-scorecard.webp?v=c" data-w="766" data-h="1013"
               data-alt="Playbook scorecard with three CLEAN rows and the Library section preface."
               data-title="Scorecard &middot; Playbook Section 02"
@@ -365,7 +365,7 @@
               <img src="og/sample-gallery/thumbs/07-scorecard.webp?v=c" alt="" width="240" height="321" loading="lazy" decoding="async" />
               <span class="gal-thumb-cap">Scorecard</span>
             </button></li>
-            <li><button type="button" class="gal-thumb" role="tab" aria-selected="false"
+            <li><button type="button" class="gal-thumb"
               data-hero="og/sample-gallery/08-code.webp?v=c" data-w="766" data-h="1013"
               data-alt="JSON-LD FAQPage code block ready to paste."
               data-title="Code &middot; Playbook Section 05"
@@ -373,7 +373,7 @@
               <img src="og/sample-gallery/thumbs/08-code.webp?v=c" alt="" width="240" height="321" loading="lazy" decoding="async" />
               <span class="gal-thumb-cap">Code</span>
             </button></li>
-            <li><button type="button" class="gal-thumb" role="tab" aria-selected="false"
+            <li><button type="button" class="gal-thumb"
               data-hero="og/sample-gallery/09-dashboard.webp?v=e" data-w="766" data-h="997"
               data-alt="Playbook executive dashboard with 40% / 80% citation share KPI strip, four engine cards, and four severity-graded finding cards."
               data-title="Dashboard &middot; Playbook Section 01"
@@ -399,7 +399,8 @@
             for (var j = 0; j < thumbs.length; j++) {
               var on = (j === i);
               thumbs[j].classList.toggle('is-active', on);
-              thumbs[j].setAttribute('aria-selected', on ? 'true' : 'false');
+              if (on) thumbs[j].setAttribute('aria-current', 'true');
+              else thumbs[j].removeAttribute('aria-current');
             }
           }
 
