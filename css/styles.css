@@ -1772,3 +1772,62 @@ details.faq__item p {
   line-height: 1.5;
   color: var(--slate-800);
 }
+
+/* --- Utility classes added 2026-04-28 (item W: strict CSP)
+   Replace inline `style=` attributes so CSP can drop `'unsafe-inline'`
+   from style-src. Class names match the patterns these styles
+   represented. */
+.u-hint-narrow {
+  max-width: 62ch;
+}
+.u-hint-narrow-mt-1 {
+  max-width: 62ch;
+  margin-top: 1rem;
+}
+.u-hint-narrow-mb-1 {
+  max-width: 62ch;
+  margin-bottom: 1rem;
+}
+.u-mt-1 {
+  margin-top: 1rem;
+}
+.u-mt-1_5 {
+  margin-top: 1.5rem;
+}
+.u-mt-4 {
+  margin-top: 4rem;
+}
+.u-text-center {
+  text-align: center;
+}
+.u-mono-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.u-mono-eyebrow-muted {
+  font-size: 0.75rem;
+  color: var(--slate-500);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.u-mono-tier-meta {
+  color: var(--slate-600);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+/* Honeypot positioning: off-screen so screen readers + sighted users
+   never see the field, but the DOM still includes it. CSP-safe class
+   replacing the previous inline style. The other honeypot defense
+   layers (timestamp threshold, aria-hidden, no autofocus, label hidden
+   from a11y) remain in place. */
+.honeypot-field {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  opacity: 0;
+  pointer-events: none;
+}
