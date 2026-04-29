@@ -1,504 +1,574 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Item AA: multi-trial KPI tiles mockup (2026-04-29)</title>
-  <style>
-    :root {
-      --ink: #000000;
-      --paper: #f4f3ef;
-      --paper-white: #ffffff;
-      --accent: #cc0000;
-      --accent-ink: #8b0000;
-      --slate-700: #5a5a5a;
-      --rule: 1.5px solid var(--ink);
-      --rule-thick: 3px solid var(--ink);
-    }
-    body {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      background: var(--paper);
-      color: var(--ink);
-      margin: 0;
-      padding: 40px;
-      line-height: 1.45;
-      font-size: 14px;
-    }
-    h1, h2, h3 {
-      font-family: "Helvetica Neue", "Arial Black", Helvetica, sans-serif;
-      letter-spacing: 0.01em;
-      margin: 0 0 16px;
-    }
-    h1 { font-size: 32px; border-bottom: var(--rule-thick); padding-bottom: 16px; margin-bottom: 32px; }
-    h2 { font-size: 22px; margin-top: 48px; border-bottom: var(--rule); padding-bottom: 8px; }
-    h3 { font-size: 16px; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 24px; }
-    .eyebrow {
-      display: inline-block;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      background: var(--ink);
-      color: var(--paper);
-      padding: 3px 10px;
-      margin-bottom: 12px;
-    }
-    .frame {
-      background: var(--paper-white);
-      border: var(--rule);
-      padding: 32px;
-      margin: 16px 0;
-    }
-    .frame-label {
-      font-size: 10px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--slate-700);
-      margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px dashed var(--slate-700);
-    }
-    .display {
-      font-family: "Helvetica Neue", "Arial Black", Helvetica, sans-serif;
-      font-size: 56px;
-      line-height: 1.05;
-      margin: 16px 0 24px;
-      letter-spacing: -0.01em;
-    }
-    .display .hot { color: var(--accent); }
-    .display .ci {
-      color: var(--slate-700);
-      font-weight: 400;
-      font-size: 38px;
-      letter-spacing: 0;
-    }
-    .lede {
-      font-size: 15px;
-      line-height: 1.55;
-      margin: 0 0 24px;
-      max-width: 56em;
-    }
-    .kpi-strip {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      border: var(--rule-thick);
-      margin: 24px 0;
-    }
-    .kpi-cell {
-      padding: 20px 22px;
-      border-right: var(--rule);
-    }
-    .kpi-cell:last-child { border-right: none; }
-    .kpi-label {
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--slate-700);
-      margin-bottom: 8px;
-    }
-    .kpi-value {
-      font-family: "Helvetica Neue", "Arial Black", Helvetica, sans-serif;
-      font-size: 40px;
-      line-height: 1;
-      letter-spacing: -0.01em;
-    }
-    .kpi-value.hot { color: var(--accent); }
-    .kpi-value .ci {
-      color: var(--slate-700);
-      font-weight: 400;
-      font-size: 18px;
-      display: block;
-      margin-top: 4px;
-      letter-spacing: 0;
-    }
-    .kpi-value .ci-inline {
-      color: var(--slate-700);
-      font-weight: 400;
-      font-size: 22px;
-      letter-spacing: 0;
-    }
-    .kpi-delta {
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--slate-700);
-    }
-    .competitive-row {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 0;
-      border: var(--rule);
-      margin: 8px 0;
-      align-items: center;
-    }
-    .competitive-row > div {
-      padding: 12px 16px;
-      border-right: 1px solid #ddd;
-    }
-    .competitive-row > div:last-child { border-right: none; }
-    .competitive-row .name { font-weight: 600; }
-    .competitive-row .share {
-      font-family: "Helvetica Neue", "Arial Black", Helvetica, sans-serif;
-      font-size: 22px;
-      text-align: right;
-    }
-    .competitive-row .share .ci {
-      color: var(--slate-700);
-      font-weight: 400;
-      font-size: 13px;
-    }
-    .competitive-row .ci-cell {
-      font-size: 12px;
-      color: var(--slate-700);
-      text-align: right;
-    }
-    .scorecard-row {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 16px;
-      padding: 10px 12px;
-      border-bottom: 1px solid #ddd;
-      align-items: center;
-    }
-    .scorecard-row .check { font-weight: 600; }
-    .scorecard-row .stat {
-      font-family: "Helvetica Neue", Helvetica, sans-serif;
-      font-size: 13px;
-    }
-    .scorecard-row .stat .ci {
-      color: var(--slate-700);
-      font-size: 11px;
-      margin-left: 4px;
-    }
-    .pill-current {
-      display: inline-block;
-      background: #ddd;
-      color: var(--slate-700);
-      padding: 2px 10px;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      border-radius: 0;
-    }
-    .pill-proposed {
-      display: inline-block;
-      background: var(--accent);
-      color: var(--paper-white);
-      padding: 2px 10px;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      border-radius: 0;
-    }
-    .pill-variant {
-      display: inline-block;
-      background: var(--ink);
-      color: var(--paper-white);
-      padding: 2px 10px;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      border-radius: 0;
-    }
-    p.tag {
-      margin: 4px 0 16px;
-      font-size: 11px;
-      color: var(--slate-700);
-    }
-    .note {
-      background: #fff8e0;
-      border-left: 4px solid #b07b00;
-      padding: 12px 16px;
-      margin: 16px 0;
-      font-size: 13px;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Item AA: multi-trial CI annotation, mockup against canonical golden masters</title>
+<style>
+  /* ===== Common framing for the mockup itself (NOT part of the canonical
+     design, used only to label the variants) ===== */
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #ededea;
+    color: #000;
+    margin: 0;
+    padding: 32px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .mockup-h1 {
+    font-size: 24px; font-weight: 900; letter-spacing: -0.5px;
+    margin: 0 0 24px;
+    border-bottom: 3px solid #000; padding-bottom: 12px;
+  }
+  .mockup-h2 {
+    font-size: 18px; font-weight: 800; letter-spacing: -0.2px;
+    margin: 40px 0 12px;
+  }
+  .mockup-h3 {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
+    margin: 24px 0 8px;
+  }
+  .mockup-tag {
+    font-size: 12px; color: #5a5a5a; margin: 0 0 12px; max-width: 720px;
+  }
+  .mockup-pill { display: inline-block; padding: 2px 8px; font-size: 10px; font-weight: 800;
+    letter-spacing: 0.6px; text-transform: uppercase; border: 1px solid #000; margin-right: 6px; }
+  .mockup-pill.current { background: #fff; color: #000; }
+  .mockup-pill.proposed { background: #cc0000; color: #fff; border-color: #cc0000; }
+  .mockup-pill.rec { background: #000; color: #fff; }
+  .mockup-pill.variant { background: #5a5a5a; color: #fff; border-color: #5a5a5a; }
+  .mockup-note {
+    background: #fff8e0; border-left: 4px solid #b07b00;
+    padding: 10px 14px; margin: 12px 0 24px; font-size: 13px; max-width: 800px;
+  }
+  .surface-card {
+    margin: 12px 0 24px;
+    border: 1.5px dashed #5a5a5a;
+    padding: 16px;
+    background: #f4f3ef;
+  }
+  .surface-card .surface-card-label {
+    font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase;
+    color: #5a5a5a; margin-bottom: 12px;
+  }
+  details { margin-top: 16px; }
+  summary { cursor: pointer; font-weight: 700; }
+
+  /* ===== Canonical Playbook tokens (verbatim from
+     web-cited/docs/sample/playbook-claimzilla.html lines 1-50) ===== */
+  .pb-scope {
+    /* Local scope so the canonical body styles only apply inside the
+       mockup surface card, not to this whole document. */
+    --ink: #000000;
+    --paper: #f4f3ef;
+    --paper-white: #ffffff;
+    --accent: #cc0000;
+    --accent-ink: #8b0000;
+    --slate-700: #5a5a5a;
+    --rule: 1.5px solid var(--ink);
+    --rule-thick: 3px solid var(--ink);
+    --pass: #2a7d31;
+    --warn: #b07b00;
+    --fail: var(--accent);
+    --skip: #5a5a5a;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 24px;
+  }
+  .pb-scope .pb-eyebrow {
+    font-size: 11px; letter-spacing: 0.7px; text-transform: uppercase;
+    color: var(--slate-700); margin-bottom: 8px;
+  }
+  .pb-scope .pb-title {
+    font-size: 38px; font-weight: 900; letter-spacing: -0.5px;
+    margin: 0 0 8px; line-height: 1.1;
+  }
+  .pb-scope .pb-lede {
+    font-size: 18px; max-width: 780px; color: var(--ink); margin-bottom: 28px;
+  }
+  .pb-scope .kpi-strip {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    border: var(--rule-thick); margin-bottom: 28px; background: var(--paper-white);
+  }
+  .pb-scope .kpi-cell {
+    padding: 22px 20px; border-right: var(--rule);
+  }
+  .pb-scope .kpi-cell:last-child { border-right: 0; }
+  .pb-scope .kpi-label {
+    font-size: 11px; letter-spacing: 0.7px; text-transform: uppercase;
+    color: var(--slate-700); margin-bottom: 8px;
+  }
+  .pb-scope .kpi-value {
+    font-size: 36px; font-weight: 900; line-height: 1; letter-spacing: -1px;
+  }
+  .pb-scope .kpi-value .accent { color: var(--accent); }
+  .pb-scope .kpi-delta {
+    font-size: 13px; color: var(--slate-700); margin-top: 8px; line-height: 1.45;
+  }
+
+  /* Variant-specific extras (stay inside the canonical token system) */
+  .pb-scope .kpi-ci-inline {
+    font-size: 16px; font-weight: 700; letter-spacing: -0.3px;
+    color: var(--slate-700); margin-left: 4px;
+  }
+  .pb-scope .kpi-ci-below {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.2px;
+    color: var(--slate-700); margin-top: 4px;
+  }
+
+  /* ===== Canonical PDF tokens (verbatim from
+     pdf_render/templates/styles.css) ===== */
+  .pdf-scope {
+    --ink: #000000;
+    --slate-800: #2c2c2c;
+    --slate-700: #3d3d3d;
+    --slate-500: #6b6b6b;
+    --slate-300: #bcbcbc;
+    --slate-200: #dcdcda;
+    --slate-100: #ededea;
+    --paper: #f4f3ef;
+    --paper-white: #ffffff;
+    --accent: #CC0000;
+    --accent-ink: #8b0000;
+    --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-display: "Arial Black", "Helvetica Neue", "Helvetica Neue Black", Helvetica, Arial, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.55;
+    padding: 32px 30px;
+    border: 1.5px solid var(--ink);
+  }
+  .pdf-scope h1.display {
+    font-family: var(--font-display);
+    font-weight: 900; font-size: 64px;
+    letter-spacing: -0.035em; text-transform: uppercase;
+    line-height: 0.9;
+    margin: 0 0 20px 0;
+  }
+  .pdf-scope h1.display .hot { color: var(--accent); }
+  .pdf-scope .lede {
+    font-size: 14px; line-height: 1.55; max-width: 60em;
+    margin: 0 0 16px 0;
+  }
+  .pdf-scope .kpi {
+    display: table; width: 100%; border-collapse: collapse;
+    border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink);
+    margin: 24px 0;
+  }
+  .pdf-scope .kpi-cell {
+    display: table-cell; vertical-align: top;
+    padding: 18px 14px; border-right: 1.5px solid var(--ink);
+    width: 25%;
+  }
+  .pdf-scope .kpi-cell:last-child { border-right: none; }
+  .pdf-scope .kpi-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--slate-700);
+    margin-bottom: 8px;
+  }
+  .pdf-scope .kpi-value {
+    font-family: var(--font-display);
+    font-size: 40px; font-weight: 900;
+    letter-spacing: -0.035em; line-height: 1;
+    color: var(--ink);
+  }
+  .pdf-scope .kpi-value.hot { color: var(--accent); }
+  .pdf-scope .kpi-delta {
+    font-size: 10px; color: var(--slate-700);
+    margin-top: 6px; line-height: 1.35;
+  }
+  .pdf-scope .kpi-ci-inline {
+    font-family: var(--font-display);
+    font-size: 22px; font-weight: 900;
+    letter-spacing: -0.035em;
+    color: var(--slate-700); margin-left: 2px;
+  }
+  .pdf-scope .kpi-ci-below {
+    font-family: var(--font-sans);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--slate-700); margin-top: 4px;
+  }
+  .pdf-scope h1.display .ci {
+    font-family: var(--font-display);
+    color: var(--slate-700);
+    font-size: 38px;
+    letter-spacing: -0.035em;
+  }
+</style>
 </head>
 <body>
-  <span class="eyebrow">Mockup · Item AA · Multi-trial citation sampling</span>
-  <h1>Item AA: KPI tile variants for confidence-interval display</h1>
 
-  <p class="lede">
-    Backend ships today (N=3 sampling, Wilson 95 percent confidence interval, three new fields on CitationCheckResult). Visual surface stays unchanged in production until [operator] approves a mockup variant. This file shows the current state side-by-side with three proposed variants for Section 1 KPI strip, Section 3 Competitive Position, and Playbook Scorecard cells.
-  </p>
+<h1 class="mockup-h1">Item AA: multi-trial CI annotation, mockup against canonical golden masters</h1>
 
-  <div class="note">
-    <strong>How to read.</strong> The base sample numbers below are illustrative (Cepheid 40 percent, leader BD 56 percent, BioFire 38 percent, Hologic 22 percent) chosen to exercise both narrow and wide confidence intervals. Real data lands in production after the visual surface ships.
-  </div>
+<div class="mockup-note">
+  <strong>How this mockup is built.</strong> Every "Current state" tile below is the canonical markup verbatim from <code>web-cited/docs/sample/playbook-claimzilla.html</code> (Playbook surface) and <code>web-cited-pipeline/src/pipeline/pdf_render/templates/section_1_exec.html</code> + <code>styles.css</code> (PDF surface). The variants change ONLY the +/- annotation; every other token (font, color, size, spacing, border) is preserved byte-for-byte. The same canonical tokens drive the Portfolio Summary cover (it inherits the per-brand PDF design via <code>shared_styles</code>).
+</div>
 
-  <h2>Section 1: Headline display + KPI strip (audit-report PDF cover)</h2>
+<p class="mockup-tag">
+  Sample numbers come from the Claimzilla canonical (Claimzilla cited 40 percent, Insurify cited 80 percent, 4 of 10 buyer queries, 4 LLM engines). With N=3 trials per (engine, prompt), n=120 total samples for Pulse / Claimzilla. CI numbers below are illustrative (computed via Wilson 95 percent on n=120 with 48 successes for "you cited 40 percent"; the proposed values would land in production from the actual pipeline output).
+</p>
 
-  <h3><span class="pill-current">Current state</span></h3>
-  <p class="tag">Production today; renderers consume `cited_in` boolean and `citation_share.you_percent`.</p>
-  <div class="frame">
-    <div class="frame-label">Section 1 / Executive summary</div>
-    <div class="display">
-      Cited <span class="hot">40%</span><br>
-      of the time.<br>
-      Leader: 56%.
-    </div>
-    <p class="lede">
-      Across <strong>25</strong> buyer questions tested against <strong>4</strong> answer engines, benchmarked against <strong>3</strong> competitors, this is where Cepheid stands in AI-driven answers today.
+<h2 class="mockup-h2">Surface 1: Playbook Section 01 (HTML companion)</h2>
+
+<h3 class="mockup-h3"><span class="mockup-pill current">Canonical / current state</span> (no change)</h3>
+<p class="mockup-tag">Verbatim from <code>playbook-claimzilla.html</code> lines 488 to 530.</p>
+<div class="surface-card">
+  <div class="surface-card-label">Playbook section 01 / executive summary</div>
+  <div class="pb-scope">
+    <div class="pb-eyebrow">Section 01 &middot; Executive Summary</div>
+    <h1 class="pb-title">Claimzilla cited 40%.<br>Insurify cited 80%.</h1>
+    <p class="pb-lede">
+      Across 10 buyer-question prompts run against ChatGPT, Claude, Gemini, and
+      Perplexity, Claimzilla earns the citation 4 times. Insurify earns it 8.
+      The gap is concentrated in 3 themes: AI Overview placement, llms.txt
+      absence, and Wikipedia article depth. Two of the three are a single
+      afternoon of work. The third is a 2-week editorial push.
     </p>
     <div class="kpi-strip">
       <div class="kpi-cell">
-        <div class="kpi-label">Your share</div>
-        <div class="kpi-value hot">40%</div>
-        <div class="kpi-delta">Of 25 buyer questions tested</div>
+        <div class="kpi-label">You cited</div>
+        <div class="kpi-value">40<span class="accent">%</span></div>
+        <div class="kpi-delta">4 of 10 buyer queries; 4 LLM engines.</div>
       </div>
       <div class="kpi-cell">
-        <div class="kpi-label">Leader share</div>
-        <div class="kpi-value">56%</div>
+        <div class="kpi-label">Leader cited</div>
+        <div class="kpi-value">80<span class="accent">%</span></div>
+        <div class="kpi-delta">Insurify across the same prompt grid.</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Findings</div>
+        <div class="kpi-value">17</div>
+        <div class="kpi-delta">4 PASS, 10 WARN, 3 FAIL.</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Priority</div>
+        <div class="kpi-value">5</div>
+        <div class="kpi-delta">Top 5 fixes ranked in section 04.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 class="mockup-h3"><span class="mockup-pill proposed">Variant A</span> Inline +/- on the same line as the percent</h3>
+<p class="mockup-tag">CI sits next to the percent inside <code>.kpi-value</code>. No new design tokens. <code>.kpi-delta</code> gains a CI mention.</p>
+<div class="surface-card">
+  <div class="surface-card-label">Playbook section 01, variant A</div>
+  <div class="pb-scope">
+    <div class="pb-eyebrow">Section 01 &middot; Executive Summary</div>
+    <h1 class="pb-title">Claimzilla cited 40%.<br>Insurify cited 80%.</h1>
+    <p class="pb-lede">
+      Across 10 buyer-question prompts run against ChatGPT, Claude, Gemini, and
+      Perplexity, Claimzilla earns the citation 4 times. Insurify earns it 8.
+      The gap is concentrated in 3 themes: AI Overview placement, llms.txt
+      absence, and Wikipedia article depth. Two of the three are a single
+      afternoon of work. The third is a 2-week editorial push.
+    </p>
+    <div class="kpi-strip">
+      <div class="kpi-cell">
+        <div class="kpi-label">You cited</div>
+        <div class="kpi-value">40<span class="accent">%</span><span class="kpi-ci-inline"> +/- 9%</span></div>
+        <div class="kpi-delta">4 of 10 buyer queries; 4 LLM engines x 3 trials (n=120). 95% CI.</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Leader cited</div>
+        <div class="kpi-value">80<span class="accent">%</span><span class="kpi-ci-inline"> +/- 7%</span></div>
+        <div class="kpi-delta">Insurify across the same prompt grid. 95% CI.</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Findings</div>
+        <div class="kpi-value">17</div>
+        <div class="kpi-delta">4 PASS, 10 WARN, 3 FAIL.</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Priority</div>
+        <div class="kpi-value">5</div>
+        <div class="kpi-delta">Top 5 fixes ranked in section 04.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 class="mockup-h3"><span class="mockup-pill proposed rec">Variant B (recommended)</span> +/- below the percent in muted slate</h3>
+<p class="mockup-tag">CI sits below the percent on its own line, slate-700 (matches existing kpi-delta color). <code>.kpi-value</code> stays unchanged. New utility class <code>.kpi-ci-below</code>; copy-twin to existing <code>.kpi-delta</code> color.</p>
+<div class="surface-card">
+  <div class="surface-card-label">Playbook section 01, variant B</div>
+  <div class="pb-scope">
+    <div class="pb-eyebrow">Section 01 &middot; Executive Summary</div>
+    <h1 class="pb-title">Claimzilla cited 40%.<br>Insurify cited 80%.</h1>
+    <p class="pb-lede">
+      Across 10 buyer-question prompts run against ChatGPT, Claude, Gemini, and
+      Perplexity, Claimzilla earns the citation 4 times. Insurify earns it 8.
+      The gap is concentrated in 3 themes: AI Overview placement, llms.txt
+      absence, and Wikipedia article depth. Two of the three are a single
+      afternoon of work. The third is a 2-week editorial push.
+    </p>
+    <div class="kpi-strip">
+      <div class="kpi-cell">
+        <div class="kpi-label">You cited</div>
+        <div class="kpi-value">40<span class="accent">%</span></div>
+        <div class="kpi-ci-below">+/- 9%, 95% CI</div>
+        <div class="kpi-delta">4 of 10 buyer queries; 4 LLM engines x 3 trials (n=120).</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Leader cited</div>
+        <div class="kpi-value">80<span class="accent">%</span></div>
+        <div class="kpi-ci-below">+/- 7%, 95% CI</div>
+        <div class="kpi-delta">Insurify across the same prompt grid.</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Findings</div>
+        <div class="kpi-value">17</div>
+        <div class="kpi-delta">4 PASS, 10 WARN, 3 FAIL.</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Priority</div>
+        <div class="kpi-value">5</div>
+        <div class="kpi-delta">Top 5 fixes ranked in section 04.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 class="mockup-h3"><span class="mockup-pill variant">Variant C</span> KPI tiles unchanged; CI surfaces only in <code>.kpi-delta</code> copy</h3>
+<p class="mockup-tag">Most conservative. Tile typography stays byte-identical to canonical. The +/- rides as a copy line inside the existing <code>.kpi-delta</code>. Zero new tokens, zero layout change.</p>
+<div class="surface-card">
+  <div class="surface-card-label">Playbook section 01, variant C</div>
+  <div class="pb-scope">
+    <div class="pb-eyebrow">Section 01 &middot; Executive Summary</div>
+    <h1 class="pb-title">Claimzilla cited 40%.<br>Insurify cited 80%.</h1>
+    <p class="pb-lede">
+      Across 10 buyer-question prompts run against ChatGPT, Claude, Gemini, and
+      Perplexity, Claimzilla earns the citation 4 times. Insurify earns it 8.
+      The gap is concentrated in 3 themes: AI Overview placement, llms.txt
+      absence, and Wikipedia article depth. Two of the three are a single
+      afternoon of work. The third is a 2-week editorial push.
+    </p>
+    <div class="kpi-strip">
+      <div class="kpi-cell">
+        <div class="kpi-label">You cited</div>
+        <div class="kpi-value">40<span class="accent">%</span></div>
+        <div class="kpi-delta">4 of 10 buyer queries; 4 LLM engines x 3 trials (n=120). 95% CI: 31% to 49%.</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Leader cited</div>
+        <div class="kpi-value">80<span class="accent">%</span></div>
+        <div class="kpi-delta">Insurify across the same prompt grid. 95% CI: 73% to 87%.</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Findings</div>
+        <div class="kpi-value">17</div>
+        <div class="kpi-delta">4 PASS, 10 WARN, 3 FAIL.</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Priority</div>
+        <div class="kpi-value">5</div>
+        <div class="kpi-delta">Top 5 fixes ranked in section 04.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 class="mockup-h2">Surface 2: Audit Report PDF Section 1 (per-brand PDF cover)</h2>
+
+<h3 class="mockup-h3"><span class="mockup-pill current">Canonical / current state</span> (no change)</h3>
+<p class="mockup-tag">Verbatim per <code>pdf_render/templates/section_1_exec.html</code> + <code>styles.css</code> tokens. Display headline 64px Arial Black 900 uppercase, line-height 0.9, letter-spacing -0.035em. KPI strip is <code>display:table</code>, top + bottom 1.5px ink rules, cell padding 18px 14px, label 9px 0.22em letter-spacing, value 40px Arial Black 900, delta 10px slate-700.</p>
+<div class="surface-card">
+  <div class="surface-card-label">Audit Report PDF, Section 1, current</div>
+  <div class="pdf-scope">
+    <h1 class="display">
+      Cited <span class="hot">40%</span><br>
+      of the time.<br>
+      Leader: 80%.
+    </h1>
+    <p class="lede">
+      Across <strong>10</strong> buyer questions tested against <strong>4</strong> answer
+      engines, benchmarked against <strong>3</strong> competitors, this is where Claimzilla
+      stands in AI-driven answers today. The gap is a visibility gap, fixable by
+      the technical and content patterns listed below.
+    </p>
+    <div class="kpi">
+      <div class="kpi-cell">
+        <div class="kpi-label">Your share</div>
+        <div class="kpi-value hot">40%</div>
+        <div class="kpi-delta">Of 10 buyer questions tested</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Leader Share</div>
+        <div class="kpi-value">80%</div>
         <div class="kpi-delta">Across 3 competitors</div>
       </div>
       <div class="kpi-cell">
         <div class="kpi-label">Engines</div>
         <div class="kpi-value">4</div>
-        <div class="kpi-delta">ChatGPT · Claude · Gemini · Perplexity</div>
+        <div class="kpi-delta">ChatGPT &middot; Claude &middot; Gemini &middot; Perplexity</div>
       </div>
       <div class="kpi-cell">
         <div class="kpi-label">Findings</div>
         <div class="kpi-value">12</div>
-        <div class="kpi-delta">3 priority 1, 5 priority 2, 4 priority 3</div>
+        <div class="kpi-delta">3 high &middot; 5 medium &middot; 4 clean</div>
       </div>
     </div>
   </div>
+</div>
 
-  <h3><span class="pill-proposed">Variant A</span> Inline +/- on the same line</h3>
-  <p class="tag">Compact; the +/- sits next to the percent. Fewer pixels, slightly busier headline.</p>
-  <div class="frame">
-    <div class="frame-label">Section 1 / Executive summary</div>
-    <div class="display">
-      Cited <span class="hot">40% <span class="ci">+/- 8%</span></span><br>
+<h3 class="mockup-h3"><span class="mockup-pill proposed">Variant A</span> Inline +/- on the same line</h3>
+<p class="mockup-tag">CI uses <code>--font-display</code> at 22px / 900 / slate-700, sits next to the percent. No new tokens beyond the existing slate-700 + display font.</p>
+<div class="surface-card">
+  <div class="surface-card-label">Audit Report PDF, Section 1, variant A</div>
+  <div class="pdf-scope">
+    <h1 class="display">
+      Cited <span class="hot">40%</span> <span class="ci">+/- 9%</span><br>
       of the time.<br>
-      Leader: 56% <span class="ci" style="font-size:30px;">+/- 7%</span>.
-    </div>
+      Leader: 80% <span class="ci">+/- 7%</span>.
+    </h1>
     <p class="lede">
-      Across <strong>25</strong> buyer questions x <strong>3</strong> trials per engine on <strong>4</strong> answer engines (300 total samples), benchmarked against <strong>3</strong> competitors, this is where Cepheid stands in AI-driven answers today.
+      Across <strong>10</strong> buyer questions tested against <strong>4</strong> answer
+      engines x <strong>3</strong> trials per (engine, query) for n=120 total samples,
+      benchmarked against <strong>3</strong> competitors, this is where Claimzilla stands
+      in AI-driven answers today.
     </p>
-    <div class="kpi-strip">
+    <div class="kpi">
       <div class="kpi-cell">
         <div class="kpi-label">Your share</div>
-        <div class="kpi-value hot">40%<span class="ci-inline"> +/- 8%</span></div>
-        <div class="kpi-delta">95% CI: 32 to 48%; n=300 samples</div>
+        <div class="kpi-value hot">40%<span class="kpi-ci-inline"> +/- 9%</span></div>
+        <div class="kpi-delta">Of 10 buyer questions tested. 95% CI; n=120.</div>
       </div>
       <div class="kpi-cell">
-        <div class="kpi-label">Leader share</div>
-        <div class="kpi-value">56%<span class="ci-inline"> +/- 7%</span></div>
-        <div class="kpi-delta">BD; 95% CI: 49 to 63%</div>
+        <div class="kpi-label">Leader Share</div>
+        <div class="kpi-value">80%<span class="kpi-ci-inline"> +/- 7%</span></div>
+        <div class="kpi-delta">Across 3 competitors. 95% CI; n=120.</div>
       </div>
       <div class="kpi-cell">
         <div class="kpi-label">Engines</div>
         <div class="kpi-value">4</div>
-        <div class="kpi-delta">N=3 trials per (engine, prompt)</div>
+        <div class="kpi-delta">ChatGPT &middot; Claude &middot; Gemini &middot; Perplexity</div>
       </div>
       <div class="kpi-cell">
         <div class="kpi-label">Findings</div>
         <div class="kpi-value">12</div>
-        <div class="kpi-delta">3 priority 1, 5 priority 2, 4 priority 3</div>
+        <div class="kpi-delta">3 high &middot; 5 medium &middot; 4 clean</div>
       </div>
     </div>
   </div>
+</div>
 
-  <h3><span class="pill-proposed">Variant B</span> +/- below the percent in muted gray</h3>
-  <p class="tag">Adds visual hierarchy: bold percent reads at a glance, +/- is a quieter secondary read. Recommended.</p>
-  <div class="frame">
-    <div class="frame-label">Section 1 / Executive summary</div>
-    <div class="display">
+<h3 class="mockup-h3"><span class="mockup-pill proposed rec">Variant B (recommended)</span> +/- below the percent in muted slate</h3>
+<p class="mockup-tag">CI sits below the percent on its own line, slate-700 (canonical color), font-sans 10px (matches kpi-delta size). <code>.kpi-value</code> typography stays canonical 40px Arial Black 900.</p>
+<div class="surface-card">
+  <div class="surface-card-label">Audit Report PDF, Section 1, variant B</div>
+  <div class="pdf-scope">
+    <h1 class="display">
       Cited <span class="hot">40%</span><br>
-      of the time. <span class="ci" style="font-size:24px;">+/- 8%, 95% CI</span><br>
-      Leader: 56%.
-    </div>
+      of the time.<br>
+      Leader: 80%.
+    </h1>
     <p class="lede">
-      Across <strong>25</strong> buyer questions x <strong>3</strong> trials per engine on <strong>4</strong> answer engines (300 total samples), benchmarked against <strong>3</strong> competitors, this is where Cepheid stands in AI-driven answers today.
+      Across <strong>10</strong> buyer questions tested against <strong>4</strong> answer
+      engines x <strong>3</strong> trials per (engine, query) for n=120 total samples,
+      benchmarked against <strong>3</strong> competitors, this is where Claimzilla stands
+      in AI-driven answers today.
     </p>
-    <div class="kpi-strip">
-      <div class="kpi-cell">
-        <div class="kpi-label">Your share</div>
-        <div class="kpi-value hot">40%<span class="ci">+/- 8%</span></div>
-        <div class="kpi-delta">95% CI: 32 to 48%; n=300 samples</div>
-      </div>
-      <div class="kpi-cell">
-        <div class="kpi-label">Leader share</div>
-        <div class="kpi-value">56%<span class="ci">+/- 7%</span></div>
-        <div class="kpi-delta">BD; 95% CI: 49 to 63%</div>
-      </div>
-      <div class="kpi-cell">
-        <div class="kpi-label">Engines</div>
-        <div class="kpi-value">4</div>
-        <div class="kpi-delta">N=3 trials per (engine, prompt)</div>
-      </div>
-      <div class="kpi-cell">
-        <div class="kpi-label">Findings</div>
-        <div class="kpi-value">12</div>
-        <div class="kpi-delta">3 priority 1, 5 priority 2, 4 priority 3</div>
-      </div>
-    </div>
-  </div>
-
-  <h3><span class="pill-variant">Variant C</span> Range form on the headline; KPI tiles unchanged</h3>
-  <p class="tag">Lighter touch: only the headline display gets the +/- treatment; KPI tiles stay byte-identical to current state. Conservative option that preserves the current visual rhythm.</p>
-  <div class="frame">
-    <div class="frame-label">Section 1 / Executive summary</div>
-    <div class="display">
-      Cited <span class="hot">32 to 48%</span><br>
-      of the time, 95% CI.<br>
-      Leader: 49 to 63%.
-    </div>
-    <p class="lede">
-      Across <strong>25</strong> buyer questions x <strong>3</strong> trials per engine on <strong>4</strong> answer engines (300 total samples), benchmarked against <strong>3</strong> competitors, this is where Cepheid stands in AI-driven answers today.
-    </p>
-    <div class="kpi-strip">
+    <div class="kpi">
       <div class="kpi-cell">
         <div class="kpi-label">Your share</div>
         <div class="kpi-value hot">40%</div>
-        <div class="kpi-delta">95% CI: 32 to 48%; n=300 samples</div>
+        <div class="kpi-ci-below">+/- 9%, 95% CI</div>
+        <div class="kpi-delta">Of 10 buyer questions tested; n=120 samples</div>
       </div>
       <div class="kpi-cell">
-        <div class="kpi-label">Leader share</div>
-        <div class="kpi-value">56%</div>
-        <div class="kpi-delta">BD; 95% CI: 49 to 63%</div>
+        <div class="kpi-label">Leader Share</div>
+        <div class="kpi-value">80%</div>
+        <div class="kpi-ci-below">+/- 7%, 95% CI</div>
+        <div class="kpi-delta">Across 3 competitors; n=120 samples</div>
       </div>
       <div class="kpi-cell">
         <div class="kpi-label">Engines</div>
         <div class="kpi-value">4</div>
-        <div class="kpi-delta">N=3 trials per (engine, prompt)</div>
+        <div class="kpi-delta">ChatGPT &middot; Claude &middot; Gemini &middot; Perplexity</div>
       </div>
       <div class="kpi-cell">
         <div class="kpi-label">Findings</div>
         <div class="kpi-value">12</div>
-        <div class="kpi-delta">3 priority 1, 5 priority 2, 4 priority 3</div>
+        <div class="kpi-delta">3 high &middot; 5 medium &middot; 4 clean</div>
       </div>
     </div>
   </div>
+</div>
 
-  <h2>Section 3: Competitive Position table</h2>
-
-  <h3><span class="pill-current">Current state</span></h3>
-  <div class="frame">
-    <div class="frame-label">Section 3 / Competitive Position</div>
-    <div class="competitive-row" style="background:#fff;">
-      <div class="name">Cepheid (you)</div>
-      <div class="share">40%</div>
-      <div class="ci-cell">3 competitors benchmarked</div>
-    </div>
-    <div class="competitive-row">
-      <div class="name">BD</div>
-      <div class="share">56%</div>
-      <div class="ci-cell">Leader</div>
-    </div>
-    <div class="competitive-row">
-      <div class="name">BioFire</div>
-      <div class="share">38%</div>
-      <div class="ci-cell"></div>
-    </div>
-    <div class="competitive-row">
-      <div class="name">Hologic</div>
-      <div class="share">22%</div>
-      <div class="ci-cell"></div>
+<h3 class="mockup-h3"><span class="mockup-pill variant">Variant C</span> KPI tiles unchanged; CI surfaces only in kpi-delta + lede</h3>
+<p class="mockup-tag">Most conservative. KPI tile typography stays byte-identical. CI rides as a copy line inside existing <code>.kpi-delta</code> + the lede. Zero new tokens, zero layout change.</p>
+<div class="surface-card">
+  <div class="surface-card-label">Audit Report PDF, Section 1, variant C</div>
+  <div class="pdf-scope">
+    <h1 class="display">
+      Cited <span class="hot">40%</span><br>
+      of the time.<br>
+      Leader: 80%.
+    </h1>
+    <p class="lede">
+      Across <strong>10</strong> buyer questions tested against <strong>4</strong> answer
+      engines x <strong>3</strong> trials per (engine, query) for n=120 total samples
+      (Wilson 95% CI: 31% to 49%), benchmarked against <strong>3</strong> competitors,
+      this is where Claimzilla stands in AI-driven answers today.
+    </p>
+    <div class="kpi">
+      <div class="kpi-cell">
+        <div class="kpi-label">Your share</div>
+        <div class="kpi-value hot">40%</div>
+        <div class="kpi-delta">Of 10 buyer questions tested. 95% CI: 31% to 49%; n=120.</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Leader Share</div>
+        <div class="kpi-value">80%</div>
+        <div class="kpi-delta">Across 3 competitors. 95% CI: 73% to 87%; n=120.</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Engines</div>
+        <div class="kpi-value">4</div>
+        <div class="kpi-delta">ChatGPT &middot; Claude &middot; Gemini &middot; Perplexity</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">Findings</div>
+        <div class="kpi-value">12</div>
+        <div class="kpi-delta">3 high &middot; 5 medium &middot; 4 clean</div>
+      </div>
     </div>
   </div>
+</div>
 
-  <h3><span class="pill-proposed">Variant B applied</span></h3>
-  <div class="frame">
-    <div class="frame-label">Section 3 / Competitive Position</div>
-    <div class="competitive-row" style="background:#fff;">
-      <div class="name">Cepheid (you)</div>
-      <div class="share">40% <span class="ci">+/- 8%</span></div>
-      <div class="ci-cell">95% CI: 32 to 48%</div>
-    </div>
-    <div class="competitive-row">
-      <div class="name">BD</div>
-      <div class="share">56% <span class="ci">+/- 7%</span></div>
-      <div class="ci-cell">95% CI: 49 to 63%; Leader</div>
-    </div>
-    <div class="competitive-row">
-      <div class="name">BioFire</div>
-      <div class="share">38% <span class="ci">+/- 8%</span></div>
-      <div class="ci-cell">95% CI: 30 to 46%</div>
-    </div>
-    <div class="competitive-row">
-      <div class="name">Hologic</div>
-      <div class="share">22% <span class="ci">+/- 7%</span></div>
-      <div class="ci-cell">95% CI: 15 to 29%</div>
-    </div>
-  </div>
+<h2 class="mockup-h2">Surface 3: Portfolio Summary cover (Enterprise multi-brand)</h2>
 
-  <h2>Playbook: Scorecard cells (HTML companion)</h2>
+<p class="mockup-tag">
+  The Portfolio Summary template inherits the per-brand PDF design via <code>shared_styles</code> (same <code>.kpi</code>, <code>.kpi-cell</code>, <code>.kpi-label</code>, <code>.kpi-value</code>, <code>.kpi-delta</code> classes; same Arial Black display font; same 1.5px ink rules; same <code>--font-display</code> 64px headline). Whatever variant is picked for Surface 2 (Audit Report PDF) automatically applies to the Portfolio Summary cover. No separate variant needed.
+</p>
 
-  <h3><span class="pill-current">Current state</span></h3>
-  <div class="frame">
-    <div class="scorecard-row">
-      <div class="check">Citation share (overall)</div>
-      <div class="stat"><strong>40%</strong> across 25 buyer questions x 4 engines</div>
-    </div>
-    <div class="scorecard-row">
-      <div class="check">Citation share (ChatGPT)</div>
-      <div class="stat"><strong>48%</strong> on 25 of 25 prompts cited at least once</div>
-    </div>
-    <div class="scorecard-row">
-      <div class="check">Citation share (Claude)</div>
-      <div class="stat"><strong>32%</strong></div>
-    </div>
-    <div class="scorecard-row">
-      <div class="check">Citation share (Gemini)</div>
-      <div class="stat"><strong>40%</strong></div>
-    </div>
-    <div class="scorecard-row">
-      <div class="check">Citation share (Perplexity)</div>
-      <div class="stat"><strong>40%</strong></div>
-    </div>
-  </div>
+<h2 class="mockup-h2">Recommendation</h2>
+<p>
+  <strong>Variant B</strong> across both surfaces (Playbook + PDF + Portfolio inherits PDF). Rationale:
+</p>
+<ul>
+  <li>Tile typography stays byte-identical to canonical (.kpi-value still reads 40% in Arial Black 900). Visual hierarchy unchanged.</li>
+  <li>CI sits in slate-700 below the percent. Matches the canonical kpi-delta color so the eye reads the new line as quiet metadata, not a new highlight.</li>
+  <li>Variant A inline <code>40% +/- 9%</code> at 22px is technically valid but pushes the visual weight outside the canonical hierarchy (the +/- competes with the percent).</li>
+  <li>Variant C never touches the tile, but loses the at-a-glance "we are 95 percent confident in 40 percent" read.</li>
+</ul>
+<p>
+  Variant B requires two new utility classes (<code>.kpi-ci-below</code> on each surface) using existing tokens (<code>--slate-700</code>, existing fonts, no new colors). No layout change to the canonical KPI strip; CI just inserts between <code>.kpi-value</code> and <code>.kpi-delta</code>.
+</p>
 
-  <h3><span class="pill-proposed">Variant B applied</span></h3>
-  <div class="frame">
-    <div class="scorecard-row">
-      <div class="check">Citation share (overall)</div>
-      <div class="stat"><strong>40%</strong><span class="ci">+/- 8%</span> across 25 buyer questions x 4 engines x 3 trials</div>
-    </div>
-    <div class="scorecard-row">
-      <div class="check">Citation share (ChatGPT)</div>
-      <div class="stat"><strong>48%</strong><span class="ci">+/- 17%, n=75</span></div>
-    </div>
-    <div class="scorecard-row">
-      <div class="check">Citation share (Claude)</div>
-      <div class="stat"><strong>32%</strong><span class="ci">+/- 16%, n=75</span></div>
-    </div>
-    <div class="scorecard-row">
-      <div class="check">Citation share (Gemini)</div>
-      <div class="stat"><strong>40%</strong><span class="ci">+/- 16%, n=75</span></div>
-    </div>
-    <div class="scorecard-row">
-      <div class="check">Citation share (Perplexity)</div>
-      <div class="stat"><strong>40%</strong><span class="ci">+/- 16%, n=75</span></div>
-    </div>
-  </div>
-
-  <h2>Recommendation</h2>
-  <p>
-    <strong>Variant B</strong> across all three surfaces (Section 1 headline, Section 1 KPI tiles, Section 3 Competitive Position, Playbook Scorecard). Rationale:
-  </p>
-  <ul>
-    <li>Visual hierarchy: bold percent reads first, +/- reads second; matches existing typographic emphasis logic.</li>
-    <li>Information density: lands the +/- without crowding the headline.</li>
-    <li>Consistency: same treatment across PDF and Playbook reduces visual reconciliation cost for the customer.</li>
-  </ul>
-  <p>
-    Variant A is busier on the headline display. Variant C is the most conservative but loses the at-a-glance "the answer is roughly 40 percent and we are 95 percent confident in that" read.
-  </p>
-
-  <h2>What ships when</h2>
-  <p>
-    <strong>Today (2026-04-29):</strong> backend half (sampling loop, Wilson CI math, three new fields on CitationCheckResult, back-compat preserved on `cited_in`). Visual surface stays current.
-  </p>
-  <p>
-    <strong>After [operator] approval of one variant:</strong> follow-up PR to wire the chosen variant into the production templates. Single-PR template edits + golden-byte test refresh.
-  </p>
-  <p>
-    <strong>Mockup decision questions for [operator]:</strong>
-  </p>
-  <ol>
-    <li>Pick a variant: A (inline) / B (recommended; +/- below) / C (range form on headline only).</li>
-    <li>Confirm "+/- 8%" wording vs alternatives like "+/- 8 pts", "x +/- y", or "[lo to hi]" range notation.</li>
-    <li>For multi-brand Enterprise audits, do per-brand KPI strips also get the +/- treatment, or just the Portfolio Summary cover?</li>
-  </ol>
+<h2 class="mockup-h2">Operator decision questions</h2>
+<ol>
+  <li>Pick a variant: A (inline) / B (recommended) / C (kpi-delta-only).</li>
+  <li>Confirm "+/- 9%" wording. Alternatives: "+/- 9 pts" (clearer that the unit is percentage points), "[31% to 49%]" range form, "9% margin" phrase.</li>
+  <li>For multi-brand Enterprise audits, the Portfolio Summary cover automatically inherits whatever variant is picked for the per-brand PDF. Confirm that is intended (vs Portfolio cover staying point-estimate while per-brand PDFs show CI).</li>
+  <li>Apply CI to Section 3 Competitive Position table (per-competitor share entries) too? Defaults to YES; if NO, the table stays point-estimate while Section 1 shows CI.</li>
+</ol>
 </body>
 </html>
