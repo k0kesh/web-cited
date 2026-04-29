@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Item BB mockup: WRONG_CITATION finding-card category</title>
+<style>
+  /* ===== Mockup framing (NOT canonical) ===== */
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #ededea;
+    color: #000;
+    margin: 0;
+    padding: 32px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .mockup-h1 {
+    font-size: 24px; font-weight: 900; letter-spacing: -0.5px;
+    margin: 0 0 24px;
+    border-bottom: 3px solid #000; padding-bottom: 12px;
+  }
+  .mockup-h2 {
+    font-size: 18px; font-weight: 800; letter-spacing: -0.2px;
+    margin: 40px 0 12px;
+  }
+  .mockup-h3 {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
+    margin: 24px 0 8px;
+  }
+  .mockup-tag { font-size: 12px; color: #5a5a5a; margin: 0 0 12px; max-width: 720px; }
+  .mockup-pill { display: inline-block; padding: 2px 8px; font-size: 10px; font-weight: 800;
+    letter-spacing: 0.6px; text-transform: uppercase; border: 1px solid #000; margin-right: 6px; }
+  .mockup-pill.current { background: #fff; color: #000; }
+  .mockup-pill.proposed { background: #cc0000; color: #fff; border-color: #cc0000; }
+  .mockup-pill.a { background: #7d2a7d; color: #fff; border-color: #7d2a7d; }
+  .mockup-pill.b { background: #8b0000; color: #fff; border-color: #8b0000; }
+  .mockup-pill.c { background: #cc0000; color: #fff; border-color: #cc0000; }
+  .mockup-pill.d { background: #2a7d31; color: #fff; border-color: #2a7d31; }
+  .mockup-note {
+    background: #fff8e0; border-left: 4px solid #b07b00;
+    padding: 10px 14px; margin: 12px 0 24px; font-size: 13px; max-width: 800px;
+  }
+  .surface-card {
+    margin: 12px 0 24px;
+    border: 1.5px dashed #5a5a5a;
+    padding: 16px;
+    background: #f4f3ef;
+  }
+  .surface-card .surface-card-label {
+    font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase;
+    color: #5a5a5a; margin-bottom: 12px;
+  }
+
+  /* ===== Canonical Playbook tokens (verbatim from
+     web-cited/docs/sample/playbook-claimzilla.html) ===== */
+  .pb-scope {
+    --ink: #000000;
+    --paper: #f4f3ef;
+    --paper-white: #ffffff;
+    --accent: #cc0000;
+    --accent-ink: #8b0000;
+    --slate-700: #5a5a5a;
+    --rule: 1.5px solid var(--ink);
+    --pass: #2a7d31;
+    --warn: #b07b00;
+    --fail: var(--accent);
+    --skip: #5a5a5a;
+    /* Item BB proposal: new severity color for WRONG_CITATION. Variant A
+       value here (purple/magenta). Variants B / C / D experiment with
+       alternatives below. */
+    --wrong: #7d2a7d;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 24px 32px;
+  }
+  .pb-scope .findings-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .pb-scope .finding-card {
+    background: var(--paper-white);
+    border: var(--rule);
+    padding: 18px 20px;
+    position: relative;
+  }
+  .pb-scope .finding-card.is-fail  { border-left: 6px solid var(--fail); }
+  .pb-scope .finding-card.is-warn  { border-left: 6px solid var(--warn); }
+  .pb-scope .finding-card.is-pass  { border-left: 6px solid var(--pass); }
+  .pb-scope .finding-card.is-skip  { border-left: 6px solid var(--skip); }
+  .pb-scope .finding-card.is-wrong { border-left: 6px solid var(--wrong); }
+  .pb-scope .finding-head {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+  }
+  .pb-scope .finding-title { font-weight: 800; font-size: 15px; letter-spacing: 0.2px; }
+  .pb-scope .chip {
+    display: inline-block; padding: 2px 8px;
+    font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase;
+    font-weight: 800;
+    border: 1px solid var(--ink); background: var(--paper);
+  }
+  .pb-scope .chip.is-fail  { background: var(--fail);  color: var(--paper-white); border-color: var(--fail); }
+  .pb-scope .chip.is-warn  { background: var(--warn);  color: var(--paper-white); border-color: var(--warn); }
+  .pb-scope .chip.is-pass  { background: var(--pass);  color: var(--paper-white); border-color: var(--pass); }
+  .pb-scope .chip.is-wrong { background: var(--wrong); color: var(--paper-white); border-color: var(--wrong); }
+  .pb-scope .finding-summary { font-size: 14px; color: var(--ink); margin: 4px 0 8px; }
+  .pb-scope .finding-fix {
+    font-size: 13px; color: var(--ink);
+    background: rgba(204,0,0,0.04);
+    border-left: 2px solid var(--accent);
+    padding: 8px 12px; margin-top: 6px;
+  }
+  .pb-scope .finding-fix-label {
+    font-size: 10px; letter-spacing: 0.7px; text-transform: uppercase;
+    color: var(--accent-ink); font-weight: 800; margin-bottom: 2px;
+  }
+  /* Item BB proposal: wrong-citation finding-fix uses the wrong color
+     family for the left rule + label. Same tonal pattern as the existing
+     accent-fix block. */
+  .pb-scope .finding-fix.is-wrong {
+    background: rgba(125,42,125,0.05);
+    border-left: 2px solid var(--wrong);
+  }
+  .pb-scope .finding-fix.is-wrong .finding-fix-label {
+    color: var(--wrong);
+  }
+
+  /* Variant overrides for B / C / D. Each scope picks a different
+     `--wrong` value (or omits the new severity entirely). */
+  .pb-scope.variant-b { --wrong: #8b0000; } /* dual accent-red shades */
+  .pb-scope.variant-c { --wrong: var(--accent); } /* same as FAIL */
+
+  /* Variant D: scorecard panel (no new severity color). */
+  .pb-scope.variant-d .citation-quality-panel {
+    border: var(--rule);
+    background: var(--paper-white);
+    padding: 16px 20px;
+    margin-top: 18px;
+  }
+  .pb-scope.variant-d .cqp-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.6px;
+    text-transform: uppercase; color: var(--slate-700);
+    margin-bottom: 8px;
+  }
+  .pb-scope.variant-d .cqp-title {
+    font-size: 18px; font-weight: 800; letter-spacing: -0.2px;
+    margin: 0 0 12px;
+  }
+  .pb-scope.variant-d .cqp-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 8px 0; border-top: 1px solid #e1e0d8;
+  }
+  .pb-scope.variant-d .cqp-row:first-of-type { border-top: 0; }
+  .pb-scope.variant-d .cqp-eng { font-size: 14px; font-weight: 700; }
+  .pb-scope.variant-d .cqp-rate { font-size: 13px; color: var(--slate-700); font-variant-numeric: tabular-nums; }
+  .pb-scope.variant-d .cqp-rate strong { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<h1 class="mockup-h1">Item BB: WRONG_CITATION finding-card category (Playbook + PDF)</h1>
+
+<div class="mockup-note">
+  <strong>Context.</strong> Item BB introduces a new severity
+  <code>WRONG_CITATION</code> for findings where an LLM cited the
+  brand BUT WITH FALSE FACTS (e.g., "Cepheid manufactures dental imaging
+  equipment"). Today these are silently classified as positive citations
+  by the substring matcher. The new severity sits between FAIL (the
+  brand was missed entirely) and WARN (the brand was cited weakly) and
+  needs its own color token + chip + finding-card border-left styling.
+  Spec at
+  <code>web-cited-pipeline/docs/superpowers/specs/2026-04-29-item-bb-brainstorm-prep.md</code>.
+</div>
+
+<p class="mockup-tag">
+  All variants reuse canonical <code>finding-card</code> structure and
+  <code>chip</code> typography (verbatim from
+  <code>playbook-claimzilla.html</code>). Only the <code>--wrong</code>
+  color token + <code>.is-wrong</code> rule are new.
+</p>
+
+<h2 class="mockup-h2">Side-by-side: existing severity rendering</h2>
+<div class="surface-card">
+  <div class="surface-card-label">Canonical: existing FAIL / WARN / PASS finding cards (no change)</div>
+  <div class="pb-scope">
+    <div class="findings-grid">
+      <div class="finding-card is-fail">
+        <div class="finding-head">
+          <span class="chip is-fail">High</span>
+          <div class="finding-title">Gemini does not cite Claimzilla on any buyer query</div>
+        </div>
+        <p class="finding-summary">Cited in 1 / 10 buyer queries (0 errors). Gemini follows Google trust signals tightly; today claimzilla.example has weak SERP presence + zero AIO citations + a thin Knowledge Graph entry.</p>
+        <div class="finding-fix">
+          <div class="finding-fix-label">Fix</div>
+          Three levers: (1) earn AIO citations on the 10 buyer queries, (2) build out the Wikidata entity graph, (3) deepen the Google Knowledge Graph organization profile.
+        </div>
+      </div>
+      <div class="finding-card is-warn">
+        <div class="finding-head">
+          <span class="chip is-warn">Medium</span>
+          <div class="finding-title">FAQPage schema missing despite 14 FAQ blocks on /faq</div>
+        </div>
+        <p class="finding-summary">Three priority shapes to add. Today's coverage is 25%: Organization present, WebSite + Service + FAQPage missing.</p>
+      </div>
+      <div class="finding-card is-pass">
+        <div class="finding-head">
+          <span class="chip is-pass">Clean</span>
+          <div class="finding-title">All 8 on-site SEO fundamentals present</div>
+        </div>
+        <p class="finding-summary">Title 58 chars, description 156 chars, canonical points to homepage, single H1, robots index/follow, viewport configured, lang en-US.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 class="mockup-h2">Variant A: new <code>--wrong</code> magenta/purple color (RECOMMENDED)</h2>
+
+<h3 class="mockup-h3"><span class="mockup-pill proposed">Proposed</span> <span class="mockup-pill a">Variant A</span></h3>
+<p class="mockup-tag">
+  New token <code>--wrong: #7d2a7d</code> (magenta/purple). Visually
+  distinct from <code>--fail</code> accent-red while still alarming.
+  Good contrast on white finding-card background. The wrong-citation
+  card sits alongside existing FAIL / WARN / PASS cards with its own
+  6px border-left and chip color.
+</p>
+<div class="surface-card">
+  <div class="surface-card-label">Variant A: WRONG_CITATION as a 5th severity color</div>
+  <div class="pb-scope">
+    <div class="findings-grid">
+      <div class="finding-card is-fail">
+        <div class="finding-head">
+          <span class="chip is-fail">High</span>
+          <div class="finding-title">Gemini does not cite Claimzilla on any buyer query</div>
+        </div>
+        <p class="finding-summary">Cited in 1 / 10 buyer queries. Weak SERP presence + thin Knowledge Graph entry.</p>
+      </div>
+      <div class="finding-card is-wrong">
+        <div class="finding-head">
+          <span class="chip is-wrong">Wrong fact</span>
+          <div class="finding-title">ChatGPT cites Claimzilla but with a hallucinated business model on q3</div>
+        </div>
+        <p class="finding-summary">For "Is Claimzilla legit for getting auto insurance quotes?", ChatGPT answered: "Claimzilla is an Insurance Technology insurer that underwrites direct auto policies in 12 states." Claimzilla is a comparison marketplace; it does NOT underwrite policies. Pattern repeats on q5 + q9 with similar hallucinated underwriting claims.</p>
+        <div class="finding-fix is-wrong">
+          <div class="finding-fix-label">Fix</div>
+          (1) Publish a /how-it-works page that states explicitly "Claimzilla is a comparison marketplace, not an insurer" with H1, lede, and Schema.org Service "serviceType: Insurance comparison platform". (2) Add a clarifying first paragraph on every category page disambiguating from underwriters. (3) Earn 2-3 third-party citations (NerdWallet / Wirecutter / Investopedia) confirming the comparison-not-insurer model so LLMs have grounding sources to weight against the hallucination.
+        </div>
+      </div>
+      <div class="finding-card is-warn">
+        <div class="finding-head">
+          <span class="chip is-warn">Medium</span>
+          <div class="finding-title">FAQPage schema missing despite 14 FAQ blocks on /faq</div>
+        </div>
+        <p class="finding-summary">Three priority shapes to add. Today's coverage is 25%.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 class="mockup-h2">Variant B: dual accent-red shades</h2>
+
+<h3 class="mockup-h3"><span class="mockup-pill proposed">Proposed</span> <span class="mockup-pill b">Variant B</span> (loses signal)</h3>
+<p class="mockup-tag">
+  WRONG_CITATION = <code>#8b0000</code> (accent-ink, the existing
+  hover-on-link color). Tighter visual coupling to FAIL but harder to
+  distinguish at a glance. Risk: customers misread WRONG as just a
+  "more emphasized FAIL".
+</p>
+<div class="surface-card">
+  <div class="surface-card-label">Variant B: dual accent-red shades</div>
+  <div class="pb-scope variant-b">
+    <div class="findings-grid">
+      <div class="finding-card is-fail">
+        <div class="finding-head">
+          <span class="chip is-fail">High</span>
+          <div class="finding-title">Gemini does not cite Claimzilla on any buyer query</div>
+        </div>
+      </div>
+      <div class="finding-card is-wrong">
+        <div class="finding-head">
+          <span class="chip is-wrong">Wrong fact</span>
+          <div class="finding-title">ChatGPT cites Claimzilla but with a hallucinated business model</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 class="mockup-h2">Variant C: same as FAIL with reason chip</h2>
+
+<h3 class="mockup-h3"><span class="mockup-pill proposed">Proposed</span> <span class="mockup-pill c">Variant C</span> (least visual change)</h3>
+<p class="mockup-tag">
+  No new color token. WRONG_CITATION reuses <code>--fail</code> = accent-red
+  as the border-left, but adds a "Wrong fact" chip alongside the existing
+  "High" severity chip. Reuses existing severity machinery; safest
+  rollout. Cost: less visually distinct than Variant A.
+</p>
+<div class="surface-card">
+  <div class="surface-card-label">Variant C: same color as FAIL + extra chip</div>
+  <div class="pb-scope variant-c">
+    <div class="findings-grid">
+      <div class="finding-card is-fail">
+        <div class="finding-head">
+          <span class="chip is-fail">High</span>
+          <span class="chip is-fail">Wrong fact</span>
+          <div class="finding-title">ChatGPT cites Claimzilla but with a hallucinated business model</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 class="mockup-h2">Variant D: scorecard panel only (no new finding-card category)</h2>
+
+<h3 class="mockup-h3"><span class="mockup-pill proposed">Proposed</span> <span class="mockup-pill d">Variant D</span></h3>
+<p class="mockup-tag">
+  Per-engine WRONG_CITATION rate aggregated into a new "Citation Quality"
+  panel on the Playbook Scorecard tab. PDF surface unchanged. Lowest
+  visual change but loses the per-finding storytelling that makes
+  WRONG_CITATION actionable.
+</p>
+<div class="surface-card">
+  <div class="surface-card-label">Variant D: Citation Quality panel on the Playbook Scorecard tab</div>
+  <div class="pb-scope variant-d">
+    <div class="citation-quality-panel">
+      <div class="cqp-eyebrow">New panel &middot; Citation Quality</div>
+      <h2 class="cqp-title">When LLMs cite you, are they getting the facts right?</h2>
+      <div class="cqp-row">
+        <div class="cqp-eng">ChatGPT</div>
+        <div class="cqp-rate"><strong>2 / 4 cites</strong> contained hallucinated facts (50%)</div>
+      </div>
+      <div class="cqp-row">
+        <div class="cqp-eng">Claude</div>
+        <div class="cqp-rate"><strong>0 / 5 cites</strong> contained hallucinated facts (0%)</div>
+      </div>
+      <div class="cqp-row">
+        <div class="cqp-eng">Gemini</div>
+        <div class="cqp-rate"><strong>0 / 1 cite</strong> contained hallucinated facts (0%)</div>
+      </div>
+      <div class="cqp-row">
+        <div class="cqp-eng">Perplexity</div>
+        <div class="cqp-rate"><strong>1 / 6 cites</strong> contained hallucinated facts (17%)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 class="mockup-h2">Recommendation</h2>
+<p>
+  <strong>Variant A.</strong> WRONG_CITATION is genuinely a different
+  problem class from FAIL (the brand was cited, but with false facts).
+  A distinct color token tells the customer at a glance that this row
+  needs different remediation than the missing-citation FAIL rows. The
+  magenta/purple <code>#7d2a7d</code> stays in the existing brand color
+  family (alarming, but not the same accent-red as the FAIL chip).
+</p>
+<p>
+  Variant D (scorecard panel) is a strong second-best for the operator
+  who wants the smallest visual surface change; recommend pairing
+  Variant A finding cards with Variant D's per-engine panel as a
+  Section 02 Scorecard companion.
+</p>
+
+<h2 class="mockup-h2">Operator decision questions</h2>
+<ol>
+  <li>Variant pick: A. magenta/purple severity (recommended), B. dual accent-red, C. reuse FAIL with reason chip, D. scorecard panel only?</li>
+  <li>Combine A + D so wrong-citation findings render BOTH as cards and as a per-engine quality panel?</li>
+  <li>Chip label: "Wrong fact" (recommended), "Hallucinated", "Misattributed", "Wrong cite"?</li>
+  <li>PDF surface: ship the new severity color in the PDF section 4 templates alongside the Playbook in the same PR, or defer the PDF surface to a follow-up?</li>
+  <li>Scorecard tab placement (if adding the panel): top of Section 02 Scorecard, or under the existing "By severity" panel?</li>
+</ol>
+</body>
+</html>
