@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Item AA story extension: engine-grid CI annotation</title>
+<style>
+  /* ===== Mockup framing (NOT canonical) ===== */
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #ededea;
+    color: #000;
+    margin: 0;
+    padding: 32px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .mockup-h1 {
+    font-size: 24px; font-weight: 900; letter-spacing: -0.5px;
+    margin: 0 0 24px;
+    border-bottom: 3px solid #000; padding-bottom: 12px;
+  }
+  .mockup-h2 {
+    font-size: 18px; font-weight: 800; letter-spacing: -0.2px;
+    margin: 40px 0 12px;
+  }
+  .mockup-h3 {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
+    margin: 24px 0 8px;
+  }
+  .mockup-tag { font-size: 12px; color: #5a5a5a; margin: 0 0 12px; max-width: 720px; }
+  .mockup-pill { display: inline-block; padding: 2px 8px; font-size: 10px; font-weight: 800;
+    letter-spacing: 0.6px; text-transform: uppercase; border: 1px solid #000; margin-right: 6px; }
+  .mockup-pill.current { background: #fff; color: #000; }
+  .mockup-pill.proposed { background: #cc0000; color: #fff; border-color: #cc0000; }
+  .mockup-note {
+    background: #fff8e0; border-left: 4px solid #b07b00;
+    padding: 10px 14px; margin: 12px 0 24px; font-size: 13px; max-width: 800px;
+  }
+  .surface-card {
+    margin: 12px 0 24px;
+    border: 1.5px dashed #5a5a5a;
+    padding: 16px;
+    background: #f4f3ef;
+  }
+  .surface-card .surface-card-label {
+    font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase;
+    color: #5a5a5a; margin-bottom: 12px;
+  }
+
+  /* ===== Canonical Playbook tokens (verbatim from
+     web-cited/docs/sample/playbook-claimzilla.html lines 1-50) ===== */
+  .pb-scope {
+    --ink: #000000;
+    --paper: #f4f3ef;
+    --paper-white: #ffffff;
+    --accent: #cc0000;
+    --accent-ink: #8b0000;
+    --slate-700: #5a5a5a;
+    --rule: 1.5px solid var(--ink);
+    --rule-thick: 3px solid var(--ink);
+    --pass: #2a7d31;
+    --warn: #b07b00;
+    --fail: var(--accent);
+    --skip: #5a5a5a;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 24px;
+  }
+  /* Engine grid (verbatim from canonical playbook lines 127-145) */
+  .pb-scope .engine-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: var(--rule-thick);
+    margin-bottom: 28px;
+    background: var(--paper-white);
+  }
+  .pb-scope .engine-cell {
+    padding: 18px 18px 16px;
+    border-right: var(--rule);
+    position: relative;
+  }
+  .pb-scope .engine-cell:last-child { border-right: 0; }
+  .pb-scope .engine-name { font-weight: 800; font-size: 15px; letter-spacing: 0.4px; }
+  .pb-scope .engine-vendor { font-size: 11px; color: var(--slate-700); margin-top: 2px; }
+  .pb-scope .engine-bar-wrap { margin-top: 12px; height: 8px; background: #e2e0d6; border: 1px solid var(--ink); }
+  .pb-scope .engine-bar { height: 100%; background: var(--accent); }
+  .pb-scope .engine-stat { font-size: 12px; color: var(--ink); margin-top: 6px; font-variant-numeric: tabular-nums; }
+
+  /* Variant B addition: CI line below .engine-stat. Mirrors the same
+     pattern shipped on KPI tiles (PR #52 / commit 9a61662): slate-700,
+     muted, smaller font. */
+  .pb-scope .engine-ci {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.2px;
+    color: var(--slate-700); margin-top: 2px;
+    font-variant-numeric: tabular-nums;
+  }
+</style>
+</head>
+<body>
+
+<h1 class="mockup-h1">Item AA story extension: engine-grid CI annotation (Variant B applied to per-engine bars)</h1>
+
+<div class="mockup-note">
+  <strong>Context.</strong> AA visual surface PR #52 shipped Variant B CI annotations on KPI tiles (Section 1 PDF, Playbook Section 01 KPI strip, Portfolio cover) as <code>+/- N%, 95% CI</code> in slate-700 below each <code>.kpi-value</code>. The Playbook Section 01 also contains an <strong>engine-grid</strong> component (4 cells, one per LLM engine: ChatGPT, Claude, Gemini, Perplexity), each showing a per-engine share bar and a <code>4 / 10 queries cited</code> stat line. Each engine subsamples N=3 trials per (engine, query), so per-engine Wilson 95% CI is computable from the existing data. This mockup proposes extending the same Variant B treatment to the engine-grid <code>.engine-stat</code> line.
+</div>
+
+<p class="mockup-tag">
+  Sample numbers continue from the Claimzilla canonical (per-engine cited counts: ChatGPT 4/10, Claude 5/10, Gemini 1/10, Perplexity 6/10). N=3 trials per query so per-engine total samples = 30 (10 queries x 3 trials). Wilson 95% CI on per-engine numerator / 30 yields the per-engine +/- below.
+</p>
+
+<h2 class="mockup-h2">Playbook Section 01: engine-grid (per-engine bars)</h2>
+
+<h3 class="mockup-h3"><span class="mockup-pill current">Canonical / current state</span> (no CI)</h3>
+<p class="mockup-tag">Verbatim from <code>playbook-claimzilla.html</code> lines 531-555.</p>
+<div class="surface-card">
+  <div class="surface-card-label">Playbook Section 01, engine-grid, current</div>
+  <div class="pb-scope">
+    <div class="engine-grid">
+      <div class="engine-cell">
+        <div class="engine-name">ChatGPT</div>
+        <div class="engine-vendor">OpenAI</div>
+        <div class="engine-bar-wrap"><div class="engine-bar" style="width: 40%;"></div></div>
+        <div class="engine-stat">4 / 10 queries cited</div>
+      </div>
+      <div class="engine-cell">
+        <div class="engine-name">Claude</div>
+        <div class="engine-vendor">Anthropic</div>
+        <div class="engine-bar-wrap"><div class="engine-bar" style="width: 50%;"></div></div>
+        <div class="engine-stat">5 / 10 queries cited</div>
+      </div>
+      <div class="engine-cell">
+        <div class="engine-name">Gemini</div>
+        <div class="engine-vendor">Google</div>
+        <div class="engine-bar-wrap"><div class="engine-bar" style="width: 10%;"></div></div>
+        <div class="engine-stat">1 / 10 queries cited</div>
+      </div>
+      <div class="engine-cell">
+        <div class="engine-name">Perplexity</div>
+        <div class="engine-vendor">Perplexity</div>
+        <div class="engine-bar-wrap"><div class="engine-bar" style="width: 60%;"></div></div>
+        <div class="engine-stat">6 / 10 queries cited</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3 class="mockup-h3"><span class="mockup-pill proposed">Variant B applied</span> (CI on .engine-stat)</h3>
+<p class="mockup-tag">
+  New utility class <code>.engine-ci</code> (slate-700 11px 700 weight 0.2px letter-spacing tabular-nums, 2px margin-top). Inserted between <code>.engine-stat</code> and the cell boundary. Token vocabulary mirrors the shipped <code>.kpi-ci-below</code>: slate-700 color, 700 weight, tabular-nums for numeric alignment. Smaller font (11px vs 12px on the kpi tiles) since the engine-grid cell is a tighter container than the KPI strip.
+</p>
+<div class="surface-card">
+  <div class="surface-card-label">Playbook Section 01, engine-grid, Variant B</div>
+  <div class="pb-scope">
+    <div class="engine-grid">
+      <div class="engine-cell">
+        <div class="engine-name">ChatGPT</div>
+        <div class="engine-vendor">OpenAI</div>
+        <div class="engine-bar-wrap"><div class="engine-bar" style="width: 40%;"></div></div>
+        <div class="engine-stat">12 / 30 trials cited (40%)</div>
+        <div class="engine-ci">+/- 18%, 95% CI; n=30</div>
+      </div>
+      <div class="engine-cell">
+        <div class="engine-name">Claude</div>
+        <div class="engine-vendor">Anthropic</div>
+        <div class="engine-bar-wrap"><div class="engine-bar" style="width: 50%;"></div></div>
+        <div class="engine-stat">15 / 30 trials cited (50%)</div>
+        <div class="engine-ci">+/- 18%, 95% CI; n=30</div>
+      </div>
+      <div class="engine-cell">
+        <div class="engine-name">Gemini</div>
+        <div class="engine-vendor">Google</div>
+        <div class="engine-bar-wrap"><div class="engine-bar" style="width: 10%;"></div></div>
+        <div class="engine-stat">3 / 30 trials cited (10%)</div>
+        <div class="engine-ci">+/- 11%, 95% CI; n=30</div>
+      </div>
+      <div class="engine-cell">
+        <div class="engine-name">Perplexity</div>
+        <div class="engine-vendor">Perplexity</div>
+        <div class="engine-bar-wrap"><div class="engine-bar" style="width: 60%;"></div></div>
+        <div class="engine-stat">18 / 30 trials cited (60%)</div>
+        <div class="engine-ci">+/- 18%, 95% CI; n=30</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 class="mockup-h2">Recommendation</h2>
+<p>
+  Apply Variant B verbatim. The engine-grid is a tighter container than the Section 01 KPI strip, so the CI line uses 11px (vs 12px on KPI tiles) but the same slate-700 color, 700 weight, tabular-nums alignment.
+</p>
+<p>
+  Note the <code>.engine-stat</code> line gains a parenthetical share percent (e.g., <code>12 / 30 trials cited (40%)</code>). Today's stat line reads <code>4 / 10 queries cited</code>; under N=3 trials, the meaningful unit is now trials, not queries. The proposed line surfaces the trial count + parenthetical percent so the percent on the bar (40 percent visual) and the percent in copy match. Alternatively, we could keep <code>4 / 10 queries cited</code> (queries-cited == queries with majority-of-trials cited per Q5 back-compat) and just add the CI line beneath; that is a smaller diff but loses the trial-level granularity.
+</p>
+
+<h2 class="mockup-h2">Operator decision questions</h2>
+<ol>
+  <li>Apply Variant B verbatim to engine-grid as drafted? (recommended yes)</li>
+  <li>Engine-stat line wording: A "12 / 30 trials cited (40%)" (trials, parenthetical percent) or B "4 / 10 queries cited" (queries-only, back-compat with current copy) plus CI line?</li>
+  <li>Surface Y (PDF Section 3 Competitive Position) confirmed deferred per Q16: A. Re-confirm OK?</li>
+</ol>
+</body>
+</html>
