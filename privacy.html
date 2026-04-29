@@ -108,7 +108,7 @@
 
           <div class="meta-row">
             <span>Effective date · 2026-04-21</span>
-            <span>Last updated · 2026-04-25</span>
+            <span>Last updated · 2026-04-29</span>
             <span>Related · <a href="terms.html">Terms of Service</a></span>
           </div>
 
@@ -163,13 +163,13 @@
           <p>Once your audit is delivered, the audit report PDF is sent to you and is yours to keep, and the Schema Pack is delivered to you as a downloadable <code>.zip</code>. The Playbook (Audit and Enterprise tiers) is hosted at a private URL for twelve (12) months from delivery. After 12 months, Web Cited may take the URL offline; we retain a copy of the rendered content in our archives for an additional twelve (12) months and can re-publish on request. After 24 months from delivery, the rendered Playbook content may be deleted from Web Cited's systems unless a separate retention agreement applies. The full retention schedule for deliverables is in <a href="terms.html">Terms of Service §6.1</a>.</p>
 
           <h2 id="hosting">Hosting</h2>
-          <p>This site is a static collection of HTML, CSS, JavaScript, and images served by <strong>GitHub Pages</strong>, which delivers content through its own content-delivery network (<strong>Fastly</strong>). GitHub and Fastly may retain access logs (including IP addresses and request headers) at the infrastructure level for security and content delivery, as described in the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">GitHub General Privacy Statement</a> and Fastly's privacy policy. DNS for web-cited.com is provided by <strong>Cloudflare</strong> (as authoritative DNS only, not as a request-path proxy); Cloudflare's DNS service may process DNS-query metadata. The intake API at <code>api.web-cited.com</code> runs on Cloudflare's edge-compute platform and may retain its own access logs at the infrastructure level. Web Cited does not access, request, or retrieve any of these providers' infrastructure logs.</p>
+          <p>This site is a static collection of HTML, CSS, JavaScript, and images served by <strong>Cloudflare Pages</strong>, which delivers content through Cloudflare's global edge network. Cloudflare may retain access logs (including IP addresses and request headers) at the infrastructure level for security and content delivery, as described in <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener">Cloudflare's privacy policy</a>. DNS for web-cited.com is also provided by Cloudflare and may process DNS query metadata. The intake API at <code>api.web-cited.com</code> runs on Cloudflare's edge-compute platform (Cloudflare Workers) and may retain its own access logs at the infrastructure level. Web Cited does not access, request, or retrieve any of these providers' infrastructure logs.</p>
 
           <h2>Third parties</h2>
           <p>When you submit the intake form, your data flows through a short list of service providers we need to actually deliver the audit. The full list mirrors Terms of Service §6.7 and is grouped by what each provider handles.</p>
           <p><strong>Personal-data processors</strong> (handle your contact details, your company information, and your payment information):</p>
           <ul>
-            <li><strong>Cloudflare</strong>: runs our intake API at <code>api.web-cited.com</code> and stores at-rest operational data.</li>
+            <li><strong>Cloudflare</strong>: hosts the marketing site (Cloudflare Pages), runs our intake API at <code>api.web-cited.com</code> (Cloudflare Workers), and stores at-rest operational data on Cloudflare's storage backends.</li>
             <li><strong>HubSpot</strong>: customer relationship management (CRM) system holding your contact record and deal record.</li>
             <li><strong>Resend</strong>: email-delivery service for scope, kickoff, and follow-up emails.</li>
             <li><strong>Stripe</strong>: payment processor for invoices and the hosted checkout you are redirected to. Web Cited never sees your card data.</li>
