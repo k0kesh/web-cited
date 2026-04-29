@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Claimzilla Playbook - Web Cited</title>
+  <title>Claimzilla Playbook, Web Cited</title>
   <meta name="robots" content="noindex,nofollow" />
   <style>
     /* Brutalist tokens, mirrored from web-cited.com/css/styles.css. */
@@ -122,6 +122,14 @@
     .kpi-delta {
       font-size: 13px; color: var(--slate-700); margin-top: 8px; line-height: 1.45;
     }
+    /* Item AA visual surface (2026-04-29): muted +/- annotation between
+       the .kpi-value percent and the .kpi-delta caption. Variant B from
+       the operator-approved mockup. Same slate-700 color as kpi-delta so
+       the eye reads the new line as quiet metadata, not a new highlight. */
+    .kpi-ci-below {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.2px;
+      color: var(--slate-700); margin-top: 4px;
+    }
 
     /* Engine grid */
     .engine-grid {
@@ -143,6 +151,15 @@
     .engine-bar-wrap { margin-top: 12px; height: 8px; background: #e2e0d6; border: 1px solid var(--ink); }
     .engine-bar { height: 100%; background: var(--accent); }
     .engine-stat { font-size: 12px; color: var(--ink); margin-top: 6px; font-variant-numeric: tabular-nums; }
+    /* Item AA visual surface (2026-04-29): per-engine Wilson 95 percent
+       CI annotation rendered below .engine-stat. Mirrors the .kpi-ci-below
+       pattern shipped on KPI tiles (PR #52). 11px instead of 12px because
+       the engine cell is a tighter container than the KPI strip. */
+    .engine-ci {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.2px;
+      color: var(--slate-700); margin-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
 
     /* Section heading */
     .section-head {
@@ -241,9 +258,7 @@
     /* WeasyPrint PDF render: hide interactive UI that has no use in
        a printed/exported document, and let JSON-LD wrap so long
        string values don't overflow off the right edge of the dark
-       code block. WeasyPrint's default media is "print" so these
-       rules apply only during PDF rendering, not the live HTML
-       view. */
+       code block. */
     @media print {
       .copy-pill { display: none !important; }
       .pb-toast  { display: none !important; }
@@ -252,18 +267,6 @@
         word-break: break-word;
         overflow-x: visible;
       }
-
-      /* Marketing-screenshot redaction. The Services page surfaces a
-         crop of the Prompts section (Playbook section 06) so prospects
-         can see that working prompts + validation prompts ship with
-         the audit. Black-bar the actual prompt body so they can see
-         the structure (label, count, "Use after Priority Fix N"
-         workflow integration) without seeing the proprietary prompt
-         text itself. Live customers reading the Playbook in their
-         browser are unaffected; this only applies during PDF render.
-
-         Pseudo-element quotes around .prompt-q also blanked so the
-         curly-quote characters don't bleed past the black bar. */
       .prompt-q {
         background: var(--ink);
         color: var(--ink);
@@ -380,10 +383,8 @@
       text-align: right;
     }
 
-    /* All sections render in vertical scroll; tab nav is anchor-link
-       scrollspy. The Web Cited Playbook ships every section in one
-       continuous page so customers can scroll through their full
-       remediation desk without tab-flipping. */
+    /* Sections render in vertical scroll; tab nav is anchor-link
+       scrollspy. */
     .pb-section { display: block; padding-top: 16px; padding-bottom: 36px; border-bottom: 1px solid #e1e0d8; scroll-margin-top: 100px; }
     .pb-section:last-child { border-bottom: 0; }
     .pb-tabs { position: sticky; top: 0; z-index: 10; background: var(--paper); }
@@ -431,9 +432,18 @@
       font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;
       border: 1px solid var(--ink);
     }
-    .sev-chip.is-fail { background: var(--accent); color: var(--paper-w); border-color: var(--accent); }
-    .sev-chip.is-warn { background: var(--warn); color: var(--paper-w); border-color: var(--warn); }
-    .sev-chip.is-pass { background: var(--pass); color: var(--paper-w); border-color: var(--pass); }
+    .sev-chip.is-fail { background: var(--accent); color: var(--paper-white); border-color: var(--accent); }
+    .sev-chip.is-warn { background: var(--warn); color: var(--paper-white); border-color: var(--warn); }
+    .sev-chip.is-pass { background: var(--pass); color: var(--paper-white); border-color: var(--pass); }
+    .sev-chip.is-skip { background: var(--skip); color: var(--paper-white); border-color: var(--skip); }
+
+    /* Scorecard rows are jump-links to Section 03's matching lib-card.
+       The first <td> wraps the title in an <a>; the rest of the row
+       responds to hover so users see the whole row is clickable. */
+    .scorecard-row-link { cursor: pointer; transition: background 80ms; }
+    .scorecard-row-link:hover { background: rgba(204, 0, 0, 0.04); }
+    .scorecard-row-link td a { color: var(--ink); text-decoration: none; }
+    .scorecard-row-link:hover td a { text-decoration: underline; text-decoration-color: var(--accent); }
 
     /* All Checks library (section 03) */
     .lib-grid {
@@ -470,7 +480,7 @@
       Web Cited Playbook
     </div>
     <div class="pb-meta">
-      <strong>Claimzilla</strong> &middot; SXO Audit &middot; Engagement #2-9847-3918-4271 &middot; Generated 2026-04-27
+      <strong>Claimzilla</strong> &middot; Audit &middot; Engagement #claimzilla-sample &middot; Generated 2026-04-27
     </div>
   </header>
 
@@ -489,133 +499,197 @@
     <!-- 01 Executive Summary -->
     <section class="pb-section" id="exec">
       <div class="pb-eyebrow">Section 01 &middot; Executive Summary</div>
-      <h1 class="pb-title">Claimzilla cited 40%.<br>Insurify cited 80%.</h1>
-      <p class="pb-lede">
-        Across 10 buyer-question prompts run against ChatGPT, Claude, Gemini, and
-        Perplexity, Claimzilla earns the citation 4 times. Insurify earns it 8.
-        The gap is concentrated in 3 themes: AI Overview placement, llms.txt
-        absence, and Wikipedia article depth. Two of the three are a single
-        afternoon of work. The third is a 2-week editorial push.
-      </p>
+      <h1 class="pb-title">Claimzilla cited 40%.<br>insurify.com cited 80%.</h1>
+      <p class="pb-lede">Across 10 buyer-question prompts run against 4 Large Language Model engines the audit surfaced 3 high-severity findings and 10 medium-severity findings. The gap is concentrated in structured data, E-E-A-T &amp; authority, crawl &amp; indexability. Each is a tractable fix; ranked by impact divided by effort, in the Priority 1 Fixes section.</p>
 
+      
       <p style="margin: 0 0 18px 0; font-size: 11px; color: var(--ink); max-width: 620px;">
         <span style="font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; font-size: 9px; color: var(--ink); margin-right: 8px;">Benchmarked against:</span>
-        <code style="font-family: 'SFMono-Regular', ui-monospace, Menlo, Consolas, monospace; font-size: 11px; color: var(--ink); padding: 1px 6px; border: 1px solid var(--ink); margin-right: 4px; display: inline-block;">insurify.com</code>
-        <code style="font-family: 'SFMono-Regular', ui-monospace, Menlo, Consolas, monospace; font-size: 11px; color: var(--ink); padding: 1px 6px; border: 1px solid var(--ink); margin-right: 4px; display: inline-block;">thezebra.com</code>
-        <code style="font-family: 'SFMono-Regular', ui-monospace, Menlo, Consolas, monospace; font-size: 11px; color: var(--ink); padding: 1px 6px; border: 1px solid var(--ink); margin-right: 4px; display: inline-block;">nerdwallet.com/insurance</code>
+        <code style="font-family: 'SFMono-Regular', ui-monospace, Menlo, Consolas, monospace; font-size: 11px; color: var(--ink); padding: 1px 6px; border: 1px solid var(--ink); margin-right: 4px; display: inline-block;">insurify.com</code><code style="font-family: 'SFMono-Regular', ui-monospace, Menlo, Consolas, monospace; font-size: 11px; color: var(--ink); padding: 1px 6px; border: 1px solid var(--ink); margin-right: 4px; display: inline-block;">thezebra.com</code><code style="font-family: 'SFMono-Regular', ui-monospace, Menlo, Consolas, monospace; font-size: 11px; color: var(--ink); padding: 1px 6px; border: 1px solid var(--ink); margin-right: 4px; display: inline-block;">nerdwallet.com</code>
       </p>
+      
 
       <div class="kpi-strip">
+        
         <div class="kpi-cell">
           <div class="kpi-label">You cited</div>
-          <div class="kpi-value">40<span class="accent">%</span></div>
-          <div class="kpi-delta">4 of 10 buyer queries; 4 LLM engines.</div>
+          <div class="kpi-value"><span class="accent">40%</span></div>
+          
+          <div class="kpi-ci-below">+/- 8%, 95% CI</div>
+          
+          <div class="kpi-delta">Claimzilla surfaced as a citation across the engines.</div>
         </div>
+        
         <div class="kpi-cell">
-          <div class="kpi-label">Leader cited</div>
-          <div class="kpi-value">80<span class="accent">%</span></div>
-          <div class="kpi-delta">Insurify across the same prompt grid.</div>
+          <div class="kpi-label">Leader</div>
+          <div class="kpi-value">80%</div>
+          
+          <div class="kpi-ci-below">+/- 7%, 95% CI</div>
+          
+          <div class="kpi-delta">insurify.com leads by 40 points.</div>
         </div>
+        
         <div class="kpi-cell">
-          <div class="kpi-label">Findings</div>
-          <div class="kpi-value">17</div>
-          <div class="kpi-delta">4 PASS, 10 WARN, 3 FAIL.</div>
+          <div class="kpi-label">High-severity findings</div>
+          <div class="kpi-value"><span class="accent">3</span></div>
+          
+          <div class="kpi-delta">Fix this month for fastest lift on citation share.</div>
         </div>
+        
         <div class="kpi-cell">
-          <div class="kpi-label">Priority</div>
-          <div class="kpi-value">5</div>
-          <div class="kpi-delta">Top 5 fixes ranked in section 04.</div>
+          <div class="kpi-label">Themes affected</div>
+          <div class="kpi-value">6</div>
+          
+          <div class="kpi-delta">Findings span the audit; pick the highest-impact theme first.</div>
         </div>
+        
       </div>
 
       <div class="engine-grid">
+        
         <div class="engine-cell">
           <div class="engine-name">ChatGPT</div>
           <div class="engine-vendor">OpenAI</div>
-          <div class="engine-bar-wrap"><div class="engine-bar" style="width: 40%;"></div></div>
-          <div class="engine-stat">4 / 10 queries cited</div>
+          <div class="engine-bar-wrap"><div class="engine-bar" style="width: 20%;"></div></div>
+          <div class="engine-stat">6 / 30 trials cited (20%)</div>
+          
+          <div class="engine-ci">+/- 14%, 95% CI; n=30</div>
+          
         </div>
+        
         <div class="engine-cell">
           <div class="engine-name">Claude</div>
           <div class="engine-vendor">Anthropic</div>
-          <div class="engine-bar-wrap"><div class="engine-bar" style="width: 50%;"></div></div>
-          <div class="engine-stat">5 / 10 queries cited</div>
+          <div class="engine-bar-wrap"><div class="engine-bar" style="width: 30%;"></div></div>
+          <div class="engine-stat">9 / 30 trials cited (30%)</div>
+          
+          <div class="engine-ci">+/- 16%, 95% CI; n=30</div>
+          
         </div>
+        
         <div class="engine-cell">
           <div class="engine-name">Gemini</div>
           <div class="engine-vendor">Google</div>
           <div class="engine-bar-wrap"><div class="engine-bar" style="width: 10%;"></div></div>
-          <div class="engine-stat">1 / 10 queries cited</div>
+          <div class="engine-stat">3 / 30 trials cited (10%)</div>
+          
+          <div class="engine-ci">+/- 11%, 95% CI; n=30</div>
+          
         </div>
+        
         <div class="engine-cell">
           <div class="engine-name">Perplexity</div>
           <div class="engine-vendor">Perplexity</div>
-          <div class="engine-bar-wrap"><div class="engine-bar" style="width: 60%;"></div></div>
-          <div class="engine-stat">6 / 10 queries cited</div>
+          <div class="engine-bar-wrap"><div class="engine-bar" style="width: 40%;"></div></div>
+          <div class="engine-stat">12 / 30 trials cited (40%)</div>
+          
+          <div class="engine-ci">+/- 17%, 95% CI; n=30</div>
+          
         </div>
+        
       </div>
+      <p class="ci-footnote" style="font-size: 12px; color: var(--slate-700); margin-top: 14px; line-height: 1.5;">
+        <strong>How to read &ldquo;+/- N%, 95% CI&rdquo;:</strong> CI stands for
+        <strong>Confidence Interval</strong>. Each buyer question is sampled at
+        N=3 independent trials per engine, so per-engine totals are
+        n=trials_per_query x queries. The +/- N% half-width is the Wilson 95%
+        confidence interval on the cited share, computed from the trial counts:
+        roughly, "if we re-ran this audit, the cited share would land inside
+        this band 95 times out of 100." Smaller bands mean more sampling
+        certainty.
+      </p>
+      
 
-      <h2 class="section-head">The three patterns moving the needle</h2>
+      
+      <h2 class="section-head">The patterns moving the needle</h2>
       <div class="findings-grid">
-        <div class="finding-card is-fail">
-          <div class="finding-head">
-            <span class="chip is-fail">High</span>
-            <div class="finding-title">Google AI Overview slot is held by competitors</div>
-          </div>
-          <p class="finding-summary">
-            0 of 8 commercial buyer queries surfaced Claimzilla in the AIO. Insurify
-            holds 5 of 8; The Zebra holds 2; NerdWallet holds 1.
-          </p>
-          <div class="finding-fix">
-            <div class="finding-fix-label">Fix</div>
-            Earn FAQPage rich result + answer-first paragraphs (90 to 110 words) on
-            the 8 missed queries. AIO draws from FAQ-marked content disproportionately.
-          </div>
-        </div>
-        <div class="finding-card is-fail">
-          <div class="finding-head">
-            <span class="chip is-fail">High</span>
-            <div class="finding-title">/llms.txt is missing</div>
-          </div>
-          <p class="finding-summary">
-            Crawlers fall back to robots.txt heuristics when /llms.txt is absent.
-            That sampling tends to grab low-value comparison-form pages instead of
-            the homepage + how-it-works + research hub.
-          </p>
-          <div class="finding-fix">
-            <div class="finding-fix-label">Fix</div>
-            Publish /llms.txt at the site root with 8 to 12 priority URLs. Most
-            LLM crawlers honor it within 14 days.
-          </div>
-        </div>
+        
         <div class="finding-card is-warn">
           <div class="finding-head">
             <span class="chip is-warn">Medium</span>
-            <div class="finding-title">Wikipedia article depth is below LLM-grounding threshold</div>
+            <div class="finding-title">JSON-LD: Organization, WebSite, Service, FAQPage shapes</div>
           </div>
-          <p class="finding-summary">
-            240 words + 2 third-party citations. Competitors range 8 to 21 cites.
-            Anthropic + OpenAI weight Wikipedia depth heavily when deciding whether
-            to name a brand vs name a competitor.
-          </p>
+          <p class="finding-summary">Organization schema present and well-formed; WebSite + Service JSON-LD missing entirely; FAQPage schema NOT present despite 14 FAQ-shaped Q&amp;A blocks on /faq.</p>
+          
           <div class="finding-fix">
             <div class="finding-fix-label">Fix</div>
-            Editorial push: 600+ words covering history / model / funding / market
-            position. 5+ third-party reliable sources cited. ~2 weeks of work.
+            Three priority shapes to add. (1) WebSite JSON-LD with publisher pointing to your Organization. (2) Service schema with &#39;serviceType: &#34;Insurance comparison platform&#34;&#39; and &#39;areaServed: { &#34;@type&#34;: &#34;Country&#34;, &#34;name&#34;: &#34;United States&#34; }&#39;. (3) FAQPage JSON-LD on /faq with all 14 question/answer pairs marked up; this unlocks AIO + Bing Copilot FAQ-rich-result eligibility and feeds Perplexity&#39;s grounding. Ready-to-paste samples in your Playbook.
           </div>
+          
         </div>
-        <div class="finding-card is-pass">
+        
+        <div class="finding-card is-warn">
           <div class="finding-head">
-            <span class="chip is-pass">Clean</span>
-            <div class="finding-title">Wikidata Q-ID + 11 typed claims</div>
+            <span class="chip is-warn">Medium</span>
+            <div class="finding-title">OpenAI (ChatGPT) names the target domain for representative queries</div>
           </div>
-          <p class="finding-summary">
-            Q12399847 with instance-of, industry, founded, headquarters, social
-            identifiers all populated. This is the strongest entity-graph signal
-            in the audit; it directly lifts Claude's citation rate.
-          </p>
+          <p class="finding-summary">Cited in 2 / 10 buyer queries for domain claimzilla.example (0 query errors). Strong on brand-name queries; weak on category queries where Insurify and The Zebra dominate the answer.</p>
+          
+          <div class="finding-fix">
+            <div class="finding-fix-label">Fix</div>
+            Publish authoritative content on the 8 missed query topics (Texas Camry, Florida home, fastest claims handler, online quote credit-score impact, California-specific, $20 renters, plus 2 more). Use the buyer&#39;s exact phrasing in H2/H3 headings + answer-first paragraphs in the first 80 words. Targets to outrank: Insurify (cited in 8/10), The Zebra (7/10), NerdWallet (5/10).
+          </div>
+          
         </div>
+        
+        <div class="finding-card is-warn">
+          <div class="finding-head">
+            <span class="chip is-warn">Medium</span>
+            <div class="finding-title">Anthropic (Claude) names the target domain for representative queries</div>
+          </div>
+          <p class="finding-summary">Cited in 3 / 10 buyer queries (0 errors). Best engine for Claimzilla today: Claude weights Wikidata + Wikipedia presence highly and claimzilla.example has both, lifting brand-recognition signals.</p>
+          
+          <div class="finding-fix">
+            <div class="finding-fix-label">Fix</div>
+            Strengthen Wikipedia article (currently 240 words; bring to 600+ with 5 reliable third-party citations) and expand Wikidata claims. Anthropic citation rate scales with entity-graph depth more than any other engine.
+          </div>
+          
+        </div>
+        
+        <div class="finding-card is-fail">
+          <div class="finding-head">
+            <span class="chip is-fail">High</span>
+            <div class="finding-title">Gemini (Google) names the target domain for representative queries</div>
+          </div>
+          <p class="finding-summary">Cited in 1 / 10 buyer queries (0 errors). Gemini follows Google trust signals tightly; today claimzilla.example has weak SERP presence + zero AIO citations + a thin Knowledge Graph entry.</p>
+          
+          <div class="finding-fix">
+            <div class="finding-fix-label">Fix</div>
+            Gemini is the most-coupled engine to Google search authority. Three levers: (1) get into Google Knowledge Graph with a complete Organization page, (2) earn AIO citations on the 10 buyer queries, (3) build out the entity graph on Wikidata so Google connects you to the auto + home insurance comparison cluster.
+          </div>
+          
+        </div>
+        
+        <div class="finding-card is-warn">
+          <div class="finding-head">
+            <span class="chip is-warn">Medium</span>
+            <div class="finding-title">Perplexity (Sonar) names the target domain for representative queries</div>
+          </div>
+          <p class="finding-summary">Cited in 4 / 10 buyer queries (0 errors). Best citation rate of the four engines; Perplexity surfaces well-structured comparison content and Claimzilla&#39;s quote-flow pages match that pattern.</p>
+          
+          <div class="finding-fix">
+            <div class="finding-fix-label">Fix</div>
+            Publish a /research-hub or /how-it-works section with structured comparison tables + buyer-decision criteria. Perplexity&#39;s grounding loves clean comparison schema. The 6 missed queries all map to topics where competitors have published exactly this format.
+          </div>
+          
+        </div>
+        
+        <div class="finding-card is-fail">
+          <div class="finding-head">
+            <span class="chip is-fail">High</span>
+            <div class="finding-title">llms.txt directive file at the site root</div>
+          </div>
+          <p class="finding-summary">/llms.txt not present (HTTP 404). The file is the public spec for telling LLM crawlers what to index, what to summarize, and what to exclude; missing it means crawlers fall back to robots.txt heuristics and may sample from low-value pages.</p>
+          
+          <div class="finding-fix">
+            <div class="finding-fix-label">Fix</div>
+            Publish /llms.txt at the site root listing 8-12 priority URLs for LLM consumption (homepage, /how-it-works, /faq, top 5 carrier comparison pages, /about, /reviews). Format: one URL per line with optional `# notes`. Most LLM crawlers (Anthropic, Perplexity, OpenAI&#39;s GPTBot) honor this hint within 14 days.
+          </div>
+          
+        </div>
+        
       </div>
+      
     </section>
 
     <!-- 02 Scorecard -->
@@ -624,8 +698,8 @@
       <h1 class="pb-title">All 17 checks at a glance.</h1>
       <p class="pb-lede">
         Every audit check, color-coded by severity. Click any row to jump to
-        the All Checks library entry that explains the universal best
-        practice behind the check. Numbers update at every re-audit.
+        the All Checks library entry that explains the universal best practice
+        behind the check. Numbers update at every re-audit.
       </p>
 
       <div class="scorecard-grid">
@@ -634,11 +708,11 @@
           <div class="scorecard-label">High severity</div>
         </div>
         <div class="scorecard-cell">
-          <div class="scorecard-num is-warn">9</div>
+          <div class="scorecard-num is-warn">10</div>
           <div class="scorecard-label">Medium severity</div>
         </div>
         <div class="scorecard-cell">
-          <div class="scorecard-num is-pass">5</div>
+          <div class="scorecard-num is-pass">4</div>
           <div class="scorecard-label">Clean / pass</div>
         </div>
         <div class="scorecard-cell">
@@ -653,27 +727,130 @@
             <th>Check</th>
             <th>Theme</th>
             <th>Severity</th>
-            <th class="num">Score</th>
+            <th class="num">Pages</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>Gemini (Google) names the target domain</td><td>Citation</td><td><span class="sev-chip is-fail">High</span></td><td class="num">10%</td></tr>
-          <tr><td>llms.txt directive file at site root</td><td>Discoverability</td><td><span class="sev-chip is-fail">High</span></td><td class="num">0%</td></tr>
-          <tr><td>Google AI Overview surfaces target domain</td><td>SERP</td><td><span class="sev-chip is-fail">High</span></td><td class="num">0%</td></tr>
-          <tr><td>JSON-LD: Organization, WebSite, Service, FAQPage</td><td>Structured data</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">25%</td></tr>
-          <tr><td>OpenAI (ChatGPT) names the target domain</td><td>Citation</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">40%</td></tr>
-          <tr><td>Anthropic (Claude) names the target domain</td><td>Citation</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">50%</td></tr>
-          <tr><td>Perplexity (Sonar) names the target domain</td><td>Citation</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">60%</td></tr>
-          <tr><td>Wikipedia article + external citations</td><td>Entity</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">55%</td></tr>
-          <tr><td>Google Knowledge Graph entity entry</td><td>Entity</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">50%</td></tr>
-          <tr><td>YouTube embeds have transcripts</td><td>Media</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">40%</td></tr>
-          <tr><td>YouTube mentions in third-party content</td><td>Media</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">55%</td></tr>
-          <tr><td>Bing Copilot answer + organic rank</td><td>SERP</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">45%</td></tr>
-          <tr><td>Google Business Profile completeness</td><td>Entity</td><td><span class="sev-chip is-warn">Medium</span></td><td class="num">55%</td></tr>
-          <tr><td>Title, description, canonical, robots, viewport</td><td>SEO</td><td><span class="sev-chip is-pass">Clean</span></td><td class="num">100%</td></tr>
-          <tr><td>Open Graph + Twitter Card meta completeness</td><td>Meta &amp; social</td><td><span class="sev-chip is-pass">Clean</span></td><td class="num">100%</td></tr>
-          <tr><td>Wikidata Q-ID + typed claims</td><td>Entity</td><td><span class="sev-chip is-pass">Clean</span></td><td class="num">100%</td></tr>
-          <tr><td>Google organic rank for brand queries</td><td>SERP</td><td><span class="sev-chip is-pass">Clean</span></td><td class="num">100%</td></tr>
+          
+          <tr class="scorecard-row-link" data-jump="#lib-on-site-seo">
+            <td><a href="#lib-on-site-seo">Title, description, canonical, robots, viewport, H1/H2, lang</a></td>
+            <td>content structure</td>
+            <td><span class="sev-chip is-pass">Clean</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#lib-schema-jsonld">
+            <td><a href="#lib-schema-jsonld">JSON-LD: Organization, WebSite, Service, FAQPage shapes</a></td>
+            <td>structured data</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#lib-open-graph">
+            <td><a href="#lib-open-graph">Open Graph + Twitter Card meta completeness</a></td>
+            <td>meta &amp; social tags</td>
+            <td><span class="sev-chip is-pass">Clean</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#lib-llm-citation">
+            <td><a href="#lib-llm-citation">OpenAI (ChatGPT) names the target domain for representative queries</a></td>
+            <td>E-E-A-T &amp; authority</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#lib-llm-citation">
+            <td><a href="#lib-llm-citation">Anthropic (Claude) names the target domain for representative queries</a></td>
+            <td>E-E-A-T &amp; authority</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#lib-llm-citation">
+            <td><a href="#lib-llm-citation">Gemini (Google) names the target domain for representative queries</a></td>
+            <td>E-E-A-T &amp; authority</td>
+            <td><span class="sev-chip is-fail">High</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#lib-llm-citation">
+            <td><a href="#lib-llm-citation">Perplexity (Sonar) names the target domain for representative queries</a></td>
+            <td>E-E-A-T &amp; authority</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#lib-llms-txt">
+            <td><a href="#lib-llms-txt">llms.txt directive file at the site root</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-fail">High</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#lib-wikipedia">
+            <td><a href="#lib-wikipedia">Wikipedia article + external citations</a></td>
+            <td>E-E-A-T &amp; authority</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#lib-wikidata-presence">
+            <td><a href="#lib-wikidata-presence">Wikidata Q-ID + typed claims (instance of, industry, founded)</a></td>
+            <td>E-E-A-T &amp; authority</td>
+            <td><span class="sev-chip is-pass">Clean</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">Google Knowledge Graph entity entry</a></td>
+            <td>E-E-A-T &amp; authority</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">Embedded YouTube videos have transcripts</a></td>
+            <td>media</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#lib-youtube-mentions">
+            <td><a href="#lib-youtube-mentions">Brand mentions in third-party YouTube content (titles, descriptions, transcripts)</a></td>
+            <td>media</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">Google organic rank for brand-only and brand+modifier queries</a></td>
+            <td>rendering &amp; visibility</td>
+            <td><span class="sev-chip is-pass">Clean</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">Google AI Overview surfaces the target domain on commercial buyer queries</a></td>
+            <td>rendering &amp; visibility</td>
+            <td><span class="sev-chip is-fail">High</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">Bing Copilot answer + Bing organic rank for buyer queries</a></td>
+            <td>rendering &amp; visibility</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">Google Business Profile completeness</a></td>
+            <td>security &amp; trust</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">1</td>
+          </tr>
+          
         </tbody>
       </table>
     </section>
@@ -683,163 +860,95 @@
       <div class="pb-eyebrow">Section 03 &middot; All Checks &middot; Universal Library</div>
       <h1 class="pb-title">The "why this matters" behind every check.</h1>
       <p class="pb-lede">
-        Universal best-practice entries for the 17 checks Web Cited runs.
-        Each entry explains what the check measures, why it moves LLM
-        citation, and how to fix it. Reusable reference for your team
-        regardless of how Claimzilla scored on this audit.
+        Universal best-practice entries for every check Web Cited runs.
+        Each entry explains what the check measures, why it moves Large
+        Language Model (LLM) citation, and how to fix it. Reusable reference
+        for your team regardless of how Claimzilla scored on this audit.
       </p>
 
       <div class="lib-grid">
-        <div class="lib-card">
+        <div class="lib-card" id="lib-llm-citation">
           <div class="lib-theme">Citation &middot; LLM</div>
           <h3>OpenAI / Anthropic / Gemini / Perplexity citation rate</h3>
-          <p>
-            For each buyer question, send the same prompt to all four
-            engines and capture which engines name your domain in the
-            response. Aggregate across the prompt grid for a per-engine
-            score.
-          </p>
-          <p>
-            Why it matters: the four engines collectively cover ~95% of
-            generative-answer market share. A brand that's cited by 3 of
-            4 engines on the buyer's question is the de facto answer.
-          </p>
+          <p>For each buyer question, send the same prompt to all four engines and capture which engines name your domain in the response. Aggregate across the prompt grid for a per-engine score.</p>
+          <p>Why it matters: the four engines collectively cover ~95% of generative-answer market share. A brand that's cited by 3 of 4 engines on the buyer's question is the de facto answer.</p>
           <div class="lib-fix">Fix levers: authoritative content matching the buyer's exact phrasing, third-party citations on Wikipedia + niche publications, FAQ schema, llms.txt with priority pages.</div>
         </div>
 
-        <div class="lib-card">
+        <div class="lib-card" id="lib-llms-txt">
           <div class="lib-theme">Discoverability</div>
           <h3>llms.txt at site root</h3>
-          <p>
-            Public spec for telling LLM crawlers what to prioritize and
-            what to skip. One URL per line, optional <code># notes</code>.
-            Most LLM crawlers (Anthropic, Perplexity, OpenAI's GPTBot)
-            honor it within 14 days of publication.
-          </p>
+          <p>Public spec for telling LLM crawlers what to prioritize and what to skip. One URL per line, optional <code># notes</code>. Most LLM crawlers (Anthropic, Perplexity, OpenAI's GPTBot) honor it within 14 days of publication.</p>
           <div class="lib-fix">Fix: publish 8 to 12 priority URLs at <code>/llms.txt</code>. Include homepage, /how-it-works, /faq, top buyer-decision pages, and authoritative reference content.</div>
         </div>
 
-        <div class="lib-card">
+        <div class="lib-card" id="lib-aio">
           <div class="lib-theme">SERP &middot; AIO</div>
           <h3>Google AI Overview placement</h3>
-          <p>
-            For commercial buyer queries, Google now shows an AI-generated
-            multi-source summary above organic results. The brands cited
-            in the AIO get the highest-conversion answer slot in Google
-            search. Coverage is the % of your buyer queries where your
-            domain appears.
-          </p>
+          <p>For commercial buyer queries, Google now shows an AI-generated multi-source summary above organic results. The brands cited in the AI Overview (AIO) get the highest-conversion answer slot in Google search. Coverage is the % of your buyer queries where your domain appears.</p>
           <div class="lib-fix">Fix: earn FAQPage rich result eligibility (AIO draws from FAQ-marked content disproportionately), publish answer-first paragraphs (90 to 110 words) on the queries you want to capture, earn 2 to 3 mid-authority third-party citations per query topic.</div>
         </div>
 
-        <div class="lib-card">
+        <div class="lib-card" id="lib-schema-jsonld">
           <div class="lib-theme">Structured data</div>
           <h3>JSON-LD: Organization, WebSite, Service, FAQPage</h3>
-          <p>
-            Schema.org JSON-LD is the most reliable way to feed your
-            entity facts to LLM training pipelines + Google's Knowledge
-            Graph. Four priority shapes: Organization (who you are),
-            WebSite (your site as a publisher), Service or Product (what
-            you sell), FAQPage (your buyer's most-searched questions).
-          </p>
-          <div class="lib-fix">Fix: ship all four shapes on your homepage / category / FAQ pages. Validate via Google's Rich Results Test before merging. Per-page samples in your Schema Pack tab.</div>
+          <p>Schema.org JSON-LD (JavaScript Object Notation for Linked Data) is the most reliable way to feed your entity facts to LLM training pipelines + Google's Knowledge Graph. Four priority shapes: Organization (who you are), WebSite (your site as a publisher), Service or Product (what you sell), FAQPage (your buyer's most-searched questions).</p>
+          <div class="lib-fix">Fix: ship all four shapes on your homepage / category / FAQ pages. Validate via Google's Rich Results Test before merging. Per-page samples in Section 05 of this Playbook.</div>
         </div>
 
-        <div class="lib-card">
+        <div class="lib-card" id="lib-knowledge-graph">
           <div class="lib-theme">Entity &middot; Knowledge Graph</div>
           <h3>Google Knowledge Graph entity entry</h3>
-          <p>
-            Google maintains a graph of entities (companies, people,
-            places). Brands with a complete Knowledge Graph entry win
-            the right-rail Knowledge Panel on branded searches and feed
-            Gemini's grounding signal heavily.
-          </p>
-          <div class="lib-fix">Fix: submit a Schema.org Organization update with sameAs (LinkedIn, Crunchbase, Wikipedia, Wikidata), founder, foundingDate, address, contactPoint. Allow 14 to 30 days for KG to absorb.</div>
+          <p>Google maintains a graph of entities (companies, people, places). Brands with a complete Knowledge Graph entry win the right-rail Knowledge Panel on branded searches and feed Gemini's grounding signal heavily.</p>
+          <div class="lib-fix">Fix: submit a Schema.org Organization update with sameAs (LinkedIn, Crunchbase, Wikipedia, Wikidata), founder, foundingDate, address, contactPoint. Allow 14 to 30 days for the Knowledge Graph to absorb.</div>
         </div>
 
-        <div class="lib-card">
+        <div class="lib-card" id="lib-wikidata-presence">
           <div class="lib-theme">Entity &middot; Wikidata</div>
           <h3>Wikidata Q-ID + typed claims</h3>
-          <p>
-            Wikidata is the multilingual structured-fact graph that feeds
-            both Wikipedia's right-rail panels and most LLM entity-grounding
-            pipelines. A Q-ID with typed claims (instance-of, industry,
-            founded, etc.) is the single strongest entity-graph signal
-            for Anthropic Claude.
-          </p>
+          <p>Wikidata is the multilingual structured-fact graph that feeds both Wikipedia's right-rail panels and most LLM entity-grounding pipelines. A Q-ID with typed claims (instance-of, industry, founded, etc.) is the single strongest entity-graph signal for Anthropic Claude.</p>
           <div class="lib-fix">Fix: open or expand a Wikidata item (community-edited; takes 2 to 3 weeks to settle). Populate at least 8 to 10 typed claims. Link sameAs identifiers (LinkedIn, Crunchbase, X handle).</div>
         </div>
 
-        <div class="lib-card">
+        <div class="lib-card" id="lib-wikipedia">
           <div class="lib-theme">Entity &middot; Wikipedia</div>
           <h3>Wikipedia article depth + external citations</h3>
-          <p>
-            LLMs weight Wikipedia article depth heavily when deciding
-            whether to name a brand by name vs by category. Articles
-            below 600 words with under 5 third-party citations rarely
-            survive LLM citation generation.
-          </p>
+          <p>LLMs weight Wikipedia article depth heavily when deciding whether to name a brand by name vs by category. Articles below 600 words with under 5 third-party citations rarely survive LLM citation generation.</p>
           <div class="lib-fix">Fix: editorial push to expand the article to 600+ words covering history, model, funding, market position. Cite 5+ reliable third-party sources (industry publications, regulator filings, Forbes / TechCrunch / WSJ coverage). 2-week effort; lasting payoff.</div>
         </div>
 
-        <div class="lib-card">
+        <div class="lib-card" id="lib-on-site-seo">
           <div class="lib-theme">SEO &middot; Fundamentals</div>
           <h3>Title, description, canonical, robots, viewport, H1, H2, lang</h3>
-          <p>
-            The eight on-page fundamentals every page must get right.
-            Title under 60 chars, description 130 to 160 chars, canonical
-            pointing to the preferred URL, robots index/follow, viewport
-            mobile-friendly, single H1 per page, hierarchical H2s, lang
-            attribute set on the html element.
-          </p>
+          <p>The eight on-page fundamentals every page must get right. Title under 60 chars, description 130 to 160 chars, canonical pointing to the preferred URL, robots index/follow, viewport mobile-friendly, single H1 per page, hierarchical H2s, lang attribute set on the html element.</p>
           <div class="lib-fix">Fix: a CMS template lock-down ensures every published page hits all 8. Audit existing top-50 traffic pages for compliance; the typical hit rate before lock-down is 60-70%.</div>
         </div>
 
-        <div class="lib-card">
+        <div class="lib-card" id="lib-open-graph">
           <div class="lib-theme">Meta &amp; social</div>
           <h3>Open Graph + Twitter Card completeness</h3>
-          <p>
-            Nine OG tags + four Twitter Card tags drive how your link
-            previews render across Facebook, LinkedIn, Slack, iMessage,
-            X, Discord. Incomplete preview cards lose ~20% of share
-            click-through versus fully-populated ones.
-          </p>
+          <p>Nine Open Graph tags + four Twitter Card tags drive how your link previews render across Facebook, LinkedIn, Slack, iMessage, X, Discord. Incomplete preview cards lose ~20% of share click-through versus fully-populated ones.</p>
           <div class="lib-fix">Fix: validate every page-template via OpenGraph.xyz and LinkedIn Post Inspector before going live. Preview image must be 1200x630 px and under 1 MB.</div>
         </div>
 
-        <div class="lib-card">
+        <div class="lib-card" id="lib-youtube-transcripts">
           <div class="lib-theme">Media</div>
           <h3>YouTube embed transcripts</h3>
-          <p>
-            Embedded videos without &lt;track&gt; caption files OR
-            visible transcript text below the video are invisible to LLM
-            crawlers (which can't transcribe video content). Critical for
-            video-heavy landing pages.
-          </p>
+          <p>Embedded videos without &lt;track&gt; caption files OR visible transcript text below the video are invisible to LLM crawlers (which can't transcribe video content). Critical for video-heavy landing pages.</p>
           <div class="lib-fix">Fix: auto-generate captions in YouTube Studio, review for accuracy on industry terms, publish as a public caption track. Bonus: embed the transcript as visible page text in a collapsible &lt;details&gt; element.</div>
         </div>
 
-        <div class="lib-card">
+        <div class="lib-card" id="lib-youtube-mentions">
           <div class="lib-theme">Media</div>
           <h3>YouTube mentions in third-party content</h3>
-          <p>
-            Brand mentioned in titles, descriptions, or transcripts of
-            YouTube videos the brand <em>didn't</em> publish. Among the
-            single strongest signals for being named when an LLM is
-            asked an open-ended buyer question.
-          </p>
-          <div class="lib-fix">Fix: pitch product reviews / explainer videos to mid-tier YouTube personal-finance / industry channels (50K to 500K subscribers). Each video lifts both general-search citation and Perplexity grounding.</div>
+          <p>Brand mentioned in titles, descriptions, or transcripts of YouTube videos the brand <em>didn't</em> publish. Among the single strongest signals for being named when an LLM is asked an open-ended buyer question.</p>
+          <div class="lib-fix">Fix: pitch product reviews / explainer videos to mid-tier YouTube industry channels (50K to 500K subscribers). Each video lifts both general-search citation and Perplexity grounding.</div>
         </div>
 
-        <div class="lib-card">
+        <div class="lib-card" id="lib-bing-copilot">
           <div class="lib-theme">SERP &middot; Bing</div>
           <h3>Bing Copilot answer + organic rank</h3>
-          <p>
-            Bing has ~10% of US search and feeds Microsoft Copilot, which
-            is the second-largest source of LLM grounding traffic after
-            Google. Bing weights structured data + freshness more than
-            Google.
-          </p>
+          <p>Bing has ~10% of US search and feeds Microsoft Copilot, which is the second-largest source of LLM grounding traffic after Google. Bing weights structured data + freshness more than Google.</p>
           <div class="lib-fix">Fix: keep page lastmod headers + sitemap.xml lastmod fresh on every content update. Use the IndexNow API to push updates to Bing within minutes instead of waiting for the crawl cycle. Most comparison sites neglect IndexNow.</div>
         </div>
       </div>
@@ -850,47 +959,55 @@
       <div class="pb-eyebrow">Section 04 &middot; Priority 1 Fixes</div>
       <h1 class="pb-title">5 fixes to ship in the next 30 days.</h1>
       <p class="pb-lede">
-        Ranked by citation impact divided by effort. Each row links to the
-        relevant All Checks library entry for the full how-to. Ship in order;
-        re-audit at 30 days to measure lift.
+        Ranked by citation impact divided by effort. Ship in order; re-audit
+        at 30 days to measure lift.
       </p>
 
+      
       <div class="priority-matrix">
         <div class="pm-grid">
+          
           <div class="pm-cell">
             <div class="pm-rank">01</div>
-            <div class="pm-task">Publish /llms.txt with 8 to 12 priority URLs.</div>
-            <div class="pm-effort">~1 hour &middot; HIGH IMPACT</div>
+            <div class="pm-task">Gemini is the most-coupled engine to Google search authority. Three levers: (1) get into Google Knowledge Graph with a complete Organization page, (2) earn AIO citations on the 10 buyer queries, (3) build out the entity graph on Wikidata so Google connects you to the auto + home insurance comparison cluster.</div>
+            <div class="pm-effort">HIGH EFFORT</div>
           </div>
+          
           <div class="pm-cell">
             <div class="pm-rank">02</div>
-            <div class="pm-task">Add FAQPage JSON-LD to /faq covering 14 Q&amp;A blocks.</div>
-            <div class="pm-effort">~2 hours &middot; HIGH IMPACT</div>
+            <div class="pm-task">Publish /llms.txt at the site root listing 8-12 priority URLs for LLM consumption (homepage, /how-it-works, /faq, top 5 carrier comparison pages, /about, /reviews). Format: one URL per line with optional `# notes`. Most LLM crawlers (Anthropic, Perplexity, OpenAI&#39;s GPTBot) honor this hint within 14 days.</div>
+            <div class="pm-effort">LOW EFFORT</div>
           </div>
+          
           <div class="pm-cell">
             <div class="pm-rank">03</div>
-            <div class="pm-task">Author answer-first paragraphs (90 to 110 words) for the 8 missed AIO queries.</div>
-            <div class="pm-effort">~3 days &middot; HIGH IMPACT</div>
+            <div class="pm-task">Three levers in priority order: (1) earn the FAQPage rich result (currently failed; see schema_jsonld finding) since AIO draws from FAQ-marked content disproportionately; (2) publish answer-first content on the 8 buyer queries with the answer in the first paragraph (90 to 110 words) followed by supporting detail; (3) earn 2-3 mid-authority third-party citations per query topic so Google&#39;s AIO models trust the claim.</div>
+            <div class="pm-effort">HIGH EFFORT</div>
           </div>
+          
           <div class="pm-cell">
             <div class="pm-rank">04</div>
-            <div class="pm-task">Submit Schema.org Organization update with sameAs + founder + foundingDate.</div>
-            <div class="pm-effort">~2 hours &middot; MEDIUM IMPACT</div>
+            <div class="pm-task">Three priority shapes to add. (1) WebSite JSON-LD with publisher pointing to your Organization. (2) Service schema with &#39;serviceType: &#34;Insurance comparison platform&#34;&#39; and &#39;areaServed: { &#34;@type&#34;: &#34;Country&#34;, &#34;name&#34;: &#34;United States&#34; }&#39;. (3) FAQPage JSON-LD on /faq with all 14 question/answer pairs marked up; this unlocks AIO + Bing Copilot FAQ-rich-result eligibility and feeds Perplexity&#39;s grounding. Ready-to-paste samples in your Playbook.</div>
+            <div class="pm-effort">LOW EFFORT</div>
           </div>
+          
           <div class="pm-cell">
             <div class="pm-rank">05</div>
-            <div class="pm-task">Editorial push: expand Wikipedia article to 600+ words with 5+ external citations.</div>
-            <div class="pm-effort">~2 weeks &middot; HIGH IMPACT</div>
+            <div class="pm-task">Publish authoritative content on the 8 missed query topics (Texas Camry, Florida home, fastest claims handler, online quote credit-score impact, California-specific, $20 renters, plus 2 more). Use the buyer&#39;s exact phrasing in H2/H3 headings + answer-first paragraphs in the first 80 words. Targets to outrank: Insurify (cited in 8/10), The Zebra (7/10), NerdWallet (5/10).</div>
+            <div class="pm-effort">HIGH EFFORT</div>
           </div>
+          
         </div>
       </div>
 
-      <h2 class="section-head">Expected lift at 30 days, if all 5 ship</h2>
+      <h2 class="section-head">Expected lift at 30 days, if all fixes ship</h2>
       <p>
-        Modeled against 32 prior audits with similar before-state. Median lift:
-        you-cited rate 40% to 64% (+24 points), Gemini citation rate 10% to 35%
-        (+25 points), AIO captures 0 to 3 of 8 buyer queries.
+        Modeled against prior audits with similar before-state. Median lift:
+        you-cited rate climbs by 20 to 30 points, gaps to leader narrow,
+        and zero-cite engines start surfacing your domain on at least one
+        buyer query.
       </p>
+      
     </section>
 
     <!-- 05 Schema Pack -->
@@ -898,93 +1015,78 @@
       <div class="pb-eyebrow">Section 05 &middot; Schema Pack</div>
       <h1 class="pb-title">Copy-paste JSON-LD per priority page.</h1>
       <p class="pb-lede">
-        Three schemas you can drop into the &lt;head&gt; today. Each is a complete,
+        Schemas you can drop into the &lt;head&gt; today. Each is a complete,
         validated payload generated from your audit; no placeholder text. Run
         them through Google's Rich Results Test before merging.
       </p>
 
+      
       <div class="schema-card-head">
-        <h3>Homepage &middot; Organization + WebSite (combined @graph)</h3>
+        <h3>Homepage  /  Organization + WebSite + WebPage (combined @graph)</h3>
         <button class="copy-pill" type="button" data-copy-target="schema-1">Copy</button>
       </div>
-      <pre class="schema-block" id="schema-1"><span class="com">&lt;script type=&quot;application/ld+json&quot;&gt;</span>
+      <pre class="schema-block" id="schema-1">&lt;script type=&#34;application/ld+json&#34;&gt;
 {
-  <span class="key">"@context"</span>: <span class="str">"https://schema.org"</span>,
-  <span class="key">"@graph"</span>: [
+  &#34;@context&#34;: &#34;https://schema.org&#34;,
+  &#34;@graph&#34;: [
     {
-      <span class="key">"@type"</span>: <span class="str">"Organization"</span>,
-      <span class="key">"@id"</span>: <span class="str">"https://claimzilla.example/#organization"</span>,
-      <span class="key">"name"</span>: <span class="str">"Claimzilla"</span>,
-      <span class="key">"url"</span>: <span class="str">"https://claimzilla.example/"</span>,
-      <span class="key">"foundingDate"</span>: <span class="str">"2019-03-01"</span>,
-      <span class="key">"sameAs"</span>: [
-        <span class="str">"https://www.linkedin.com/company/claimzilla"</span>,
-        <span class="str">"https://www.crunchbase.com/organization/claimzilla"</span>,
-        <span class="str">"https://en.wikipedia.org/wiki/Claimzilla"</span>,
-        <span class="str">"https://www.wikidata.org/wiki/Q12399847"</span>
+      &#34;@context&#34;: &#34;https://schema.org&#34;,
+      &#34;@type&#34;: &#34;Organization&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/#organization&#34;,
+      &#34;name&#34;: &#34;Claimzilla&#34;,
+      &#34;url&#34;: &#34;https://claimzilla.example&#34;,
+      &#34;description&#34;: &#34;Claimzilla is a U.S.-based digital marketplace that compares personal-line insurance quotes (auto, home, renters, life) from 40+ carriers in under 90 seconds and pairs every quote with a transparent claims-history scorecard for the carrier behind it.&#34;,
+      &#34;logo&#34;: {
+        &#34;@type&#34;: &#34;ImageObject&#34;,
+        &#34;@id&#34;: &#34;https://claimzilla.example/#logo&#34;,
+        &#34;url&#34;: &#34;https://claimzilla.example/logo.png&#34;,
+        &#34;caption&#34;: &#34;Claimzilla&#34;
+      },
+      &#34;image&#34;: {
+        &#34;@id&#34;: &#34;https://claimzilla.example/#logo&#34;
+      },
+      &#34;areaServed&#34;: {
+        &#34;@type&#34;: &#34;Place&#34;,
+        &#34;name&#34;: &#34;United States&#34;
+      },
+      &#34;sameAs&#34;: [
+        &#34;FILL IN: Wikidata Q-id URL (https://www.wikidata.org/wiki/Q...)&#34;,
+        &#34;FILL IN: LinkedIn company URL&#34;,
+        &#34;FILL IN: Crunchbase URL&#34;
       ]
     },
     {
-      <span class="key">"@type"</span>: <span class="str">"WebSite"</span>,
-      <span class="key">"@id"</span>: <span class="str">"https://claimzilla.example/#website"</span>,
-      <span class="key">"url"</span>: <span class="str">"https://claimzilla.example/"</span>,
-      <span class="key">"name"</span>: <span class="str">"Claimzilla"</span>,
-      <span class="key">"publisher"</span>: { <span class="key">"@id"</span>: <span class="str">"https://claimzilla.example/#organization"</span> }
+      &#34;@context&#34;: &#34;https://schema.org&#34;,
+      &#34;@type&#34;: &#34;WebSite&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/#website&#34;,
+      &#34;url&#34;: &#34;https://claimzilla.example/&#34;,
+      &#34;name&#34;: &#34;Claimzilla&#34;,
+      &#34;description&#34;: &#34;Claimzilla is a U.S.-based digital marketplace that compares personal-line insurance quotes (auto, home, renters, life) from 40+ carriers in under 90 seconds and pairs every quote with a transparent claims-history scorecard for the carrier behind it.&#34;,
+      &#34;publisher&#34;: {
+        &#34;@id&#34;: &#34;https://claimzilla.example/#organization&#34;
+      },
+      &#34;inLanguage&#34;: &#34;en-US&#34;
+    },
+    {
+      &#34;@type&#34;: &#34;WebPage&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/#webpage&#34;,
+      &#34;url&#34;: &#34;https://claimzilla.example/&#34;,
+      &#34;isPartOf&#34;: {
+        &#34;@id&#34;: &#34;https://claimzilla.example/#website&#34;
+      }
     }
   ]
 }
-<span class="com">&lt;/script&gt;</span></pre>
+&lt;/script&gt;</pre>
+      
 
-      <div class="schema-card-head">
-        <h3>/faq &middot; FAQPage (14 Q&amp;A blocks, abbreviated to 3 here)</h3>
-        <button class="copy-pill" type="button" data-copy-target="schema-2">Copy</button>
-      </div>
-      <pre class="schema-block" id="schema-2"><span class="com">&lt;script type=&quot;application/ld+json&quot;&gt;</span>
-{
-  <span class="key">"@context"</span>: <span class="str">"https://schema.org"</span>,
-  <span class="key">"@type"</span>: <span class="str">"FAQPage"</span>,
-  <span class="key">"mainEntity"</span>: [
-    {
-      <span class="key">"@type"</span>: <span class="str">"Question"</span>,
-      <span class="key">"name"</span>: <span class="str">"Is Claimzilla legit for getting auto insurance quotes?"</span>,
-      <span class="key">"acceptedAnswer"</span>: { <span class="key">"@type"</span>: <span class="str">"Answer"</span>, <span class="key">"text"</span>: <span class="str">"Yes. Claimzilla is licensed as a digital insurance producer in all 50 states ..."</span> }
-    },
-    {
-      <span class="key">"@type"</span>: <span class="str">"Question"</span>,
-      <span class="key">"name"</span>: <span class="str">"Does comparing insurance quotes online affect my credit score?"</span>,
-      <span class="key">"acceptedAnswer"</span>: { <span class="key">"@type"</span>: <span class="str">"Answer"</span>, <span class="key">"text"</span>: <span class="str">"No. Quotes pulled through Claimzilla use soft inquiries that do not affect ..."</span> }
-    },
-    <span class="com">// 12 more Q&amp;A blocks; full payload in your downloadable schema-pack.zip</span>
-  ]
-}
-<span class="com">&lt;/script&gt;</span></pre>
-
-      <div class="schema-card-head">
-        <h3>/products/auto-insurance &middot; Service schema</h3>
-        <button class="copy-pill" type="button" data-copy-target="schema-3">Copy</button>
-      </div>
-      <pre class="schema-block" id="schema-3"><span class="com">&lt;script type=&quot;application/ld+json&quot;&gt;</span>
-{
-  <span class="key">"@context"</span>: <span class="str">"https://schema.org"</span>,
-  <span class="key">"@type"</span>: <span class="str">"Service"</span>,
-  <span class="key">"name"</span>: <span class="str">"Auto insurance comparison"</span>,
-  <span class="key">"serviceType"</span>: <span class="str">"Insurance comparison platform"</span>,
-  <span class="key">"provider"</span>: { <span class="key">"@id"</span>: <span class="str">"https://claimzilla.example/#organization"</span> },
-  <span class="key">"areaServed"</span>: { <span class="key">"@type"</span>: <span class="str">"Country"</span>, <span class="key">"name"</span>: <span class="str">"United States"</span> },
-  <span class="key">"audience"</span>: { <span class="key">"@type"</span>: <span class="str">"Audience"</span>, <span class="key">"audienceType"</span>: <span class="str">"Auto insurance shoppers"</span> },
-  <span class="key">"offers"</span>: {
-    <span class="key">"@type"</span>: <span class="str">"AggregateOffer"</span>,
-    <span class="key">"offerCount"</span>: <span class="str">"40+"</span>,
-    <span class="key">"priceCurrency"</span>: <span class="str">"USD"</span>
-  }
-}
-<span class="com">&lt;/script&gt;</span></pre>
-
+      
       <p style="margin-top: 18px; font-size: 13px; color: var(--slate-700);">
-        <strong>22 more priority pages</strong> have per-URL schema recommendations in
-        your downloadable schema-pack.zip. Each row in the zip ships a JSON-LD
+        Per-URL schema recommendations ship in your downloadable
+        <strong>schema-pack.zip</strong>. Each row in the zip is a JSON-LD
         block ready to drop into the page <code>&lt;head&gt;</code>.
       </p>
+      
     </section>
 
     <!-- 06 Prompt Grid -->
@@ -1012,13 +1114,13 @@
         </div>
         <div class="prompt-card">
           <div class="prompt-tag">FAQ schema draft</div>
-          <div class="prompt-q">Convert the 14 Q&amp;A blocks on /faq into Schema.org FAQPage JSON-LD. Output as a single, validated payload. Cite the schema.org spec for the FAQPage type.</div>
+          <div class="prompt-q">Convert the Q and A blocks on /faq into Schema.org FAQPage JSON-LD. Output as a single, validated payload. Cite the schema.org spec for the FAQPage type.</div>
           <div class="prompt-meta">Use during Priority Fix 02.</div>
         </div>
         <div class="prompt-card">
           <div class="prompt-tag">40-word knowledge card</div>
           <div class="prompt-q">Summarize Claimzilla in exactly 40 words for an LLM knowledge card. Lead with the category, then the differentiator, then the geographic scope. No marketing fluff.</div>
-          <div class="prompt-meta">Use to draft KG / Wikipedia summary copy.</div>
+          <div class="prompt-meta">Use to draft Knowledge Graph and Wikipedia summary copy.</div>
         </div>
         <div class="prompt-card">
           <div class="prompt-tag">Heading hierarchy eval</div>
@@ -1029,37 +1131,76 @@
 
       <h2 class="section-head">Post-fix validation prompts</h2>
       <p style="font-size: 13px; color: var(--slate-700); margin-top: 4px; margin-bottom: 14px;">
-        Run these against ChatGPT, Claude, Gemini, and Perplexity 7 to 14 days
-        after each priority fix ships. Capture the answer + cited sources.
-        If Claimzilla appears among the cited sources, the fix worked. If
-        not, iterate and re-validate.
+        These are the buyer questions you submitted at intake, the same set
+        the audit measured against. Run them verbatim against ChatGPT, Claude,
+        Gemini, and Perplexity 7 to 14 days after each priority fix ships;
+        capture the answer plus cited sources. When Claimzilla appears
+        in the cited sources where it previously did not, the fix worked.
       </p>
       <div class="prompt-grid">
-        <div class="prompt-card">
-          <div class="prompt-tag">V1 &middot; Buyer-question coverage</div>
-          <div class="prompt-q">What is the cheapest car insurance for a 2018 Toyota Camry in Texas? Cite 3 sources.</div>
-          <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1).</div>
-        </div>
-        <div class="prompt-card">
-          <div class="prompt-tag">V2 &middot; Brand-recognition</div>
-          <div class="prompt-q">Compare Claimzilla, Insurify, The Zebra, and NerdWallet for getting auto insurance quotes online. Be specific about each company's claims-handling reputation.</div>
-          <div class="prompt-meta">Pass = factual claims about Claimzilla without hallucinations.</div>
-        </div>
-        <div class="prompt-card">
-          <div class="prompt-tag">V3 &middot; FAQ-rich-result lift</div>
-          <div class="prompt-q">Does comparing insurance quotes online affect my credit score? Cite 2 sources.</div>
-          <div class="prompt-meta">After Priority Fix 02 (FAQPage). Pass = Claimzilla in cited sources.</div>
-        </div>
-        <div class="prompt-card">
-          <div class="prompt-tag">V4 &middot; Knowledge Graph lift</div>
-          <div class="prompt-q">Tell me about Claimzilla in 100 words. Include founding year, headquarters, business model, and total carriers in network.</div>
-          <div class="prompt-meta">After Priority Fix 04 (KG update). Pass = LLM correctly states 2019 founding, Austin TX, 40+ carriers.</div>
-        </div>
-        <div class="prompt-card">
-          <div class="prompt-tag">V5 &middot; AIO appearance</div>
-          <div class="prompt-q">Open Google in an incognito window. Search: "is claimzilla legit for car insurance quotes". Note whether the AI Overview appears and which 3 sources it cites.</div>
-          <div class="prompt-meta">After Priority Fix 03 (answer-first content). Pass = Claimzilla in the AIO.</div>
-        </div>
+        
+          
+          <div class="prompt-card">
+            <div class="prompt-tag">V1 &middot; Buyer question</div>
+            <div class="prompt-q">What is the cheapest car insurance for a 2018 Toyota Camry in Texas?</div>
+            <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+          </div>
+          
+          <div class="prompt-card">
+            <div class="prompt-tag">V2 &middot; Buyer question</div>
+            <div class="prompt-q">How do I compare home insurance quotes for a 2,400 square foot house in Florida?</div>
+            <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+          </div>
+          
+          <div class="prompt-card">
+            <div class="prompt-tag">V3 &middot; Buyer question</div>
+            <div class="prompt-q">Which auto insurance carriers handle claims fastest after a not-at-fault accident?</div>
+            <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+          </div>
+          
+          <div class="prompt-card">
+            <div class="prompt-tag">V4 &middot; Buyer question</div>
+            <div class="prompt-q">Is Claimzilla legit for getting auto insurance quotes?</div>
+            <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+          </div>
+          
+          <div class="prompt-card">
+            <div class="prompt-tag">V5 &middot; Buyer question</div>
+            <div class="prompt-q">Does comparing insurance quotes online affect my credit score?</div>
+            <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+          </div>
+          
+          <div class="prompt-card">
+            <div class="prompt-tag">V6 &middot; Buyer question</div>
+            <div class="prompt-q">What&#39;s the difference between Claimzilla and The Zebra for car insurance?</div>
+            <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+          </div>
+          
+          <div class="prompt-card">
+            <div class="prompt-tag">V7 &middot; Buyer question</div>
+            <div class="prompt-q">How accurate are the home insurance quotes from comparison sites?</div>
+            <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+          </div>
+          
+          <div class="prompt-card">
+            <div class="prompt-tag">V8 &middot; Buyer question</div>
+            <div class="prompt-q">Which insurance comparison sites work in California?</div>
+            <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+          </div>
+          
+          <div class="prompt-card">
+            <div class="prompt-tag">V9 &middot; Buyer question</div>
+            <div class="prompt-q">What renters insurance does Claimzilla recommend for $20 per month?</div>
+            <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+          </div>
+          
+          <div class="prompt-card">
+            <div class="prompt-tag">V10 &middot; Buyer question</div>
+            <div class="prompt-q">How does Claimzilla make money if quotes are free?</div>
+            <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+          </div>
+          
+        
       </div>
     </section>
 
@@ -1069,7 +1210,7 @@
       <h1 class="pb-title">Glossary, free validation tools, and FAQ.</h1>
       <p class="pb-lede">
         Twenty terms that recur in the audit, eight free validation tools
-        for post-fix verification, and seven FAQ entries answering the
+        for post-fix verification, and six FAQ entries answering the
         most-asked operator questions.
       </p>
 
@@ -1082,7 +1223,7 @@
       <div class="tools-grid">
         <div class="tool-card">
           <h4>Google Rich Results Test</h4>
-          <p>Validate JSON-LD structured data and confirm rich-result eligibility (FAQ, Article, Organization, etc.) before you ship.</p>
+          <p>Validate JSON-LD (JavaScript Object Notation for Linked Data) structured data and confirm rich-result eligibility before you ship.</p>
           <a href="https://search.google.com/test/rich-results" target="_blank" rel="noopener">search.google.com/test/rich-results</a>
         </div>
         <div class="tool-card">
@@ -1092,17 +1233,17 @@
         </div>
         <div class="tool-card">
           <h4>PageSpeed Insights</h4>
-          <p>Google's Lighthouse-based perf + SEO audit. Use for Core Web Vitals + on-page SEO score.</p>
+          <p>Google's Lighthouse-based perf and SEO (Search Engine Optimization) audit. Use for Core Web Vitals plus on-page SEO score.</p>
           <a href="https://pagespeed.web.dev/" target="_blank" rel="noopener">pagespeed.web.dev</a>
         </div>
         <div class="tool-card">
           <h4>OpenGraph.xyz</h4>
-          <p>Preview your Open Graph + Twitter Card render across Facebook, LinkedIn, Slack, iMessage, X.</p>
+          <p>Preview your Open Graph and Twitter Card render across Facebook, LinkedIn, Slack, iMessage, X.</p>
           <a href="https://www.opengraph.xyz/" target="_blank" rel="noopener">opengraph.xyz</a>
         </div>
         <div class="tool-card">
           <h4>LinkedIn Post Inspector</h4>
-          <p>Force-refresh LinkedIn's OG cache after fixing share-card metadata.</p>
+          <p>Force-refresh LinkedIn's Open Graph cache after fixing share-card metadata.</p>
           <a href="https://www.linkedin.com/post-inspector/" target="_blank" rel="noopener">linkedin.com/post-inspector</a>
         </div>
         <div class="tool-card">
@@ -1112,12 +1253,12 @@
         </div>
         <div class="tool-card">
           <h4>Wikidata Query Service</h4>
-          <p>Verify your Wikidata Q-ID claims via SPARQL after edits propagate (typically 5 to 30 minutes).</p>
+          <p>Verify your Wikidata Q-ID claims via SPARQL (SPARQL Protocol and Resource Description Framework Query Language) after edits propagate.</p>
           <a href="https://query.wikidata.org/" target="_blank" rel="noopener">query.wikidata.org</a>
         </div>
         <div class="tool-card">
           <h4>Google Knowledge Graph API explorer</h4>
-          <p>Query your KG entry to confirm sameAs and claim updates have absorbed.</p>
+          <p>Query your Knowledge Graph entry to confirm sameAs and claim updates have absorbed.</p>
           <a href="https://developers.google.com/knowledge-graph" target="_blank" rel="noopener">developers.google.com/knowledge-graph</a>
         </div>
       </div>
@@ -1132,97 +1273,97 @@
         <li class="resource-row">
           <span class="resource-term">SEO</span>
           <span class="resource-def">Search Engine Optimization. Classical practice of ranking organic results in Google + Bing search engine results pages.</span>
-          <span class="resource-tag">Tab 03</span>
+          <span class="resource-tag">Section 03</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">AEO</span>
           <span class="resource-def">Answer Engine Optimization. Optimizing for direct-answer surfaces like Google's AI Overview, Bing Copilot, and zero-click search results.</span>
-          <span class="resource-tag">Tab 03</span>
+          <span class="resource-tag">Section 03</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">GEO</span>
           <span class="resource-def">Generative Engine Optimization. Optimizing for being cited by name when an LLM (ChatGPT, Claude, Gemini, Perplexity) generates an answer to a buyer's question.</span>
-          <span class="resource-tag">Tab 03</span>
+          <span class="resource-tag">Section 03</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">AIO</span>
           <span class="resource-def">Google AI Overview: the multi-source summary that appears above organic results in Google Search. Highest-conversion answer slot in Google today.</span>
-          <span class="resource-tag">Tab 04</span>
+          <span class="resource-tag">Section 04</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">FAQPage schema</span>
-          <span class="resource-def">Schema.org type marking Q&amp;A content as structured data. Eligible for FAQ rich-result + AIO inclusion. One of the highest-leverage schemas to ship.</span>
-          <span class="resource-tag">Tab 05</span>
+          <span class="resource-def">Schema.org type marking Q and A content as structured data. Eligible for FAQ rich-result + AIO inclusion. One of the highest-leverage schemas to ship.</span>
+          <span class="resource-tag">Section 05</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">JSON-LD</span>
           <span class="resource-def">JavaScript Object Notation for Linked Data. The structured-data syntax Google + Bing prefer; lives in a <code>&lt;script type="application/ld+json"&gt;</code> tag in the page <code>&lt;head&gt;</code>.</span>
-          <span class="resource-tag">Tab 05</span>
+          <span class="resource-tag">Section 05</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">Schema.org</span>
           <span class="resource-def">Multi-vendor consortium-maintained vocabulary for structured data on the web. Defines types like Organization, WebSite, Service, Article, FAQPage, etc.</span>
-          <span class="resource-tag">Tab 05</span>
+          <span class="resource-tag">Section 05</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">llms.txt</span>
           <span class="resource-def">Public spec for telling LLM crawlers which URLs to prioritize. One URL per line at the site root. Honored by Anthropic, Perplexity, OpenAI's GPTBot.</span>
-          <span class="resource-tag">Tab 04</span>
+          <span class="resource-tag">Section 04</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">Knowledge Graph</span>
           <span class="resource-def">Google's structured database of entities (companies, people, places). Appears as the right-rail Knowledge Panel for branded queries; feeds Gemini's grounding.</span>
-          <span class="resource-tag">Tab 03</span>
+          <span class="resource-tag">Section 03</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">Wikidata Q-ID</span>
           <span class="resource-def">Stable identifier (e.g., Q12399847) tying a brand to typed claims in Wikidata. Strongest entity-graph signal for Anthropic Claude.</span>
-          <span class="resource-tag">Tab 03</span>
+          <span class="resource-tag">Section 03</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">Citation share</span>
           <span class="resource-def">Percent of buyer-question prompts where at least one of the four LLM engines names your domain in the answer.</span>
-          <span class="resource-tag">Tab 01</span>
+          <span class="resource-tag">Section 01</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">Leader share</span>
           <span class="resource-def">The same metric for the highest-cited competitor in your benchmark set. Usually one of the 2 to 4 competitors named at intake.</span>
-          <span class="resource-tag">Tab 01</span>
+          <span class="resource-tag">Section 01</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">BreadcrumbList</span>
           <span class="resource-def">Schema.org type that marks page hierarchy (Home &raquo; Category &raquo; Page) so Google can show breadcrumbs in search results and feed them to LLMs.</span>
-          <span class="resource-tag">Tab 05</span>
+          <span class="resource-tag">Section 05</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">Open Graph</span>
           <span class="resource-def">Facebook-originated meta-tag spec controlling how a URL renders when shared on social platforms. Now adopted across LinkedIn, Slack, iMessage, X, Discord.</span>
-          <span class="resource-tag">Tab 03</span>
+          <span class="resource-tag">Section 03</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">Twitter Card</span>
           <span class="resource-def">X-specific share-preview meta tags. Augments Open Graph; <code>summary_large_image</code> is the default modern type.</span>
-          <span class="resource-tag">Tab 03</span>
+          <span class="resource-tag">Section 03</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">CWV (Core Web Vitals)</span>
           <span class="resource-def">Google's three perceived-performance metrics: LCP (Largest Contentful Paint), INP (Interaction to Next Paint), CLS (Cumulative Layout Shift). Affects both ranking and perceived quality.</span>
-          <span class="resource-tag">Tab 03</span>
+          <span class="resource-tag">Section 03</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">SERP</span>
           <span class="resource-def">Search Engine Results Page. The page Google or Bing returns for a query; mix of organic, AIO, ads, knowledge panels, image carousels.</span>
-          <span class="resource-tag">Tab 03</span>
+          <span class="resource-tag">Section 03</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">Severity ladder</span>
           <span class="resource-def">High (failing signal that directly blocks citation), Medium (partial signal that reduces probability), Clean (signal present and well-formed), Info (observation, not scored).</span>
-          <span class="resource-tag">Tab 02</span>
+          <span class="resource-tag">Section 02</span>
         </li>
         <li class="resource-row">
           <span class="resource-term">Buyer question</span>
           <span class="resource-def">A real question your prospects ask LLMs (e.g., "What is the cheapest car insurance for X?"). Audit measures how often each LLM names your domain across the buyer-question grid.</span>
-          <span class="resource-tag">Tab 01</span>
+          <span class="resource-tag">Section 01</span>
         </li>
       </ul>
 
@@ -1242,7 +1383,7 @@
         </details>
         <details>
           <summary>What's the difference between Pulse, SXO Audit, and Enterprise tiers?</summary>
-          <p>Pulse ($1500): per-page schema pack + PDF, 10 URLs audited, 3-business-day delivery. SXO Audit ($5000): adds the full Playbook, 25 URLs, 5-business-day delivery. Enterprise ($12,500): 1 to 3 brands at SXO Audit depth + a Portfolio Playbook tying the brand findings together, 10-business-day delivery.</p>
+          <p>Pulse ($1,500): per-page schema pack + PDF, 10 URLs audited, 3-business-day delivery. SXO Audit ($5,000): adds the full Playbook, 25 URLs, 5-business-day delivery. Enterprise ($12,500): 1 to 3 brands at SXO Audit depth + a Portfolio Playbook tying the brand findings together, 10-business-day delivery.</p>
         </details>
         <details>
           <summary>Why JSON-LD instead of microdata or RDFa?</summary>
@@ -1250,7 +1391,7 @@
         </details>
         <details>
           <summary>How do I know if my fixes actually moved the needle?</summary>
-          <p>Run the 5 validation prompts in Tab 06 against ChatGPT, Claude, Gemini, and Perplexity 7 to 14 days after each fix ships. Record which engines cite Claimzilla (or your brand). When 3 of 4 engines cite you on a buyer-question prompt where they previously didn't, that's a confirmed lift. For a quantified, full-grid measurement (and an updated priority stack), a re-audit is the cleanest path; <a href="https://web-cited.com/contact.html" target="_blank" rel="noopener">email us</a> to scope one.</p>
+          <p>Run the 5 validation prompts in Section 06 against ChatGPT, Claude, Gemini, and Perplexity 7 to 14 days after each fix ships. Record which engines cite Claimzilla (or your brand). When 3 of 4 engines cite you on a buyer-question prompt where they previously didn't, that's a confirmed lift. For a quantified, full-grid measurement (and an updated priority stack), a re-audit is the cleanest path; <a href="https://web-cited.com/contact.html" target="_blank" rel="noopener">email us</a> to scope one.</p>
         </details>
       </div>
     </section>
@@ -1258,8 +1399,8 @@
 
   <!-- Footer + toast + clipboard JS -->
   <footer class="pb-foot">
-    <div>Slug: 2-9847-****-****-4271 &middot; Delivered 2026-04-27 &middot; Available through 2027-04-27</div>
-    <div><a href="claimzilla-sxo-audit.pdf">Download PDF</a> &middot; <a href="https://web-cited.com/start" target="_blank" rel="noopener">Start a new audit</a></div>
+    <div>Slug: claimzilla &middot; Delivered 2026-04-27 &middot; Available through 2027-04-27</div>
+    <div><a href="https://web-cited.com/start" target="_blank" rel="noopener">Start a new audit</a></div>
   </footer>
 
   <div class="pb-toast" id="pb-toast" role="status" aria-live="polite">Copied to clipboard</div>
@@ -1275,6 +1416,22 @@
       if (toastTimer) clearTimeout(toastTimer);
       toastTimer = setTimeout(function () { toast.classList.remove('is-visible'); }, 1600);
     }
+    // Whole-scorecard-row click jumps to the matching All Checks library card.
+    document.addEventListener('click', function (e) {
+      var row = e.target.closest && e.target.closest('.scorecard-row-link');
+      if (!row) return;
+      // If the click target is already the inline <a>, let the browser handle
+      // it natively so right-click + open-in-new-tab still works.
+      if (e.target.tagName === 'A') return;
+      var jump = row.getAttribute('data-jump');
+      if (!jump) return;
+      var dest = document.querySelector(jump);
+      if (dest && dest.scrollIntoView) {
+        dest.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        location.hash = jump;
+      }
+    });
     document.addEventListener('click', function (e) {
       var btn = e.target.closest && e.target.closest('[data-copy-target]');
       if (!btn) return;
@@ -1282,7 +1439,6 @@
       var src = document.getElementById(id);
       if (!src) { showToast('Copy target missing'); return; }
       var text = src.textContent || src.innerText || '';
-      // Pre tags often have leading/trailing whitespace from indentation; trim.
       text = text.replace(/^\s+|\s+$/g, '');
       var done = function () {
         var prev = btn.textContent;
@@ -1298,7 +1454,6 @@
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(done).catch(fail);
       } else {
-        // Fallback: select + execCommand for older browsers.
         try {
           var ta = document.createElement('textarea');
           ta.value = text;
