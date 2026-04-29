@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Item CC mockup: prompt-set version footer (Playbook Section 06)</title>
+<style>
+  /* ===== Mockup framing (NOT canonical) ===== */
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #ededea;
+    color: #000;
+    margin: 0;
+    padding: 32px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .mockup-h1 {
+    font-size: 24px; font-weight: 900; letter-spacing: -0.5px;
+    margin: 0 0 24px;
+    border-bottom: 3px solid #000; padding-bottom: 12px;
+  }
+  .mockup-h2 {
+    font-size: 18px; font-weight: 800; letter-spacing: -0.2px;
+    margin: 40px 0 12px;
+  }
+  .mockup-h3 {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
+    margin: 24px 0 8px;
+  }
+  .mockup-tag { font-size: 12px; color: #5a5a5a; margin: 0 0 12px; max-width: 720px; }
+  .mockup-pill { display: inline-block; padding: 2px 8px; font-size: 10px; font-weight: 800;
+    letter-spacing: 0.6px; text-transform: uppercase; border: 1px solid #000; margin-right: 6px; }
+  .mockup-pill.current { background: #fff; color: #000; }
+  .mockup-pill.proposed { background: #cc0000; color: #fff; border-color: #cc0000; }
+  .mockup-pill.a { background: #2a7d31; color: #fff; border-color: #2a7d31; }
+  .mockup-pill.b { background: #b07b00; color: #fff; border-color: #b07b00; }
+  .mockup-pill.c { background: #5a5a5a; color: #fff; border-color: #5a5a5a; }
+  .mockup-note {
+    background: #fff8e0; border-left: 4px solid #b07b00;
+    padding: 10px 14px; margin: 12px 0 24px; font-size: 13px; max-width: 800px;
+  }
+  .surface-card {
+    margin: 12px 0 24px;
+    border: 1.5px dashed #5a5a5a;
+    padding: 16px;
+    background: #f4f3ef;
+  }
+  .surface-card .surface-card-label {
+    font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase;
+    color: #5a5a5a; margin-bottom: 12px;
+  }
+
+  /* ===== Canonical Playbook tokens (verbatim from
+     web-cited/docs/sample/playbook-claimzilla.html lines 10-30 + 93-99 +
+     348-362 + 388-389) ===== */
+  .pb-scope {
+    --ink: #000000;
+    --paper: #f4f3ef;
+    --paper-white: #ffffff;
+    --accent: #cc0000;
+    --slate-700: #5a5a5a;
+    --rule: 1.5px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 24px 32px;
+  }
+  .pb-scope .pb-section {
+    display: block; padding-top: 16px; padding-bottom: 36px;
+    border-bottom: 1px solid #e1e0d8;
+  }
+  .pb-scope .pb-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.6px;
+    text-transform: uppercase; color: var(--slate-700);
+    margin-bottom: 8px;
+  }
+  .pb-scope .pb-title {
+    font-size: 38px; font-weight: 900; letter-spacing: -0.5px;
+    margin: 0 0 8px; line-height: 1.1;
+  }
+  .pb-scope .pb-lede {
+    font-size: 18px; max-width: 780px; color: var(--ink); margin-bottom: 28px;
+  }
+  .pb-scope .section-head {
+    font-size: 22px; font-weight: 800; letter-spacing: -0.2px;
+    margin: 24px 0 14px;
+  }
+  .pb-scope .prompt-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+  }
+  .pb-scope .prompt-card {
+    border: var(--rule); background: var(--paper-white); padding: 14px 16px;
+  }
+  .pb-scope .prompt-tag {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.5px;
+    text-transform: uppercase; color: var(--slate-700); margin-bottom: 8px;
+  }
+  .pb-scope .prompt-q {
+    font-size: 15px; font-weight: 700; line-height: 1.4;
+  }
+  .pb-scope .prompt-q:before { content: "\201c"; color: var(--accent); margin-right: 4px; }
+  .pb-scope .prompt-q:after  { content: "\201d"; color: var(--accent); margin-left: 2px; }
+  .pb-scope .prompt-meta {
+    font-size: 12px; color: var(--slate-700); margin-top: 10px;
+  }
+
+  /* Item CC mockup additions (proposed). Three placement variants for
+     the prompt-set version footer line. All use canonical slate-700 +
+     11px font + 0.4px letter-spacing matching the .pb-eyebrow rhythm. */
+  .pb-scope .prompt-set-footer {
+    margin-top: 26px;
+    padding-top: 14px;
+    border-top: 1px solid #e1e0d8;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: var(--slate-700);
+    text-transform: uppercase;
+  }
+  .pb-scope .prompt-set-footer .label-strong { color: var(--ink); }
+
+  /* Variant B: subtle, lowercase, no border. */
+  .pb-scope .prompt-set-footer-quiet {
+    margin-top: 22px;
+    font-size: 12px;
+    color: var(--slate-700);
+  }
+
+  /* Variant C: chip-style, highest visibility. */
+  .pb-scope .prompt-set-chip {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 4px 10px;
+    border: 1px solid var(--ink);
+    background: var(--paper-white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<h1 class="mockup-h1">Item CC: prompt-set version footer (Playbook Section 06)</h1>
+
+<div class="mockup-note">
+  <strong>Context.</strong> Item CC stores an immutable
+  <code>prompt_set.json</code> per engagement in R2 alongside the existing
+  audit artifacts (PDF, Playbook, schema-pack zip,
+  <code>raw_responses.jsonl</code>). The Playbook surfaces a small footer
+  line on Section 06 (Prompt Grid) tagging the version used by this audit:
+  "Prompt set v1, frozen 2026-04-29 (default set; see /resources for
+  change log)". Three variants below; same content, different
+  placements + emphasis. Spec at
+  <code>web-cited-pipeline/docs/superpowers/specs/2026-04-29-item-cc-brainstorm-prep.md</code>.
+</div>
+
+<p class="mockup-tag">
+  Variants are byte-faithful to canonical <code>playbook-claimzilla.html</code>
+  tokens (verbatim ink / paper / accent / slate-700 + Helvetica + 1.5px
+  rules). Only the new lines below are CC additions; everything else
+  reproduces the canonical Section 06 structure.
+</p>
+
+<h2 class="mockup-h2">Section 06 Prompt Grid (canonical preview, last few cards + footer area)</h2>
+
+<h3 class="mockup-h3"><span class="mockup-pill current">Canonical / current state</span> (no version footer)</h3>
+<div class="surface-card">
+  <div class="surface-card-label">Playbook Section 06, last validation card + section closure (current)</div>
+  <div class="pb-scope">
+    <section class="pb-section">
+      <div class="pb-eyebrow">Section 06 &middot; Prompt Grid</div>
+      <h1 class="pb-title">Run these prompts against your own pages.</h1>
+
+      <h2 class="section-head">Post-fix validation prompts</h2>
+      <div class="prompt-grid">
+        <div class="prompt-card">
+          <div class="prompt-tag">V1 &middot; Buyer question</div>
+          <div class="prompt-q">What is the cheapest car insurance for a 2018 Toyota Camry in Texas?</div>
+          <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-tag">V2 &middot; Buyer question</div>
+          <div class="prompt-q">How do I compare home insurance quotes for a 2,400 square foot house in Florida?</div>
+          <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<h3 class="mockup-h3"><span class="mockup-pill proposed">Proposed</span> <span class="mockup-pill a">Variant A (recommended)</span> Eyebrow-styled footer line above section closure</h3>
+<p class="mockup-tag">
+  Slate-700 11px 700-weight 0.4px tracking, uppercase. 1px hairline rule
+  on top, 14px padding-top. Mirrors <code>.pb-eyebrow</code> rhythm so the
+  line reads as quiet metadata, not as a prompt card. Bolds the version
+  label only.
+</p>
+<div class="surface-card">
+  <div class="surface-card-label">Playbook Section 06, Variant A</div>
+  <div class="pb-scope">
+    <section class="pb-section">
+      <div class="pb-eyebrow">Section 06 &middot; Prompt Grid</div>
+      <h1 class="pb-title">Run these prompts against your own pages.</h1>
+
+      <h2 class="section-head">Post-fix validation prompts</h2>
+      <div class="prompt-grid">
+        <div class="prompt-card">
+          <div class="prompt-tag">V1 &middot; Buyer question</div>
+          <div class="prompt-q">What is the cheapest car insurance for a 2018 Toyota Camry in Texas?</div>
+          <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-tag">V2 &middot; Buyer question</div>
+          <div class="prompt-q">How do I compare home insurance quotes for a 2,400 square foot house in Florida?</div>
+          <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+        </div>
+      </div>
+
+      <div class="prompt-set-footer">
+        <span class="label-strong">Prompt set v1</span> &middot; frozen 2026-04-29 &middot; default set (see Section 07 Resources for change log)
+      </div>
+    </section>
+  </div>
+</div>
+
+<h3 class="mockup-h3"><span class="mockup-pill proposed">Proposed</span> <span class="mockup-pill b">Variant B</span> Quiet sentence-case caption</h3>
+<p class="mockup-tag">
+  Slate-700 12px regular, no border, no uppercase. Reads like a tagline
+  rather than metadata. Lower visibility; loses the "this is a stable
+  contract" feel.
+</p>
+<div class="surface-card">
+  <div class="surface-card-label">Playbook Section 06, Variant B</div>
+  <div class="pb-scope">
+    <section class="pb-section">
+      <div class="pb-eyebrow">Section 06 &middot; Prompt Grid</div>
+      <h1 class="pb-title">Run these prompts against your own pages.</h1>
+
+      <h2 class="section-head">Post-fix validation prompts</h2>
+      <div class="prompt-grid">
+        <div class="prompt-card">
+          <div class="prompt-tag">V1 &middot; Buyer question</div>
+          <div class="prompt-q">What is the cheapest car insurance for a 2018 Toyota Camry in Texas?</div>
+          <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-tag">V2 &middot; Buyer question</div>
+          <div class="prompt-q">How do I compare home insurance quotes for a 2,400 square foot house in Florida?</div>
+          <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+        </div>
+      </div>
+
+      <div class="prompt-set-footer-quiet">
+        Prompt set v1, frozen 2026-04-29 (default set; change log in Section 07).
+      </div>
+    </section>
+  </div>
+</div>
+
+<h3 class="mockup-h3"><span class="mockup-pill proposed">Proposed</span> <span class="mockup-pill c">Variant C</span> Chip-style emphasis</h3>
+<p class="mockup-tag">
+  Black 1px border, paper-white background, inline chip. Reads like a
+  badge ("this audit ran prompt set v1"). Highest visibility; risks
+  competing with the prompt cards above.
+</p>
+<div class="surface-card">
+  <div class="surface-card-label">Playbook Section 06, Variant C</div>
+  <div class="pb-scope">
+    <section class="pb-section">
+      <div class="pb-eyebrow">Section 06 &middot; Prompt Grid</div>
+      <h1 class="pb-title">Run these prompts against your own pages.</h1>
+
+      <h2 class="section-head">Post-fix validation prompts</h2>
+      <div class="prompt-grid">
+        <div class="prompt-card">
+          <div class="prompt-tag">V1 &middot; Buyer question</div>
+          <div class="prompt-q">What is the cheapest car insurance for a 2018 Toyota Camry in Texas?</div>
+          <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-tag">V2 &middot; Buyer question</div>
+          <div class="prompt-q">How do I compare home insurance quotes for a 2,400 square foot house in Florida?</div>
+          <div class="prompt-meta">Run against all 4 LLMs. Pass = Claimzilla cited by 2+ engines (was 1 or 0).</div>
+        </div>
+      </div>
+
+      <span class="prompt-set-chip">Prompt set v1 &middot; frozen 2026-04-29</span>
+    </section>
+  </div>
+</div>
+
+<h2 class="mockup-h2">Recommendation</h2>
+<p>
+  <strong>Variant A.</strong> Mirrors the existing <code>.pb-eyebrow</code>
+  rhythm (slate-700, uppercase, 0.4px tracking) so the footer reads as
+  natural section metadata, not as a new design element. The
+  &ldquo;Prompt set v1&rdquo; label is bolded to ink-black so customers
+  scanning the section see the version at a glance; the date and label
+  fall back to slate-700.
+</p>
+
+<p>
+  PDF Section 2 surface (out of scope for this mockup; recommended Variant
+  A pattern but in PDF Helvetica 10px 700-weight slate-700 caption inline
+  with the existing per-engine KPI strip lede).
+</p>
+
+<h2 class="mockup-h2">Operator decision questions</h2>
+<ol>
+  <li>Variant pick: A. eyebrow-styled (recommended), B. quiet caption, C. chip badge?</li>
+  <li>Bold the version label only (e.g., "Prompt set v1") or bold version + date ("v1 frozen 2026-04-29")?</li>
+  <li>Section 07 Resources change log: ship as a placeholder ("change log: not yet started") or wire it in the same PR?</li>
+  <li>PDF mirror: ship a Section 2 lede caption alongside this Playbook footer in the same PR, or defer the PDF surface to a follow-up?</li>
+</ol>
+</body>
+</html>
