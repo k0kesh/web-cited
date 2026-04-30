@@ -1022,7 +1022,7 @@
 
       
       <div class="schema-card-head">
-        <h3>Homepage  /  Organization + WebSite + WebPage (combined @graph)</h3>
+        <h3>Homepage  /  Organization + WebSite + Service + WebPage (combined @graph)</h3>
         <button class="copy-pill" type="button" data-copy-target="schema-1">Copy</button>
       </div>
       <pre class="schema-block" id="schema-1">&lt;script type=&#34;application/ld+json&#34;&gt;
@@ -1036,24 +1036,10 @@
       &#34;name&#34;: &#34;Claimzilla&#34;,
       &#34;url&#34;: &#34;https://claimzilla.example&#34;,
       &#34;description&#34;: &#34;Claimzilla is a U.S.-based digital marketplace that compares personal-line insurance quotes (auto, home, renters, life) from 40+ carriers in under 90 seconds and pairs every quote with a transparent claims-history scorecard for the carrier behind it.&#34;,
-      &#34;logo&#34;: {
-        &#34;@type&#34;: &#34;ImageObject&#34;,
-        &#34;@id&#34;: &#34;https://claimzilla.example/#logo&#34;,
-        &#34;url&#34;: &#34;https://claimzilla.example/logo.png&#34;,
-        &#34;caption&#34;: &#34;Claimzilla&#34;
-      },
-      &#34;image&#34;: {
-        &#34;@id&#34;: &#34;https://claimzilla.example/#logo&#34;
-      },
       &#34;areaServed&#34;: {
         &#34;@type&#34;: &#34;Place&#34;,
         &#34;name&#34;: &#34;United States&#34;
-      },
-      &#34;sameAs&#34;: [
-        &#34;FILL IN: Wikidata Q-id URL (https://www.wikidata.org/wiki/Q...)&#34;,
-        &#34;FILL IN: LinkedIn company URL&#34;,
-        &#34;FILL IN: Crunchbase URL&#34;
-      ]
+      }
     },
     {
       &#34;@context&#34;: &#34;https://schema.org&#34;,
@@ -1061,11 +1047,24 @@
       &#34;@id&#34;: &#34;https://claimzilla.example/#website&#34;,
       &#34;url&#34;: &#34;https://claimzilla.example/&#34;,
       &#34;name&#34;: &#34;Claimzilla&#34;,
-      &#34;description&#34;: &#34;Claimzilla is a U.S.-based digital marketplace that compares personal-line insurance quotes (auto, home, renters, life) from 40+ carriers in under 90 seconds and pairs every quote with a transparent claims-history scorecard for the carrier behind it.&#34;,
       &#34;publisher&#34;: {
         &#34;@id&#34;: &#34;https://claimzilla.example/#organization&#34;
       },
-      &#34;inLanguage&#34;: &#34;en-US&#34;
+      &#34;inLanguage&#34;: &#34;en-US&#34;,
+      &#34;description&#34;: &#34;Claimzilla is a U.S.-based digital marketplace that compares personal-line insurance quotes (auto, home, renters, life) from 40+ carriers in under 90 seconds and pairs every quote with a transparent claims-history scorecard for the carrier behind it.&#34;
+    },
+    {
+      &#34;@type&#34;: &#34;Service&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/#service&#34;,
+      &#34;provider&#34;: {
+        &#34;@id&#34;: &#34;https://claimzilla.example/#organization&#34;
+      },
+      &#34;areaServed&#34;: {
+        &#34;@type&#34;: &#34;Place&#34;,
+        &#34;name&#34;: &#34;United States&#34;
+      },
+      &#34;description&#34;: &#34;Claimzilla is a U.S.-based digital marketplace that compares personal-line insurance quotes (auto, home, renters, life) from 40+ carriers in under 90 seconds and pairs every quote with a transparent claims-history scorecard for the carrier behind it.&#34;,
+      &#34;name&#34;: &#34;Claimzilla&#34;
     },
     {
       &#34;@type&#34;: &#34;WebPage&#34;,
@@ -1073,7 +1072,9 @@
       &#34;url&#34;: &#34;https://claimzilla.example/&#34;,
       &#34;isPartOf&#34;: {
         &#34;@id&#34;: &#34;https://claimzilla.example/#website&#34;
-      }
+      },
+      &#34;name&#34;: &#34;Claimzilla&#34;,
+      &#34;inLanguage&#34;: &#34;en-US&#34;
     }
   ]
 }
@@ -1383,7 +1384,7 @@
         </details>
         <details>
           <summary>What's the difference between Pulse, SXO Audit, and Enterprise tiers?</summary>
-          <p>Pulse ($1,500): per-page schema pack + PDF, 10 URLs audited, 3-business-day delivery. SXO Audit ($5,000): adds the full Playbook, 25 URLs, 5-business-day delivery. Enterprise ($12,500): 1 to 3 brands at SXO Audit depth + a Portfolio Playbook tying the brand findings together, 10-business-day delivery.</p>
+          <p>Pulse ($1,500): per-page schema pack + PDF, 10 URLs and 10 buyer questions, 3-business-day delivery. SXO Audit ($5,000): adds the full Playbook, 25 URLs and 25 buyer questions, 5-business-day delivery. Enterprise ($12,500): 1 to 3 brands at SXO Audit depth (25 URLs and 25 buyer questions per brand) plus a Portfolio Playbook tying the findings together, 10-business-day delivery.</p>
         </details>
         <details>
           <summary>Why JSON-LD instead of microdata or RDFa?</summary>
