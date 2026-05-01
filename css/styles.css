@@ -1888,3 +1888,236 @@ details.faq__item p {
   color: var(--accent, #CC0000);
 }
 .add-brand-btn[hidden] { display: none; }
+
+/* ---------- Pricing matrix (Variant A, 2026-05-01) ----------------- */
+/* Replaces the 3-card .pricing layout on /pricing.html. Single feature
+   matrix; tier diff = scope volume + Playbook deliverable + Enterprise
+   multi-brand. Aligned with the post-unify pipeline (PR #60 + #51,
+   2026-05-01) where all tiers share one Audit Report PDF design. */
+.pmatrix-intro {
+  margin: 0 0 1.25rem;
+  max-width: 780px;
+}
+.pmatrix {
+  border: var(--rule-thick);
+  background: var(--paper-white);
+  margin-top: 0.5rem;
+  width: 100%;
+  overflow-x: auto;
+}
+.pmatrix table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  min-width: 720px;
+}
+.pmatrix thead th {
+  text-align: left;
+  vertical-align: top;
+  padding: 1rem 0.875rem;
+  background: var(--paper);
+  border-bottom: var(--rule-thick);
+}
+.pmatrix .pmatrix-th-feature { width: 34%; }
+.pmatrix .pmatrix-th-tier { width: 22%; }
+.pmatrix .pmatrix-tag {
+  display: inline-block;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--slate-600);
+  margin-bottom: 0.375rem;
+}
+.pmatrix .pmatrix-feature-note {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--slate-700);
+  font-weight: 600;
+  line-height: 1.4;
+}
+.pmatrix thead h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.0625rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.pmatrix .pmatrix-price {
+  font-size: 1.625rem;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+.pmatrix .pmatrix-price sup {
+  font-size: 0.55em;
+  vertical-align: top;
+  margin-right: 0.05em;
+  font-weight: 700;
+}
+.pmatrix .pmatrix-th-tier--featured {
+  background: var(--paper-white);
+  border-top: 5px solid var(--accent);
+}
+.pmatrix .pmatrix-th-tier--featured .pmatrix-tag {
+  color: var(--accent);
+  font-weight: 800;
+}
+.pmatrix .pmatrix-most-pick {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 800;
+  margin-bottom: 0.375rem;
+}
+.pmatrix tbody .pmatrix-row-band td {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+  padding: 0.5rem 0.875rem;
+}
+.pmatrix tbody td {
+  padding: 0.75rem 0.875rem;
+  vertical-align: top;
+  border-bottom: 1px solid var(--slate-200);
+  font-size: 0.8125rem;
+}
+.pmatrix .pmatrix-feature {
+  font-weight: 700;
+  color: var(--ink);
+}
+.pmatrix .pmatrix-cell {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  color: var(--ink);
+}
+.pmatrix .pmatrix-cell--featured { background: rgba(204, 0, 0, 0.04); }
+.pmatrix .pmatrix-yes { color: #2a7d31; font-weight: 800; }
+.pmatrix .pmatrix-no { color: var(--slate-500); }
+.pmatrix .pmatrix-num { font-weight: 800; }
+.pmatrix .pmatrix-note {
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--slate-600);
+  margin-top: 0.125rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+.pmatrix tfoot .pmatrix-cta-row td {
+  padding: 1.125rem 0.875rem;
+  background: var(--paper);
+  border-top: var(--rule-thick);
+  text-align: center;
+}
+
+/* Mobile (<= 720px): convert the table into a feature-first stacked
+   layout. Each tier-cell shows its tier label inline via a CSS
+   ::before pseudo-element keyed off positional :nth-of-type, so no
+   data-label attributes are needed in the HTML. The 3 tier headers
+   stack vertically; band rows keep their black-fill horizontal style;
+   CTA buttons stack full-width. */
+@media (max-width: 720px) {
+  .pmatrix { overflow-x: visible; }
+  .pmatrix table { min-width: 0; width: 100%; }
+  .pmatrix table,
+  .pmatrix thead,
+  .pmatrix tbody,
+  .pmatrix tfoot,
+  .pmatrix thead tr,
+  .pmatrix tbody tr,
+  .pmatrix tfoot tr,
+  .pmatrix th,
+  .pmatrix td { display: block; }
+
+  /* Header: hide feature column header; tier headers stack */
+  .pmatrix thead .pmatrix-th-feature { display: none; }
+  .pmatrix thead tr { border-bottom: var(--rule-thick); }
+  .pmatrix thead .pmatrix-th-tier {
+    width: auto;
+    padding: 0.875rem 1rem;
+    border-top: 1px solid var(--slate-300);
+    border-bottom: none;
+  }
+  /* Preserve the featured-tier 5px red accent on mobile too */
+  .pmatrix thead .pmatrix-th-tier--featured {
+    border-top: 5px solid var(--accent);
+  }
+  .pmatrix thead .pmatrix-th-tier h3 {
+    display: inline-block;
+    margin: 0 0.5rem 0 0;
+    vertical-align: middle;
+  }
+  .pmatrix thead .pmatrix-price {
+    display: inline-block;
+    font-size: 1.25rem;
+    vertical-align: middle;
+  }
+  .pmatrix thead .pmatrix-tag,
+  .pmatrix thead .pmatrix-most-pick {
+    display: block;
+    margin: 0 0 0.25rem;
+  }
+
+  /* Body: feature label as a row header; tier cells stack with
+     ::before tier name surfaced via positional :nth-of-type. */
+  .pmatrix tbody tr:not(.pmatrix-row-band) {
+    padding: 0.625rem 0 0.5rem;
+    border-bottom: 1px solid var(--slate-200);
+  }
+  .pmatrix tbody .pmatrix-row-band td {
+    padding: 0.5rem 1rem;
+    border-bottom: none;
+  }
+  .pmatrix tbody .pmatrix-feature {
+    padding: 0 1rem 0.375rem;
+    border-bottom: none;
+  }
+  .pmatrix tbody .pmatrix-cell {
+    padding: 0.25rem 1rem;
+    border-bottom: none;
+    background: transparent;
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .pmatrix tbody .pmatrix-cell--featured {
+    background: rgba(204, 0, 0, 0.04);
+  }
+  .pmatrix tbody .pmatrix-cell:nth-of-type(2)::before { content: "Pulse"; }
+  .pmatrix tbody .pmatrix-cell:nth-of-type(3)::before { content: "SXO Audit"; }
+  .pmatrix tbody .pmatrix-cell:nth-of-type(4)::before { content: "Enterprise"; }
+  .pmatrix tbody .pmatrix-cell::before {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--slate-600);
+    font-weight: 700;
+  }
+  .pmatrix tbody .pmatrix-cell .pmatrix-note {
+    grid-column: 2;
+    margin-top: 0.125rem;
+  }
+
+  /* CTA row: stack 3 full-width buttons; hide the empty feature-column cell */
+  .pmatrix tfoot .pmatrix-cta-row {
+    border-top: var(--rule-thick);
+    padding: 0.875rem 0;
+    background: var(--paper);
+  }
+  .pmatrix tfoot .pmatrix-cta-row td {
+    padding: 0.375rem 1rem;
+    background: transparent;
+    border-top: none;
+    text-align: center;
+  }
+  .pmatrix tfoot .pmatrix-cta-row td:first-child { display: none; }
+  .pmatrix tfoot .pmatrix-cta-row .btn {
+    display: block;
+    width: 100%;
+  }
+}
