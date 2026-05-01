@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Pricing tier comparison grid: 3 design variants for /pricing.html</title>
+<style>
+  /* ===== Mockup framing (NOT part of canonical design) ===== */
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #ededea;
+    color: #000;
+    margin: 0;
+    padding: 32px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .mockup-h1 {
+    font-size: 24px; font-weight: 900; letter-spacing: -0.5px;
+    margin: 0 0 8px;
+    border-bottom: 3px solid #000; padding-bottom: 12px;
+  }
+  .mockup-sub {
+    font-size: 13px; color: #444; margin: 0 0 24px; max-width: 780px;
+  }
+  .mockup-h2 {
+    font-size: 18px; font-weight: 800; letter-spacing: -0.2px;
+    margin: 40px 0 8px;
+  }
+  .mockup-tag {
+    font-size: 12px; color: #5a5a5a; margin: 0 0 12px; max-width: 800px;
+  }
+  .mockup-pill {
+    display: inline-block; padding: 2px 8px; font-size: 10px; font-weight: 800;
+    letter-spacing: 0.6px; text-transform: uppercase; border: 1px solid #000; margin-right: 6px;
+  }
+  .mockup-pill.variant { background: #5a5a5a; color: #fff; border-color: #5a5a5a; }
+  .mockup-pill.rec { background: #cc0000; color: #fff; border-color: #cc0000; }
+  .mockup-note {
+    background: #fff8e0; border-left: 4px solid #b07b00;
+    padding: 10px 14px; margin: 8px 0 20px; font-size: 13px; max-width: 900px;
+  }
+  .surface-card {
+    margin: 12px 0 32px;
+    border: 1.5px dashed #5a5a5a;
+    padding: 0;
+    background: #f4f3ef;
+    overflow: hidden;
+  }
+  .surface-card-label {
+    font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase;
+    color: #5a5a5a; padding: 10px 16px; border-bottom: 1px dashed #5a5a5a;
+    background: #ededea;
+  }
+  details { margin-top: 12px; max-width: 900px; }
+  summary { cursor: pointer; font-weight: 700; font-size: 13px; }
+  details p, details ul { font-size: 13px; color: #2c2c2c; }
+
+  /* ===== Canonical brutalist tokens (verbatim from
+     web-cited/css/styles.css) scoped to .wc-scope so they only apply
+     inside the mockup surface, not to the framing chrome. ===== */
+  .wc-scope {
+    --ink: #000000;
+    --slate-900: #222222;
+    --slate-800: #2c2c2c;
+    --slate-700: #3d3d3d;
+    --slate-600: #555555;
+    --slate-500: #6b6b6b;
+    --slate-400: #8a8a8a;
+    --slate-300: #bcbcbc;
+    --slate-200: #dcdcda;
+    --slate-100: #ededea;
+    --paper: #f4f3ef;
+    --paper-white: #ffffff;
+    --accent: #cc0000;
+    --accent-ink: #8b0000;
+    --rule: 1.5px solid var(--ink);
+    --rule-thick: 3px solid var(--ink);
+    --pass: #2a7d31;
+    --warn: #b07b00;
+    --fail: var(--accent);
+    --skip: #5a5a5a;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 28px 32px;
+  }
+
+  /* ====== Shared bits used across all 3 variants ====== */
+  .wc-scope .eyebrow {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--slate-700);
+  }
+  .wc-scope h2.section-h {
+    font-size: 28px; font-weight: 900; letter-spacing: -0.6px;
+    margin: 4px 0 4px; line-height: 1.15;
+  }
+  .wc-scope p.lead {
+    font-size: 15px; color: var(--slate-700); margin: 0 0 24px; max-width: 780px;
+  }
+  .wc-scope .btn {
+    display: inline-block;
+    padding: 10px 18px;
+    background: var(--ink); color: var(--paper-white);
+    border: 1.5px solid var(--ink);
+    font-weight: 800; font-size: 13px; letter-spacing: 0.4px;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .wc-scope .btn--ghost {
+    background: transparent; color: var(--ink);
+  }
+  .wc-scope .btn--accent {
+    background: var(--accent); border-color: var(--accent); color: var(--paper-white);
+  }
+
+  /* ============ VARIANT A: pure feature matrix ============ */
+  .va-table-wrap {
+    border: var(--rule-thick); background: var(--paper-white);
+    overflow: hidden;
+  }
+  .va-table {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+  }
+  .va-table thead th {
+    text-align: left; vertical-align: top;
+    border-bottom: var(--rule-thick);
+    padding: 16px 14px;
+    background: var(--paper);
+  }
+  .va-table thead th.va-th-tier { width: 22%; }
+  .va-table thead th.va-th-feature { width: 34%; }
+  .va-th-tier .va-tag {
+    display: inline-block; font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase;
+    color: var(--slate-600); margin-bottom: 6px;
+  }
+  .va-th-tier h3 {
+    margin: 0 0 4px; font-size: 17px; font-weight: 900; letter-spacing: -0.3px;
+  }
+  .va-th-tier .va-price {
+    font-size: 26px; font-weight: 900; letter-spacing: -1px; line-height: 1;
+  }
+  .va-th-tier .va-price sup { font-size: 14px; vertical-align: top; margin-right: 1px; }
+  .va-th-tier.va-featured {
+    background: var(--paper-white);
+    border-top: 5px solid var(--accent);
+  }
+  .va-th-tier.va-featured .va-tag { color: var(--accent); font-weight: 800; }
+
+  .va-section-row td {
+    background: var(--ink); color: var(--paper);
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.7px; text-transform: uppercase;
+    padding: 8px 14px;
+  }
+  .va-table tbody td {
+    padding: 12px 14px; vertical-align: top;
+    border-bottom: 1px solid var(--slate-200);
+    font-size: 13px;
+  }
+  .va-feature {
+    font-weight: 700; color: var(--ink);
+  }
+  .va-cell {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13px; color: var(--ink);
+  }
+  .va-cell.va-cell--featured { background: rgba(204,0,0,0.04); }
+  .va-cell .va-yes { color: var(--pass); font-weight: 800; }
+  .va-cell .va-no { color: var(--slate-500); }
+  .va-cell .va-num { font-weight: 800; }
+  .va-cell .va-note { display: block; font-size: 11px; color: var(--slate-600); }
+
+  .va-cta-row td {
+    padding: 18px 14px;
+    background: var(--paper);
+    border-top: var(--rule-thick);
+  }
+  .va-cta-row .va-cta-cell { text-align: center; }
+
+  /* ============ VARIANT B: stepped accumulator ============ */
+  .vb-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+    border: var(--rule-thick); background: var(--paper-white);
+  }
+  .vb-card {
+    padding: 24px 22px; border-right: var(--rule);
+    display: flex; flex-direction: column;
+  }
+  .vb-card:last-child { border-right: 0; }
+  .vb-card.vb-featured {
+    background: var(--ink); color: var(--paper-white);
+  }
+  .vb-card.vb-featured .vb-tag,
+  .vb-card.vb-featured .vb-foot,
+  .vb-card.vb-featured .vb-includes,
+  .vb-card.vb-featured .vb-step-list li,
+  .vb-card.vb-featured .vb-step-list .vb-num {
+    color: var(--paper-white);
+  }
+  .vb-card.vb-featured .vb-step-list .vb-tick { color: var(--paper-white); }
+  .vb-card.vb-featured .vb-includes {
+    border-color: var(--paper-white);
+  }
+  .vb-card.vb-featured .vb-step-list li { border-color: var(--slate-700); }
+  .vb-card.vb-featured .btn { background: var(--accent); border-color: var(--accent); color: var(--paper-white); }
+
+  .vb-tag {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase;
+    color: var(--slate-600); margin-bottom: 4px;
+  }
+  .vb-card h3 {
+    margin: 0 0 6px; font-size: 22px; font-weight: 900; letter-spacing: -0.3px;
+  }
+  .vb-price {
+    font-size: 38px; font-weight: 900; letter-spacing: -1px; line-height: 1;
+    margin: 0 0 14px;
+  }
+  .vb-price sup { font-size: 18px; vertical-align: top; margin-right: 1px; }
+  .vb-includes {
+    border-top: 1.5px solid var(--ink);
+    padding-top: 12px; margin-top: 4px; margin-bottom: 14px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase;
+    color: var(--slate-700); font-weight: 700;
+  }
+  .vb-step-list {
+    list-style: none; padding: 0; margin: 0 0 16px;
+    flex: 1;
+  }
+  .vb-step-list li {
+    padding: 7px 0; border-bottom: 1px solid var(--slate-200);
+    font-size: 13px;
+    display: grid; grid-template-columns: 18px 1fr; gap: 8px;
+  }
+  .vb-step-list li:last-child { border-bottom: 0; }
+  .vb-step-list .vb-tick { color: var(--pass); font-weight: 800; }
+  .vb-step-list .vb-num { font-weight: 800; }
+  .vb-foot {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase;
+    color: var(--slate-600); margin-top: 12px;
+  }
+
+  /* ============ VARIANT C: card + scoreband hybrid ============ */
+  .vc-cards {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+    border: var(--rule-thick); border-bottom: 0;
+  }
+  .vc-card {
+    padding: 22px 22px 18px;
+    border-right: var(--rule);
+    background: var(--paper-white);
+  }
+  .vc-card:last-child { border-right: 0; }
+  .vc-card.vc-featured { background: var(--paper); border-top: 5px solid var(--accent); padding-top: 17px; }
+  .vc-card .vc-tag {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase;
+    color: var(--slate-600); margin-bottom: 4px;
+  }
+  .vc-card.vc-featured .vc-tag { color: var(--accent); font-weight: 800; }
+  .vc-card h3 {
+    margin: 0 0 4px; font-size: 20px; font-weight: 900; letter-spacing: -0.3px;
+  }
+  .vc-card .vc-price {
+    font-size: 32px; font-weight: 900; letter-spacing: -1px; line-height: 1;
+    margin: 0 0 10px;
+  }
+  .vc-card .vc-price sup { font-size: 16px; vertical-align: top; margin-right: 1px; }
+  .vc-card .vc-blurb {
+    font-size: 13px; color: var(--slate-700); margin: 0 0 14px;
+  }
+  .vc-card .vc-cta { margin-top: 4px; }
+
+  .vc-scoreband {
+    border-top: 0; border: var(--rule-thick); border-top: 0;
+    background: var(--paper-white);
+  }
+  .vc-scoreband-h {
+    background: var(--ink); color: var(--paper-white);
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.7px;
+    text-transform: uppercase;
+    padding: 9px 16px;
+  }
+  .vc-score-row {
+    display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    border-bottom: 1px solid var(--slate-200);
+  }
+  .vc-score-row:last-child { border-bottom: 0; }
+  .vc-score-row > div {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  .vc-score-row .vc-score-feat {
+    font-weight: 700; border-right: 1px solid var(--slate-200);
+  }
+  .vc-score-row .vc-score-cell {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    border-right: 1px solid var(--slate-200);
+  }
+  .vc-score-row .vc-score-cell:last-child { border-right: 0; }
+  .vc-score-row .vc-score-cell.vc-featured-cell {
+    background: rgba(204,0,0,0.05);
+  }
+  .vc-score-row .vc-num { font-weight: 800; font-size: 15px; color: var(--ink); }
+  .vc-score-row .vc-note { display: block; font-size: 11px; color: var(--slate-600); margin-top: 2px; }
+  .vc-score-row .vc-yes { color: var(--pass); font-weight: 800; }
+  .vc-score-row .vc-no  { color: var(--slate-500); }
+
+  .vc-deliverables {
+    border: var(--rule-thick); border-top: 0; padding: 16px;
+    background: var(--paper);
+  }
+  .vc-deliv-h {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.7px;
+    text-transform: uppercase; color: var(--slate-700); margin: 0 0 10px;
+  }
+  .vc-deliv-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  }
+  .vc-deliv-tile {
+    border: 1.5px solid var(--ink); padding: 12px 14px; background: var(--paper-white);
+  }
+  .vc-deliv-tile .vc-deliv-name {
+    font-weight: 800; font-size: 14px; margin: 0 0 4px;
+  }
+  .vc-deliv-tile .vc-deliv-meta {
+    font-size: 12px; color: var(--slate-700);
+  }
+  .vc-deliv-tile .vc-deliv-meta .vc-pulse-no {
+    color: var(--accent); font-weight: 800;
+  }
+
+</style>
+</head>
+<body>
+
+<h1 class="mockup-h1">Pricing tier comparison grid: 3 design variants</h1>
+<p class="mockup-sub">
+  Three design directions for the <code>/pricing.html</code> tier comparison grid. Today's
+  page renders three independent cards (Pulse / SXO Audit / Enterprise) with bullet lists
+  per card; there is no side-by-side feature-by-feature comparison. These mockups all use
+  canonical brutalist tokens (ink #000000, paper #f4f3ef, accent #cc0000, Helvetica)
+  scoped to <code>.wc-scope</code> so the framing chrome on this page does not bleed into
+  the design surface. Open this file in a browser:
+  <code>file:///Users/craigkokesh/web-cited/docs/mockups/2026-04-30-pricing-tier-comparison-grid.html</code>.
+</p>
+<div class="mockup-note">
+  H7 lockdown applies to the PDF, Playbook, and Portfolio Summary canonicals. The
+  pricing page is NOT one of the locked surfaces, so design changes here are in
+  scope for review. None of the three variants below have shipped to production;
+  they exist for morning operator review only.
+</div>
+
+<details>
+  <summary>Tier-difference reference data used in all 3 variants</summary>
+  <p>All variants render the same underlying tier matrix. Differences across tiers are
+  data-volume only, plus the Playbook-omission upgrade motivator for Pulse. Same matrix
+  the unified Audit Report PDF enforces server-side via <code>TIER_MAX_*</code> validators.</p>
+  <ul>
+    <li><b>Brands:</b> Pulse 1, SXO Audit 1, Enterprise up to 3</li>
+    <li><b>URLs (per brand):</b> 10 / 25 / 25</li>
+    <li><b>Buyer-question prompts (per brand):</b> 10 / 25 / 25</li>
+    <li><b>LLM engines:</b> 4 across all tiers (ChatGPT, Perplexity, Gemini, Claude)</li>
+    <li><b>Bing organic + Google AI Overview brand-presence:</b> all 3 tiers</li>
+    <li><b>Citation-share scorecard:</b> Pulse vs up to 2 competitors, SXO Audit vs 2 to 4, Enterprise vs 2 to 4 per brand</li>
+    <li><b>Async follow-up Q&amp;A:</b> none / 30 days / 60 days</li>
+    <li><b>Turnaround:</b> 3 / 5 / 10 business days</li>
+    <li><b>Audit Report PDF + Schema Pack:</b> all 3 tiers (identical PDF design post unify)</li>
+    <li><b>Playbook HTML companion:</b> SXO Audit + Enterprise only (Pulse omits, by design, as the upgrade motivator)</li>
+    <li><b>Premium scope (full technical SEO, entity / KG, off-site content, prioritized fix backlog):</b> SXO Audit + Enterprise</li>
+    <li><b>Multi-brand scope (cross-brand overlap, cannibalization, KG remediation across brands):</b> Enterprise only</li>
+  </ul>
+</details>
+
+
+<!-- =============================================================
+     VARIANT A: pure feature matrix (single big table)
+     ============================================================= -->
+<h2 class="mockup-h2">
+  <span class="mockup-pill variant">Variant A</span>
+  <span class="mockup-pill rec">Strongest scan</span>
+  Pure feature matrix
+</h2>
+<p class="mockup-tag">
+  Replaces the existing 3-card layout with a single feature-by-feature table.
+  Buyers can scan tier diffs row by row. Section bands group rows by purpose
+  (audit scope, deliverables, engagement). Featured tier (SXO Audit, "Most teams
+  pick this") gets a red accent rule above its column header and a faint tint on
+  its cells. Tier prices live in column heads. Single CTA row at the bottom.
+  Best fit if the priority is decision speed over storytelling.
+</p>
+
+<div class="surface-card">
+  <div class="surface-card-label">Variant A, rendered with canonical brutalist tokens</div>
+  <div class="wc-scope">
+    <span class="eyebrow">Pricing</span>
+    <h2 class="section-h">Three tiers, side by side.</h2>
+    <p class="lead">
+      Fixed scope, fixed price, written down. Same 8-section audit report at every
+      tier. SXO Audit and Enterprise scale up scope (URLs, prompts, competitors)
+      and add the Playbook HTML implementation companion. Enterprise covers up to
+      3 brands with cross-brand strategy.
+    </p>
+
+    <div class="va-table-wrap">
+      <table class="va-table">
+        <thead>
+          <tr>
+            <th class="va-th-feature">
+              <div class="va-tag">Feature</div>
+              <div style="font-size:12px;color:#3d3d3d;font-weight:600;line-height:1.4;">
+                What you get at each tier. Values are fixed; nothing is sold as
+                an upcharge after intake.
+              </div>
+            </th>
+            <th class="va-th-tier">
+              <div class="va-tag">Pulse, one-time</div>
+              <h3>Pulse</h3>
+              <div class="va-price"><sup>$</sup>1,500</div>
+            </th>
+            <th class="va-th-tier va-featured">
+              <div class="va-tag">Flagship, one-time</div>
+              <h3>SXO Audit</h3>
+              <div class="va-price"><sup>$</sup>5,000</div>
+            </th>
+            <th class="va-th-tier">
+              <div class="va-tag">Enterprise, one-time</div>
+              <h3>Enterprise</h3>
+              <div class="va-price"><sup>$</sup>12,500</div>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr class="va-section-row"><td colspan="4">Audit scope</td></tr>
+          <tr>
+            <td class="va-feature">Brands</td>
+            <td class="va-cell"><span class="va-num">1</span></td>
+            <td class="va-cell va-cell--featured"><span class="va-num">1</span></td>
+            <td class="va-cell"><span class="va-num">up to 3</span></td>
+          </tr>
+          <tr>
+            <td class="va-feature">URLs audited (per brand)</td>
+            <td class="va-cell"><span class="va-num">10</span></td>
+            <td class="va-cell va-cell--featured"><span class="va-num">25</span></td>
+            <td class="va-cell"><span class="va-num">25</span></td>
+          </tr>
+          <tr>
+            <td class="va-feature">Buyer-question prompts (per brand)</td>
+            <td class="va-cell"><span class="va-num">10</span></td>
+            <td class="va-cell va-cell--featured"><span class="va-num">25</span></td>
+            <td class="va-cell"><span class="va-num">25</span></td>
+          </tr>
+          <tr>
+            <td class="va-feature">Competitors benchmarked (per brand)</td>
+            <td class="va-cell"><span class="va-num">up to 2</span></td>
+            <td class="va-cell va-cell--featured"><span class="va-num">up to 4</span></td>
+            <td class="va-cell"><span class="va-num">up to 4</span></td>
+          </tr>
+          <tr>
+            <td class="va-feature">LLM engines tested</td>
+            <td class="va-cell"><span class="va-num">4</span><span class="va-note">ChatGPT, Perplexity, Gemini, Claude</span></td>
+            <td class="va-cell va-cell--featured"><span class="va-num">4</span><span class="va-note">ChatGPT, Perplexity, Gemini, Claude</span></td>
+            <td class="va-cell"><span class="va-num">4</span><span class="va-note">ChatGPT, Perplexity, Gemini, Claude</span></td>
+          </tr>
+
+          <tr class="va-section-row"><td colspan="4">Deliverables</td></tr>
+          <tr>
+            <td class="va-feature">Audit Report PDF (8 sections, same depth at every tier)</td>
+            <td class="va-cell"><span class="va-yes">Yes</span><span class="va-note">exec, state, citations, findings, roadmap, schema, handoff, method</span></td>
+            <td class="va-cell va-cell--featured"><span class="va-yes">Yes</span><span class="va-note">exec, state, citations, findings, roadmap, schema, handoff, method</span></td>
+            <td class="va-cell"><span class="va-yes">Yes</span><span class="va-note">per brand, plus portfolio summary</span></td>
+          </tr>
+          <tr>
+            <td class="va-feature">Per-page JSON-LD Schema Pack ZIP</td>
+            <td class="va-cell"><span class="va-yes">Yes</span><span class="va-note">10 URLs</span></td>
+            <td class="va-cell va-cell--featured"><span class="va-yes">Yes</span><span class="va-note">25 URLs</span></td>
+            <td class="va-cell"><span class="va-yes">Yes</span><span class="va-note">25 URLs per brand</span></td>
+          </tr>
+          <tr>
+            <td class="va-feature">Playbook HTML implementation companion</td>
+            <td class="va-cell"><span class="va-no">Not included</span><span class="va-note">order SXO Audit or Enterprise to receive the Playbook</span></td>
+            <td class="va-cell va-cell--featured"><span class="va-yes">Yes</span></td>
+            <td class="va-cell"><span class="va-yes">Yes</span><span class="va-note">per brand</span></td>
+          </tr>
+          <tr>
+            <td class="va-feature">Cross-brand strategy + cannibalization analysis</td>
+            <td class="va-cell"><span class="va-no">Not included</span></td>
+            <td class="va-cell va-cell--featured"><span class="va-no">Not included</span></td>
+            <td class="va-cell"><span class="va-yes">Yes</span><span class="va-note">Enterprise only, requires 2+ brands</span></td>
+          </tr>
+
+          <tr class="va-section-row"><td colspan="4">Engagement</td></tr>
+          <tr>
+            <td class="va-feature">Async follow-up Q&amp;A window</td>
+            <td class="va-cell">none</td>
+            <td class="va-cell va-cell--featured"><span class="va-num">30 days</span></td>
+            <td class="va-cell"><span class="va-num">60 days</span></td>
+          </tr>
+          <tr>
+            <td class="va-feature">Turnaround</td>
+            <td class="va-cell"><span class="va-num">3 business days</span></td>
+            <td class="va-cell va-cell--featured"><span class="va-num">5 business days</span></td>
+            <td class="va-cell"><span class="va-num">10 business days</span></td>
+          </tr>
+        </tbody>
+
+        <tfoot>
+          <tr class="va-cta-row">
+            <td></td>
+            <td class="va-cta-cell"><a class="btn btn--ghost" href="start.html?tier=pulse">Start a Pulse</a></td>
+            <td class="va-cta-cell"><a class="btn btn--accent" href="start.html?tier=audit">Start an SXO Audit</a></td>
+            <td class="va-cta-cell"><a class="btn btn--ghost" href="start.html?tier=enterprise">Start Enterprise</a></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- =============================================================
+     VARIANT B: stepped accumulator
+     ============================================================= -->
+<h2 class="mockup-h2">
+  <span class="mockup-pill variant">Variant B</span>
+  Stepped accumulator
+</h2>
+<p class="mockup-tag">
+  Three-column card layout where each higher tier visibly inherits the prior tier
+  and adds new line items on top. SXO Audit reads "Everything in Pulse, plus..."
+  and Enterprise reads "Everything in SXO Audit, plus..." Reduces line repetition
+  and emphasizes the additive scope model. Featured (SXO Audit) is rendered
+  inverted (ink background) to draw the eye. Best fit if the priority is to
+  narrate the upgrade story; weaker for at-a-glance numeric comparison.
+</p>
+
+<div class="surface-card">
+  <div class="surface-card-label">Variant B, rendered with canonical brutalist tokens</div>
+  <div class="wc-scope">
+    <span class="eyebrow">Pricing</span>
+    <h2 class="section-h">Three tiers. Each one builds on the last.</h2>
+    <p class="lead">
+      Pulse is the temperature check. SXO Audit is the flagship; everything in
+      Pulse plus the full prioritized audit and the Playbook implementation
+      companion. Enterprise extends SXO Audit across up to three brands with
+      cross-brand overlap and KG remediation.
+    </p>
+
+    <div class="vb-grid">
+
+      <!-- Pulse card -->
+      <div class="vb-card">
+        <div class="vb-tag">Pulse, one-time</div>
+        <h3>Pulse</h3>
+        <div class="vb-price"><sup>$</sup>1,500</div>
+        <div class="vb-includes">Includes</div>
+        <ul class="vb-step-list">
+          <li><span class="vb-num">1</span> brand, single market</li>
+          <li><span class="vb-num">10</span> URLs audited</li>
+          <li><span class="vb-num">10</span> buyer-question prompts</li>
+          <li><span class="vb-num">4</span> LLM engines (ChatGPT, Perplexity, Gemini, Claude)</li>
+          <li><span class="vb-tick">+</span> Bing organic + Google AI Overview brand-presence</li>
+          <li><span class="vb-tick">+</span> Citation-share scorecard vs up to 2 competitors</li>
+          <li><span class="vb-tick">+</span> Audit Report PDF (executive)</li>
+          <li><span class="vb-tick">+</span> Per-page JSON-LD Schema Pack (10 URLs)</li>
+          <li><span class="vb-num">3</span> business-day turnaround</li>
+        </ul>
+        <div>
+          <a class="btn btn--ghost" href="start.html?tier=pulse">Start a Pulse</a>
+        </div>
+        <div class="vb-foot">Fast, fixed scope, one invoice</div>
+      </div>
+
+      <!-- SXO Audit card (featured / inverted) -->
+      <div class="vb-card vb-featured">
+        <div class="vb-tag">Flagship, one-time</div>
+        <h3>SXO Audit</h3>
+        <div class="vb-price"><sup>$</sup>5,000</div>
+        <div class="vb-includes">Everything in Pulse, plus</div>
+        <ul class="vb-step-list">
+          <li><span class="vb-num">25</span> URLs audited (Pulse: 10)</li>
+          <li><span class="vb-num">25</span> buyer-question prompts (Pulse: 10)</li>
+          <li><span class="vb-tick">+</span> Full technical SEO audit</li>
+          <li><span class="vb-tick">+</span> Entity + Knowledge Graph review</li>
+          <li><span class="vb-tick">+</span> Off-site content review (YouTube, Wikipedia, GBP)</li>
+          <li><span class="vb-tick">+</span> Competitive citation matrix</li>
+          <li><span class="vb-tick">+</span> Prioritized fix backlog</li>
+          <li><span class="vb-tick">+</span> Playbook HTML implementation companion</li>
+          <li><span class="vb-num">30</span> days async follow-up Q&amp;A</li>
+          <li><span class="vb-num">5</span> business-day turnaround</li>
+        </ul>
+        <div>
+          <a class="btn" href="start.html?tier=audit">Start an Audit</a>
+        </div>
+        <div class="vb-foot">Most teams pick this</div>
+      </div>
+
+      <!-- Enterprise card -->
+      <div class="vb-card">
+        <div class="vb-tag">Enterprise, one-time</div>
+        <h3>Enterprise</h3>
+        <div class="vb-price"><sup>$</sup>12,500</div>
+        <div class="vb-includes">Everything in SXO Audit, plus</div>
+        <ul class="vb-step-list">
+          <li><span class="vb-num">3</span> brands (single-tier was 1)</li>
+          <li><span class="vb-num">25</span> URLs per brand</li>
+          <li><span class="vb-num">25</span> buyer-question prompts per brand</li>
+          <li><span class="vb-tick">+</span> Cross-brand overlap + cannibalization</li>
+          <li><span class="vb-tick">+</span> Entity disambiguation + KG remediation plan</li>
+          <li><span class="vb-tick">+</span> Per-brand prioritized fix backlog</li>
+          <li><span class="vb-num">60</span> days async follow-up Q&amp;A (was 30)</li>
+          <li><span class="vb-num">10</span> business-day turnaround</li>
+        </ul>
+        <div>
+          <a class="btn btn--ghost" href="start.html?tier=enterprise">Start Enterprise</a>
+        </div>
+        <div class="vb-foot">DPA / NDA / MSA welcome</div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- =============================================================
+     VARIANT C: cards + scoreband hybrid
+     ============================================================= -->
+<h2 class="mockup-h2">
+  <span class="mockup-pill variant">Variant C</span>
+  Cards plus by-the-numbers scoreband
+</h2>
+<p class="mockup-tag">
+  Keeps the existing 3-card narrative layout (lowest delta from production) and
+  layers on a compact "By the numbers" scoreband below: 5 numeric rows that pull
+  the most-asked tier-diff data into one strip. A separate "Deliverables" block
+  underneath calls out Audit Report PDF + Schema Pack (all tiers) + Playbook
+  (SXO Audit and Enterprise only) so the upgrade motivator reads at a glance.
+  Best fit if the priority is to keep the current page's emotional arc intact
+  while still answering the "but how do they actually compare?" question.
+</p>
+
+<div class="surface-card">
+  <div class="surface-card-label">Variant C, rendered with canonical brutalist tokens</div>
+  <div class="wc-scope">
+    <span class="eyebrow">Pricing</span>
+    <h2 class="section-h">Three tiers. All public.</h2>
+    <p class="lead">
+      No "contact sales" mystery. Every price printed, every scope written down.
+      SXO Audit and Enterprise both include the Playbook implementation companion;
+      Pulse is the fast generative-engine temperature check.
+    </p>
+
+    <div class="vc-cards">
+      <article class="vc-card">
+        <div class="vc-tag">Pulse, one-time</div>
+        <h3>Pulse</h3>
+        <div class="vc-price"><sup>$</sup>1,500</div>
+        <p class="vc-blurb">
+          Single-brand temperature check. Fastest way to see whether ChatGPT,
+          Perplexity, Gemini, Claude, Bing/Copilot, and Google AI Overviews
+          know your brand exists, and which competitors they surface instead.
+        </p>
+        <div class="vc-cta">
+          <a class="btn btn--ghost" href="start.html?tier=pulse">Start a Pulse</a>
+        </div>
+      </article>
+
+      <article class="vc-card vc-featured">
+        <div class="vc-tag">Flagship, one-time</div>
+        <h3>SXO Audit</h3>
+        <div class="vc-price"><sup>$</sup>5,000</div>
+        <p class="vc-blurb">
+          The full opinionated audit across SEO, AEO, GEO, entity coverage,
+          and off-site content. Every finding prioritized; every schema
+          paste-ready; every recommendation has an owner, an effort, and an
+          expected impact.
+        </p>
+        <div class="vc-cta">
+          <a class="btn" href="start.html?tier=audit">Start an Audit</a>
+        </div>
+      </article>
+
+      <article class="vc-card">
+        <div class="vc-tag">Enterprise, one-time</div>
+        <h3>Enterprise</h3>
+        <div class="vc-price"><sup>$</sup>12,500</div>
+        <p class="vc-blurb">
+          For multi-brand operators running the same audit across a portfolio
+          of brands. Everything in SXO Audit, expanded across up to 3 brands
+          with a coordinated read of where each brand wins, loses, and overlaps.
+        </p>
+        <div class="vc-cta">
+          <a class="btn btn--ghost" href="start.html?tier=enterprise">Start Enterprise</a>
+        </div>
+      </article>
+    </div>
+
+    <div class="vc-scoreband">
+      <div class="vc-scoreband-h">By the numbers</div>
+
+      <div class="vc-score-row">
+        <div class="vc-score-feat">Brands</div>
+        <div class="vc-score-cell"><span class="vc-num">1</span></div>
+        <div class="vc-score-cell vc-featured-cell"><span class="vc-num">1</span></div>
+        <div class="vc-score-cell"><span class="vc-num">up to 3</span></div>
+      </div>
+      <div class="vc-score-row">
+        <div class="vc-score-feat">URLs audited <span class="vc-note">per brand</span></div>
+        <div class="vc-score-cell"><span class="vc-num">10</span></div>
+        <div class="vc-score-cell vc-featured-cell"><span class="vc-num">25</span></div>
+        <div class="vc-score-cell"><span class="vc-num">25</span></div>
+      </div>
+      <div class="vc-score-row">
+        <div class="vc-score-feat">Buyer-question prompts <span class="vc-note">per brand</span></div>
+        <div class="vc-score-cell"><span class="vc-num">10</span></div>
+        <div class="vc-score-cell vc-featured-cell"><span class="vc-num">25</span></div>
+        <div class="vc-score-cell"><span class="vc-num">25</span></div>
+      </div>
+      <div class="vc-score-row">
+        <div class="vc-score-feat">Async follow-up Q&amp;A</div>
+        <div class="vc-score-cell">none</div>
+        <div class="vc-score-cell vc-featured-cell"><span class="vc-num">30 days</span></div>
+        <div class="vc-score-cell"><span class="vc-num">60 days</span></div>
+      </div>
+      <div class="vc-score-row">
+        <div class="vc-score-feat">Turnaround</div>
+        <div class="vc-score-cell"><span class="vc-num">3 business days</span></div>
+        <div class="vc-score-cell vc-featured-cell"><span class="vc-num">5 business days</span></div>
+        <div class="vc-score-cell"><span class="vc-num">10 business days</span></div>
+      </div>
+    </div>
+
+    <div class="vc-deliverables">
+      <p class="vc-deliv-h">What you receive</p>
+      <div class="vc-deliv-grid">
+        <div class="vc-deliv-tile">
+          <p class="vc-deliv-name">Audit Report PDF</p>
+          <p class="vc-deliv-meta">All 3 tiers. Same design and section structure.</p>
+        </div>
+        <div class="vc-deliv-tile">
+          <p class="vc-deliv-name">Schema Pack (JSON-LD)</p>
+          <p class="vc-deliv-meta">All 3 tiers. URL count scales with tier.</p>
+        </div>
+        <div class="vc-deliv-tile">
+          <p class="vc-deliv-name">Playbook (HTML)</p>
+          <p class="vc-deliv-meta">SXO Audit + Enterprise only. <span class="vc-pulse-no">Not in Pulse.</span></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- =============================================================
+     Side-by-side recommendation (mockup framing only)
+     ============================================================= -->
+<h2 class="mockup-h2">Recommendation</h2>
+<p class="mockup-tag">
+  All three variants are honest renderings of the same tier-difference matrix in
+  the canonical brutalist system.
+</p>
+<ul style="font-size:14px; max-width:820px; line-height:1.6;">
+  <li>
+    <b>Variant A (pure feature matrix).</b> Strongest for buyer decision speed.
+    Replaces the cards entirely and answers "what's actually different across
+    tiers" in one scan. Cost: loses the per-tier narrative blurb. The featured
+    (SXO Audit) accent rule + tinted column does most of the lifting.
+  </li>
+  <li>
+    <b>Variant B (stepped accumulator).</b> Strongest for upgrade narrative.
+    Reads as a story; the "Everything in Pulse, plus..." pattern reinforces why
+    the next tier is worth more. Cost: harder to compare numerics across tiers
+    (you have to re-read each list).
+  </li>
+  <li>
+    <b>Variant C (cards + scoreband hybrid).</b> Lowest production-delta. Keeps
+    the existing 3-card narrative + layers on a 5-row numeric strip and a
+    deliverables block. Cost: the scoreband is short by design, so it cannot
+    show the SEO/AEO/GEO premium-scope deltas; those still live inside the
+    cards' bullet lists.
+  </li>
+</ul>
+<p class="mockup-tag" style="margin-top:16px;">
+  My read: <b>Variant A is the strongest choice if the goal is converting a
+  cold visitor to "Start an Audit" without forcing them to read three card
+  bullets in parallel.</b> Variant C is the safest choice if the bigger risk is
+  changing too much at once. Variant B is the right choice if outbound emails
+  and content marketing are about to point at this page and you want it to
+  read as a story for skim-readers. None of the three have shipped; the call
+  is yours.
+</p>
+
+</body>
+</html>
