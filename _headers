@@ -3,17 +3,17 @@
 
 /*
   # HSTS, intentional ramp:
-  #   Today (initial Cloudflare Pages cutover): max-age=300 (5 minutes).
+  #   Initial Cloudflare Pages cutover: max-age=300 (5 minutes).
   #     Lets us roll back fast if any TLS / hosting issue surfaces in the
   #     first day. Browsers honoring this won't be locked into HTTPS
   #     beyond the 5-minute window.
-  #   After 24 hours of stable behavior: bump to 86400 (1 day).
+  #   2026-04-30 (24+ hrs stable behavior): bumped to 86400 (1 day).
   #   After 7 days of stable behavior: bump to 31536000 (1 year).
   #   After 30 days of stable behavior: bump to 63072000 (2 years).
   #   At 2-year max-age + 30+ days of stability: submit to https://hstspreload.org.
   # The includeSubDomains flag is safe today: every web-cited subdomain
   # (api, audit, artifacts) already uses HTTPS.
-  Strict-Transport-Security: max-age=300; includeSubDomains
+  Strict-Transport-Security: max-age=86400; includeSubDomains
 
   # Standard security headers.
   X-Content-Type-Options: nosniff
