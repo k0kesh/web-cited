@@ -75,7 +75,7 @@
         "name": "Pulse",
         "serviceType": "Search Experience Optimization Audit",
         "provider": { "@id": "https://web-cited.com/#business" },
-        "description": "Single-brand generative-engine citation scan with answer-engine eligibility snapshot covering up to 10 URLs and up to 10 buyer-question prompts across 4 LLM engines (ChatGPT, Perplexity, Gemini, Claude), plus Bing organic and Google AI Overview brand-presence checks. One-page executive brief and a per-page JSON-LD schema pack for the audited URLs. Three-business-day turnaround.",
+        "description": "Single-brand SEO + AEO + GEO + entity + off-site content audit covering up to 10 URLs, up to 10 buyer-question prompts, and up to 2 competitor benchmarks across 4 LLM engines (ChatGPT, Perplexity, Gemini, Claude), plus Bing organic and Google AI Overview brand-presence checks. Eight-section audit report PDF and a per-page JSON-LD schema pack for the audited URLs. Three-business-day turnaround. The Playbook HTML implementation companion is available on SXO Audit and Enterprise tiers.",
         "offers": {
           "@type": "Offer",
           "price": "1500",
@@ -166,7 +166,7 @@
             "name": "How do I pick between Pulse, SXO Audit, and Enterprise?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Pulse is a fast temperature check on generative-engine citations. SXO Audit is the flagship - the full SEO, AEO, GEO, entity, and off-site audit with a prioritized fix backlog. Enterprise is for multi-brand operators who need a coordinated read across their portfolio (up to 3 brands)."
+              "text": "All three tiers run the same SEO, AEO, GEO, entity, and off-site audit (8-section PDF report at every tier). What scales across tiers is scope volume and the implementation companion. Pulse covers 1 brand at 10 URLs, 10 prompts, and up to 2 competitors. SXO Audit covers 1 brand at 25 URLs, 25 prompts, and up to 4 competitors, and adds the Playbook HTML implementation companion. Enterprise covers up to 3 brands at the SXO Audit per-brand scope, plus a cross-brand strategy and cannibalization analysis."
             }
           },
           {
@@ -245,7 +245,7 @@
         <span class="eyebrow">Pricing</span>
         <h1>Three tiers. All public.</h1>
         <p class="lead">No "contact sales." No tiered enterprise mystery. Every price is printed below, every scope is written down, and the intake is a web form, not a call.</p>
-        <p class="lead">SXO Audit and Enterprise each deliver three artifacts: a premium PDF report for the executive desk, an interactive Playbook web hub for the implementation team, and a paste-ready Schema Pack for the engineer. Pulse delivers the PDF and the Schema Pack (the Playbook is reserved for the deeper Audit and Enterprise engagements). Most audit products ship a single static PDF or a login-walled dashboard; our multi-artifact format is built so the audit gets used, not filed.</p>
+        <p class="lead">SXO Audit and Enterprise each deliver three artifacts: a premium PDF report for the executive desk, an interactive Playbook web hub for the implementation team, and a paste-ready Schema Pack for the engineer. Pulse delivers the PDF and the Schema Pack (the Playbook is reserved for the larger-scope Audit and Enterprise engagements). Most audit products ship a single static PDF or a login-walled dashboard; our multi-artifact format is built so the audit gets used, not filed.</p>
       </div>
     </section>
 
@@ -259,75 +259,115 @@
 
     <section class="section">
       <div class="wrap">
-        <div class="pricing pricing--three" role="list">
+        <p class="lead pmatrix-intro">Same 8-section audit report at every tier. SXO Audit and Enterprise scale up scope (URLs, prompts, competitors) and add the Playbook HTML implementation companion. Enterprise covers up to 3 brands with cross-brand strategy.</p>
+        <div class="pmatrix" role="region" aria-label="Pricing tier comparison">
+          <table>
+            <thead>
+              <tr>
+                <th class="pmatrix-th-feature" scope="col">
+                  <span class="pmatrix-tag">Feature</span>
+                  <span class="pmatrix-feature-note">What you get at each tier. Values are fixed; nothing is sold as an upcharge after intake.</span>
+                </th>
+                <th class="pmatrix-th-tier" scope="col" id="pulse">
+                  <span class="pmatrix-tag">Pulse, one-time</span>
+                  <h3>Pulse</h3>
+                  <div class="pmatrix-price"><sup>$</sup>1,500</div>
+                </th>
+                <th class="pmatrix-th-tier pmatrix-th-tier--featured" scope="col" id="audit">
+                  <span class="pmatrix-tag">Flagship, one-time</span>
+                  <h3>SXO Audit</h3>
+                  <div class="pmatrix-most-pick">Most teams pick this</div>
+                  <div class="pmatrix-price"><sup>$</sup>5,000</div>
+                </th>
+                <th class="pmatrix-th-tier" scope="col" id="enterprise">
+                  <span class="pmatrix-tag">Enterprise, one-time</span>
+                  <h3>Enterprise</h3>
+                  <div class="pmatrix-price"><sup>$</sup>12,500</div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="pmatrix-row-band"><td colspan="4">Audit scope</td></tr>
+              <tr>
+                <td class="pmatrix-feature">Brands</td>
+                <td class="pmatrix-cell"><span class="pmatrix-num">1</span></td>
+                <td class="pmatrix-cell pmatrix-cell--featured"><span class="pmatrix-num">1</span></td>
+                <td class="pmatrix-cell"><span class="pmatrix-num">up to 3</span></td>
+              </tr>
+              <tr>
+                <td class="pmatrix-feature">URLs audited (per brand)</td>
+                <td class="pmatrix-cell"><span class="pmatrix-num">10</span></td>
+                <td class="pmatrix-cell pmatrix-cell--featured"><span class="pmatrix-num">25</span></td>
+                <td class="pmatrix-cell"><span class="pmatrix-num">25</span></td>
+              </tr>
+              <tr>
+                <td class="pmatrix-feature">Buyer-question prompts (per brand)</td>
+                <td class="pmatrix-cell"><span class="pmatrix-num">10</span></td>
+                <td class="pmatrix-cell pmatrix-cell--featured"><span class="pmatrix-num">25</span></td>
+                <td class="pmatrix-cell"><span class="pmatrix-num">25</span></td>
+              </tr>
+              <tr>
+                <td class="pmatrix-feature">Competitors benchmarked (per brand)</td>
+                <td class="pmatrix-cell"><span class="pmatrix-num">up to 2</span></td>
+                <td class="pmatrix-cell pmatrix-cell--featured"><span class="pmatrix-num">up to 4</span></td>
+                <td class="pmatrix-cell"><span class="pmatrix-num">up to 4</span></td>
+              </tr>
+              <tr>
+                <td class="pmatrix-feature">LLM engines tested</td>
+                <td class="pmatrix-cell"><span class="pmatrix-num">4</span><span class="pmatrix-note">ChatGPT, Perplexity, Gemini, Claude</span></td>
+                <td class="pmatrix-cell pmatrix-cell--featured"><span class="pmatrix-num">4</span><span class="pmatrix-note">ChatGPT, Perplexity, Gemini, Claude</span></td>
+                <td class="pmatrix-cell"><span class="pmatrix-num">4</span><span class="pmatrix-note">ChatGPT, Perplexity, Gemini, Claude</span></td>
+              </tr>
 
-          <article class="price-card" id="pulse" role="listitem">
-            <span class="price-card__tag">Pulse - one-time</span>
-            <h2 class="price-card__num"><sup>$</sup>1,500</h2>
-            <h3>Pulse</h3>
-            <p>Single-brand temperature check on generative-engine visibility. The fastest way to see whether ChatGPT, Perplexity, Gemini, Claude, Bing/Copilot, and Google AI Overviews know your brand exists - and which competitors they surface instead.</p>
-            <ul class="price-card__list">
-              <li>Single brand, single market</li>
-              <li>Up to 10 buyer-question prompts × 4 LLM engines (ChatGPT, Perplexity, Gemini, Claude)</li>
-              <li>Bing organic and Google AI Overview brand-presence checks</li>
-              <li>AEO eligibility snapshot on up to 10 URLs</li>
-              <li>Citation-share scorecard vs. up to 2 competitors</li>
-              <li>Per-page JSON-LD schema pack for up to 10 URLs</li>
-              <li>One-page executive brief</li>
-              <li>3-business-day turnaround</li>
-            </ul>
-            <div class="btn-row mt-2">
-              <a class="btn" href="start.html?tier=pulse">Start a Pulse</a>
-            </div>
-            <p class="mono u-mono-eyebrow-muted">Fast · Fixed scope · One invoice</p>
-          </article>
+              <tr class="pmatrix-row-band"><td colspan="4">Deliverables</td></tr>
+              <tr>
+                <td class="pmatrix-feature">Audit Report PDF (8 sections, same depth at every tier)</td>
+                <td class="pmatrix-cell"><span class="pmatrix-yes">Yes</span><span class="pmatrix-note">exec, state, citations, findings, roadmap, schema, handoff, method</span></td>
+                <td class="pmatrix-cell pmatrix-cell--featured"><span class="pmatrix-yes">Yes</span><span class="pmatrix-note">exec, state, citations, findings, roadmap, schema, handoff, method</span></td>
+                <td class="pmatrix-cell"><span class="pmatrix-yes">Yes</span><span class="pmatrix-note">per brand, plus portfolio summary</span></td>
+              </tr>
+              <tr>
+                <td class="pmatrix-feature">Per-page JSON-LD Schema Pack ZIP</td>
+                <td class="pmatrix-cell"><span class="pmatrix-yes">Yes</span><span class="pmatrix-note">10 URLs</span></td>
+                <td class="pmatrix-cell pmatrix-cell--featured"><span class="pmatrix-yes">Yes</span><span class="pmatrix-note">25 URLs</span></td>
+                <td class="pmatrix-cell"><span class="pmatrix-yes">Yes</span><span class="pmatrix-note">25 URLs per brand</span></td>
+              </tr>
+              <tr>
+                <td class="pmatrix-feature">Playbook HTML implementation companion</td>
+                <td class="pmatrix-cell"><span class="pmatrix-no">Not included</span><span class="pmatrix-note">order SXO Audit or Enterprise to receive the Playbook</span></td>
+                <td class="pmatrix-cell pmatrix-cell--featured"><span class="pmatrix-yes">Yes</span></td>
+                <td class="pmatrix-cell"><span class="pmatrix-yes">Yes</span><span class="pmatrix-note">per brand</span></td>
+              </tr>
+              <tr>
+                <td class="pmatrix-feature">Cross-brand strategy + cannibalization analysis</td>
+                <td class="pmatrix-cell"><span class="pmatrix-no">Not included</span></td>
+                <td class="pmatrix-cell pmatrix-cell--featured"><span class="pmatrix-no">Not included</span></td>
+                <td class="pmatrix-cell"><span class="pmatrix-yes">Yes</span><span class="pmatrix-note">Enterprise only, requires 2+ brands</span></td>
+              </tr>
 
-          <article class="price-card price-card--featured" id="audit" role="listitem">
-            <span class="price-card__tag">Flagship - one-time</span>
-            <h2 class="price-card__num"><sup>$</sup>5,000</h2>
-            <h3>SXO Audit</h3>
-            <p>The full, opinionated audit across SEO, AEO, GEO, entity coverage, and off-site content. Every finding is prioritized, every schema is paste-ready, every recommendation has an owner, an effort, and an expected impact.</p>
-            <ul class="price-card__list">
-              <li>Full technical SEO audit</li>
-              <li>AEO &amp; Google AI Overview analysis</li>
-              <li>Up to 25 buyer-question prompts × 4 LLM engines (ChatGPT, Perplexity, Gemini, Claude), plus Bing organic and Google AI Overview brand-presence checks</li>
-              <li>Citation-share scorecard vs. 2 to 4 primary competitors</li>
-              <li>Entity &amp; Knowledge Graph presence (Google KG, Wikidata)</li>
-              <li>Off-site content review (YouTube, Wikipedia, Google Business Profile)</li>
-              <li>Competitive citation matrix</li>
-              <li>Prioritized fix backlog</li>
-              <li>Per-page JSON-LD schema pack for up to 25 URLs</li>
-              <li>30 days of async follow-up questions</li>
-              <li>5-business-day turnaround</li>
-            </ul>
-            <div class="btn-row mt-2">
-              <a class="btn" href="start.html?tier=audit">Start an Audit</a>
-            </div>
-            <p class="mono u-mono-eyebrow">Most teams pick this</p>
-          </article>
-
-          <article class="price-card" id="enterprise" role="listitem">
-            <span class="price-card__tag">Enterprise - one-time</span>
-            <h2 class="price-card__num"><sup>$</sup>12,500</h2>
-            <h3>Enterprise</h3>
-            <p>For multi-brand operators running the same audit across a portfolio of brands. Everything in SXO Audit, expanded across up to 3 brands with a coordinated read of where each brand wins, loses, and overlaps.</p>
-            <ul class="price-card__list">
-              <li>Up to 3 brands</li>
-              <li>Up to 25 buyer-question prompts per brand × 4 LLM engines (ChatGPT, Perplexity, Gemini, Claude); plus Bing organic and Google AI Overview brand-presence checks per brand</li>
-              <li>Per-brand citation-share scorecard vs. 2 to 4 primary competitors per brand</li>
-              <li>Cross-brand overlap &amp; cannibalization analysis</li>
-              <li>Entity disambiguation &amp; KG remediation plan</li>
-              <li>Per-page JSON-LD schema pack for up to 25 URLs per brand</li>
-              <li>Prioritized fix backlog per brand</li>
-              <li>60 days of async follow-up questions</li>
-              <li>10-business-day turnaround</li>
-            </ul>
-            <div class="btn-row mt-2">
-              <a class="btn" href="start.html?tier=enterprise">Start Enterprise</a>
-            </div>
-            <p class="mono u-mono-eyebrow-muted">DPA / NDA / MSA welcome</p>
-          </article>
-
+              <tr class="pmatrix-row-band"><td colspan="4">Engagement</td></tr>
+              <tr>
+                <td class="pmatrix-feature">Async follow-up Q&amp;A window</td>
+                <td class="pmatrix-cell">none</td>
+                <td class="pmatrix-cell pmatrix-cell--featured"><span class="pmatrix-num">30 days</span></td>
+                <td class="pmatrix-cell"><span class="pmatrix-num">60 days</span></td>
+              </tr>
+              <tr>
+                <td class="pmatrix-feature">Turnaround</td>
+                <td class="pmatrix-cell"><span class="pmatrix-num">3 business days</span></td>
+                <td class="pmatrix-cell pmatrix-cell--featured"><span class="pmatrix-num">5 business days</span></td>
+                <td class="pmatrix-cell"><span class="pmatrix-num">10 business days</span></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="pmatrix-cta-row">
+                <td></td>
+                <td><a class="btn btn--ghost" href="start.html?tier=pulse">Start a Pulse</a></td>
+                <td><a class="btn btn--accent" href="start.html?tier=audit">Start an SXO Audit</a></td>
+                <td><a class="btn btn--ghost" href="start.html?tier=enterprise">Start Enterprise</a></td>
+              </tr>
+            </tfoot>
+          </table>
         </div>
       </div>
     </section>
@@ -472,7 +512,7 @@
           </details>
           <details class="faq__item">
             <summary>How do I pick between Pulse, SXO Audit, and Enterprise?</summary>
-            <p>Pulse is a fast temperature check on generative-engine citations - a good fit when you want to see where you stand before committing to a full project. SXO Audit is the flagship: the complete SEO + AEO + GEO + entity + off-site audit with a prioritized fix backlog. Enterprise is for multi-brand operators who need a coordinated read across their portfolio of up to 3 brands.</p>
+            <p>All three tiers run the same SEO, AEO, GEO, entity, and off-site audit; every tier delivers the 8-section audit report PDF. What scales across tiers is scope volume and the implementation companion. Pulse covers 1 brand at 10 URLs, 10 prompts, and up to 2 competitors (3-business-day turnaround, no Playbook). SXO Audit covers 1 brand at 25 URLs, 25 prompts, and up to 4 competitors, and adds the Playbook HTML implementation companion (5-business-day turnaround, 30 days of async follow-up). Enterprise covers up to 3 brands at the SXO Audit per-brand scope, plus a cross-brand strategy and cannibalization analysis (10-business-day turnaround, 60 days of async follow-up).</p>
           </details>
           <details class="faq__item">
             <summary>How is this different from a traditional SEO audit?</summary>
