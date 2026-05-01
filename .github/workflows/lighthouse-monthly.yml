@@ -1,0 +1,60 @@
+name: Lighthouse monthly audit
+
+# Monthly Lighthouse audit of every public Web Cited marketing page.
+# Fires on the 1st of every month and on manual dispatch. When any
+# score drops below the threshold, files a GitHub Issue and (via the
+# Issue assignee email) notifies the operator. When all scores meet
+# threshold, exits clean: no issue, no email.
+#
+# Required secrets: none beyond the auto-provided GITHUB_TOKEN.
+# Required scopes: issues:write (for the notify step).
+#
+# Notification: when scores drift, the notify step opens a GitHub
+# Issue assigned to k0kesh. GitHub's built-in assignment email
+# delivers the alert; there is no separate transactional email.
+
+on:
+  schedule:
+    # 1st of every month at 13:21 UTC. Off the :00 minute to dodge
+    # the fleet-wide stampede.
+    - cron: '21 13 1 * *'
+  workflow_dispatch:
+    inputs:
+      perf_threshold:
+        description: 'Performance threshold override (default 95)'
+        required: false
+        default: '95'
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Lighthouse + Chromium deps
+        run: |
+          npm i -g lighthouse@latest
+          npx -y puppeteer browsers install chrome --path /tmp/chrome
+
+      - name: Run Lighthouse audit
+        id: audit
+        env:
+          PERF_THRESHOLD: ${{ inputs.perf_threshold || '95' }}
+          CHROME_PATH: /tmp/chrome
+        run: bash .github/scripts/lighthouse-monthly.sh
+
+      - name: Notify on score drift (open Issue)
+        if: steps.audit.outputs.drift == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash .github/scripts/lighthouse-notify.sh

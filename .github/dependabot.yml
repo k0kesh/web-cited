@@ -1,0 +1,20 @@
+version: 2
+updates:
+  # web-cited is a static-HTML marketing site with no package.json /
+  # requirements.txt; the only thing for Dependabot to track is the
+  # GitHub Actions versions used in .github/workflows/ (privacy-audit,
+  # tos-audit, lighthouse-monthly, cwv-monthly, wcag-monthly,
+  # pentest-monthly).
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "first weekday"
+      time: "14:00"
+      timezone: "Etc/UTC"
+    labels:
+      - "dependencies"
+      - "automated"
+    commit-message:
+      prefix: "chore(actions)"
+      include: "scope"

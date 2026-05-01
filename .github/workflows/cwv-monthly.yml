@@ -1,0 +1,50 @@
+name: Core Web Vitals monthly audit
+
+# Monthly mobile Lighthouse audit measuring the three Core Web Vitals
+# (LCP, INP, CLS) against the published Good thresholds. Fires on the
+# 1st of every month and on manual dispatch. When any page falls
+# outside the Good range, files a GitHub Issue.
+#
+# Thresholds (per web.dev, refreshed 2026):
+#   LCP < 2.5s, INP < 200ms, CLS < 0.1.
+# INP is not always measurable in Lighthouse synthetic runs; when
+# absent we fall back to TBT (Total Blocking Time) < 200ms as a
+# closely-correlated proxy.
+
+on:
+  schedule:
+    - cron: '47 13 1 * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Lighthouse + Chromium
+        run: |
+          npm i -g lighthouse@latest
+          npx -y puppeteer browsers install chrome --path /tmp/chrome
+
+      - name: Run mobile CWV audit
+        id: audit
+        env:
+          CHROME_PATH: /tmp/chrome
+        run: bash .github/scripts/cwv-monthly.sh
+
+      - name: Notify on CWV drift (open Issue)
+        if: steps.audit.outputs.drift == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash .github/scripts/cwv-notify.sh

@@ -1,0 +1,47 @@
+name: WCAG monthly compliance audit
+
+# Monthly axe-core scan of every public Web Cited marketing page
+# against WCAG 2.1 AA + WCAG 2.1 A. Fires on the 1st of every month
+# and on manual dispatch. When any page reports any violation, files
+# a GitHub Issue. When all pages return zero violations, exits clean.
+#
+# This is the same axe-core engine the customer-facing audit pipeline
+# runs, so this cron also serves as a regression check on the audit
+# tool's continued zero-violation output for our own marketing site.
+
+on:
+  schedule:
+    - cron: '34 13 1 * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright + axe-core
+        run: |
+          npm init -y >/dev/null
+          npm i --no-fund --no-audit playwright@latest @axe-core/playwright@latest
+          npx playwright install --with-deps chromium
+
+      - name: Run WCAG 2.1 AA audit
+        id: audit
+        run: bash .github/scripts/wcag-monthly.sh
+
+      - name: Notify on violations (open Issue)
+        if: steps.audit.outputs.drift == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash .github/scripts/wcag-monthly-notify.sh
