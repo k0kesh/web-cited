@@ -2012,3 +2012,112 @@ details.faq__item p {
   border-top: var(--rule-thick);
   text-align: center;
 }
+
+/* Mobile (<= 720px): convert the table into a feature-first stacked
+   layout. Each tier-cell shows its tier label inline via a CSS
+   ::before pseudo-element keyed off positional :nth-of-type, so no
+   data-label attributes are needed in the HTML. The 3 tier headers
+   stack vertically; band rows keep their black-fill horizontal style;
+   CTA buttons stack full-width. */
+@media (max-width: 720px) {
+  .pmatrix { overflow-x: visible; }
+  .pmatrix table { min-width: 0; width: 100%; }
+  .pmatrix table,
+  .pmatrix thead,
+  .pmatrix tbody,
+  .pmatrix tfoot,
+  .pmatrix thead tr,
+  .pmatrix tbody tr,
+  .pmatrix tfoot tr,
+  .pmatrix th,
+  .pmatrix td { display: block; }
+
+  /* Header: hide feature column header; tier headers stack */
+  .pmatrix thead .pmatrix-th-feature { display: none; }
+  .pmatrix thead tr { border-bottom: var(--rule-thick); }
+  .pmatrix thead .pmatrix-th-tier {
+    width: auto;
+    padding: 0.875rem 1rem;
+    border-top: 1px solid var(--slate-300);
+    border-bottom: none;
+  }
+  /* Preserve the featured-tier 5px red accent on mobile too */
+  .pmatrix thead .pmatrix-th-tier--featured {
+    border-top: 5px solid var(--accent);
+  }
+  .pmatrix thead .pmatrix-th-tier h3 {
+    display: inline-block;
+    margin: 0 0.5rem 0 0;
+    vertical-align: middle;
+  }
+  .pmatrix thead .pmatrix-price {
+    display: inline-block;
+    font-size: 1.25rem;
+    vertical-align: middle;
+  }
+  .pmatrix thead .pmatrix-tag,
+  .pmatrix thead .pmatrix-most-pick {
+    display: block;
+    margin: 0 0 0.25rem;
+  }
+
+  /* Body: feature label as a row header; tier cells stack with
+     ::before tier name surfaced via positional :nth-of-type. */
+  .pmatrix tbody tr:not(.pmatrix-row-band) {
+    padding: 0.625rem 0 0.5rem;
+    border-bottom: 1px solid var(--slate-200);
+  }
+  .pmatrix tbody .pmatrix-row-band td {
+    padding: 0.5rem 1rem;
+    border-bottom: none;
+  }
+  .pmatrix tbody .pmatrix-feature {
+    padding: 0 1rem 0.375rem;
+    border-bottom: none;
+  }
+  .pmatrix tbody .pmatrix-cell {
+    padding: 0.25rem 1rem;
+    border-bottom: none;
+    background: transparent;
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .pmatrix tbody .pmatrix-cell--featured {
+    background: rgba(204, 0, 0, 0.04);
+  }
+  .pmatrix tbody .pmatrix-cell:nth-of-type(2)::before { content: "Pulse"; }
+  .pmatrix tbody .pmatrix-cell:nth-of-type(3)::before { content: "SXO Audit"; }
+  .pmatrix tbody .pmatrix-cell:nth-of-type(4)::before { content: "Enterprise"; }
+  .pmatrix tbody .pmatrix-cell::before {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--slate-600);
+    font-weight: 700;
+  }
+  .pmatrix tbody .pmatrix-cell .pmatrix-note {
+    grid-column: 2;
+    margin-top: 0.125rem;
+  }
+
+  /* CTA row: stack 3 full-width buttons; hide the empty feature-column cell */
+  .pmatrix tfoot .pmatrix-cta-row {
+    border-top: var(--rule-thick);
+    padding: 0.875rem 0;
+    background: var(--paper);
+  }
+  .pmatrix tfoot .pmatrix-cta-row td {
+    padding: 0.375rem 1rem;
+    background: transparent;
+    border-top: none;
+    text-align: center;
+  }
+  .pmatrix tfoot .pmatrix-cta-row td:first-child { display: none; }
+  .pmatrix tfoot .pmatrix-cta-row .btn {
+    display: block;
+    width: 100%;
+  }
+}
