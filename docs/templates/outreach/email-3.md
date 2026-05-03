@@ -10,7 +10,6 @@
 | Token | Source |
 |---|---|
 | `{FIRST_NAME}` | Recipient first name. |
-| `{MAILING_ADDRESS}` | Aliso, LLC physical mailing address for CAN-SPAM compliance. Filled in by Section F before send. |
 
 ## Subject (operator picks one)
 
@@ -34,8 +33,8 @@ Order: https://web-cited.com/start?utm_source=outbound&utm_medium=email&utm_camp
 Either way, good luck with the rest of the quarter.
 
 Craig
-
-{MAILING_ADDRESS}
+Aliso, LLC dba Web Cited
+2108 N Street, Suite N, Sacramento, CA 95816
 
 Reply STOP to opt out.
 ```

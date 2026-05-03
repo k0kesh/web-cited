@@ -11,7 +11,6 @@
 |---|---|
 | `{FIRST_NAME}` | Recipient first name. |
 | `{COMPANY_NAME}` | Recipient company. |
-| `{MAILING_ADDRESS}` | Aliso, LLC physical mailing address for CAN-SPAM compliance. Filled in by Section F before send. |
 
 ## Subject
 
@@ -35,8 +34,8 @@ Sample (same link as before): https://web-cited.com/docs/sample/playbook-claimzi
 Order: https://web-cited.com/start?utm_source=outbound&utm_medium=email&utm_campaign=outbound_sxo_audit_2026_05&utm_content=email-2
 
 Craig
-
-{MAILING_ADDRESS}
+Aliso, LLC dba Web Cited
+2108 N Street, Suite N, Sacramento, CA 95816
 
 Reply STOP to opt out.
 ```

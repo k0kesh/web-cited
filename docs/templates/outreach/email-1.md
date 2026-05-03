@@ -13,7 +13,6 @@
 | `{FIRST_NAME}` | Recipient first name. |
 | `{COMPANY_NAME}` | Recipient company (canonical, e.g. "Linear" not "linear.app"). |
 | `{HOOK_LINE}` | One-sentence personalized opener, hand-written per recipient. References a recent ship, post, news item, or distinctive product detail. Operator-authored. |
-| `{MAILING_ADDRESS}` | Aliso, LLC physical mailing address for CAN-SPAM compliance. Filled in by Section F before send. |
 
 ## Subject (operator picks one before send)
 
@@ -46,8 +45,7 @@ Worth a look?
 Craig Kokesh
 Aliso, LLC dba Web Cited
 hello@web-cited.com
-
-{MAILING_ADDRESS}
+2108 N Street, Suite N, Sacramento, CA 95816
 
 If this is not relevant, reply STOP and I will remove {COMPANY_NAME} from any future outreach.
 ```
@@ -58,4 +56,5 @@ If this is not relevant, reply STOP and I will remove {COMPANY_NAME} from any fu
 - No em or en dashes (H1).
 - Initialisms expanded on first use (H4): LLM (Large Language Model), CI (Confidence Interval), ARR (Annual Recurring Revenue), CAN-SPAM. Universal abbreviations skipped: AI, URL.
 - The deliverable framing aligns with the SXO Audit + Enterprise tier scope per `feedback_pulse_marketing_no_playbook.md`. Pulse is NOT pitched in this campaign per the customer-acquisition v1 lock.
-- The unsubscribe line ("reply STOP") is a placeholder; Section F decides between mailto + Resend reply-handling vs hosted-page unsubscribe before send.
+- Mailing address: `2108 N Street, Suite N, Sacramento, CA 95816` (operator-approved Q10:A 2026-05-03; reuses Site Brace's address since both DBAs share Aliso, LLC as the legal entity).
+- Unsubscribe path: reply STOP (operator-approved Q11:A 2026-05-03). Replies to outbound messages route to Resend's inbound webhook via the campaign Reply-To header; webhook auto-tags STOP-containing replies in HubSpot. Operator overhead: zero. Inbound infra is built in a separate work stream (Q12 follow-up).
