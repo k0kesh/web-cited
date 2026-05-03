@@ -26,6 +26,28 @@
       if (ts) ts.value = String(Date.now());
     }());
 
+    // Capture UTM (Urchin Tracking Module) params from the URL into the
+    // matching hidden form fields. Customer-acquisition v1 Section A:
+    // the Worker reads these on submit and patches HubSpot Contact
+    // outbound_campaign_id + Deal intake_utm_* so cold-email clicks are
+    // attributable. Only the 5 standard UTM keys are pulled; anything
+    // else in the query string is ignored. Each value capped at 200
+    // chars client-side to mirror the server-side validateIntake cap.
+    (function () {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+        UTM_KEYS.forEach(function (k) {
+          var el = document.getElementById(k);
+          if (!el) return;
+          var v = params.get(k);
+          if (v) el.value = String(v).slice(0, 200);
+        });
+      } catch (e) {
+        // URLSearchParams unavailable on very old browsers; silently fall through.
+      }
+    }());
+
     // ----- Brand-repeater + submission handling -----
     //
     // Refactor for Phase 2: nine per-brand fields (company, website, urls,
@@ -625,6 +647,15 @@
           acknowledgement: 'yes',
           _gotcha: form._gotcha.value,
           ts_loaded: form.ts_loaded.value,
+          // UTM (Urchin Tracking Module) campaign attribution. Populated
+          // by the URLSearchParams block above when the visitor arrived
+          // from a tagged link; empty strings otherwise. The Worker's
+          // validateIntake treats empty as absent.
+          utm_source: (form.utm_source && form.utm_source.value) || '',
+          utm_medium: (form.utm_medium && form.utm_medium.value) || '',
+          utm_campaign: (form.utm_campaign && form.utm_campaign.value) || '',
+          utm_content: (form.utm_content && form.utm_content.value) || '',
+          utm_term: (form.utm_term && form.utm_term.value) || '',
           brands: brandBlocks().map(function (block) {
             return {
               company: v(block, 'company'),
