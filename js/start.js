@@ -511,7 +511,7 @@
               errors.push({ brandIdx: brandIdx, field: 'buyer_questions', message: brandLabel + ' buyer questions: ' + bqCapMsg });
             }
           }
-          // competitors: optional, enforce per-tier cap.
+          // competitors: optional, enforce per-tier cap + per-line domain-presence.
           var compEl = block.querySelector('[data-field="competitors"]');
           if (compEl && compEl.value.trim()) {
             var compCap = tier ? TIER_MAX_COMPETITORS[tier] : 2;
@@ -520,6 +520,21 @@
               var compCapMsg = 'Too many competitors for the ' + tierDisplay(tier) + ' tier (' + compLines.length + ' entered, ' + compCap + ' max). Trim the list before submitting.';
               setBrandError(brandIdx, 'competitors', compCapMsg);
               errors.push({ brandIdx: brandIdx, field: 'competitors', message: brandLabel + ' competitors: ' + compCapMsg });
+            } else {
+              // Per-line domain-presence check. Mirrors the server-side
+              // validateCompetitors regex + error copy. Without a domain
+              // on each line, the audit pipeline's parse_competitor_domains
+              // yields [] and the customer silently loses competitor
+              // data in the report. Operator-approved Q6:B 2026-05-03.
+              var COMP_DOMAIN_RE = /\b[a-z0-9][a-z0-9\-.]*\.[a-z]{2,}\b/i;
+              for (var ci = 0; ci < compLines.length; ci++) {
+                if (!COMP_DOMAIN_RE.test(compLines[ci])) {
+                  var compDomMsg = 'competitor on line ' + (ci + 1) + ' is missing a domain. Use the company\'s domain or URL (e.g. https://acme.com) so we can match LLM answer mentions to this competitor.';
+                  setBrandError(brandIdx, 'competitors', compDomMsg);
+                  errors.push({ brandIdx: brandIdx, field: 'competitors', message: brandLabel + ' competitors: ' + compDomMsg });
+                  break;
+                }
+              }
             }
           }
         });
