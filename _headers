@@ -92,3 +92,35 @@
 
 /robots.txt
   Cache-Control: public, max-age=3600
+
+# Customer-facing sample artifacts (Q9:A 2026-05-03).
+#
+# The H7-locked Claimzilla Playbook sample at `/docs/sample/playbook-claimzilla.html`
+# is a self-contained HTML deliverable matching the production Playbook
+# format that ships from `artifacts.web-cited.com/{deal_id}/{brand}/playbook/index.html`
+# to paying customers. By design it carries:
+#   - one inline `<style>` block (the Playbook's CSS)
+#   - one inline `<script>` block (the tab-nav handler)
+#   - inline `style="..."` attributes on a handful of elements
+#
+# The site-wide CSP from item W (2026-04-28, `/*` block above) blocks all
+# of those because `script-src 'self'` + `style-src 'self'` exclude inline.
+# Cold-email recipients clicking the sample link from the outbound batch 1
+# templates saw an unstyled blank-looking page (caught 2026-05-03).
+#
+# This block UNSETS the inherited strict CSP for `/docs/sample/*` and
+# substitutes a relaxed CSP that allows `'unsafe-inline'` for style + script.
+# Scope-limited to the sample directory: every other route on the site
+# (start.html, pricing.html, services.html, etc.) keeps the strict CSP from
+# the `/*` block. The sample directory contains no user input, no auth
+# forms, no fetch endpoints; it is purely static deliverable HTML we ship.
+# The risk profile of "we can inject inline JS into our own sample HTML"
+# is the same as the risk profile of `/js/start.js` and `/js/contact.js`.
+#
+# Cloudflare Pages `_headers` is additive by default; the leading
+# `! Content-Security-Policy` line removes the inherited strict CSP so
+# the relaxed version below is the only CSP browsers see for these paths.
+/docs/sample/*
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'
+  Cache-Control: public, max-age=300, must-revalidate
