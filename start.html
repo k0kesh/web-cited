@@ -207,14 +207,6 @@
             </div>
           </div>
 
-          <fieldset class="form__row brands-fieldset">
-            <legend>Your business info</legend>
-            <div id="brands-container">
-              <!-- Brand blocks rendered by JS on page load. -->
-            </div>
-            <button type="button" id="add-brand-btn" class="add-brand-btn" hidden aria-label="Add another brand">+ Add another brand</button>
-          </fieldset>
-
           <div class="form__row">
             <label for="audit_type">What are you auditing?</label>
             <select id="audit_type" name="audit_type" required>
@@ -225,6 +217,14 @@
               <option value="Other">Other</option>
             </select>
           </div>
+
+          <fieldset class="form__row brands-fieldset">
+            <legend>Your business info</legend>
+            <div id="brands-container">
+              <!-- Brand blocks rendered by JS on page load. -->
+            </div>
+            <button type="button" id="add-brand-btn" class="add-brand-btn" hidden aria-label="Add another brand">+ Add another brand</button>
+          </fieldset>
 
           <div class="form__row">
             <label class="check">
@@ -259,51 +259,24 @@
 
               <div class="form__row">
                 <label for="brand-__IDX__-company">Company</label>
-                <input id="brand-__IDX__-company" data-field="company" type="text" required autocomplete="organization">
+                <input id="brand-__IDX__-company" data-field="company" type="text" required autocomplete="organization" placeholder="Acme Inc.">
               </div>
 
               <div class="form__row">
                 <label for="brand-__IDX__-website">Website</label>
-                <input id="brand-__IDX__-website" data-field="website" type="url" inputmode="url" placeholder="https://..." required>
-                <p class="hint">Your homepage. The audit crawls deeper pages from here, or from the URL list below if you provide one.</p>
-              </div>
-
-              <div class="form__row">
-                <label for="brand-__IDX__-urls">URLs (optional)</label>
-                <textarea id="brand-__IDX__-urls" data-field="urls" rows="4" placeholder="One URL per line."></textarea>
-                <p class="hint">Optional. If you list URLs here, the audit pipeline uses them as the seed instead of crawling from the homepage.</p>
-                <p class="hint">If you leave this blank, we audit the URLs we discover from your sitemap and homepage links.</p>
-                <p class="field-counter" data-counter="urls">
-                  <span data-counter-text>0 / 10</span> URLs entered
-                </p>
+                <input id="brand-__IDX__-website" data-field="website" type="url" inputmode="url" placeholder="https://acme.com" required>
+                <p class="hint">Your homepage. The audit crawls deeper pages from here, or from the optional URL list at the end of this section.</p>
               </div>
 
               <div class="form__row">
                 <label for="brand-__IDX__-business_one_liner">Business one-liner</label>
-                <textarea id="brand-__IDX__-business_one_liner" data-field="business_one_liner" rows="2" required placeholder="What does this brand do, in one sentence?"></textarea>
+                <textarea id="brand-__IDX__-business_one_liner" data-field="business_one_liner" rows="2" required placeholder="We install and service residential HVAC systems across the Denver metro area."></textarea>
               </div>
 
               <div class="form__row">
                 <label for="brand-__IDX__-brand_qualifier">Brand qualifier (optional)</label>
-                <input id="brand-__IDX__-brand_qualifier" data-field="brand_qualifier" type="text" maxlength="60" placeholder="e.g. molecular diagnostics">
-                <p class="hint">Only if your brand name collides with a common word (e.g. Apple the company vs apple the fruit, Cepheid the company vs Cepheid the variable star). Adds a short category tag to entity-graph and SERP (Search Engine Results Page) lookups so the audit resolves to the right entity. Up to 60 characters.</p>
-              </div>
-
-              <div class="form__row">
-                <label for="brand-__IDX__-buyer_questions">Buyer questions</label>
-                <textarea id="brand-__IDX__-buyer_questions" data-field="buyer_questions" rows="6" required placeholder="One per line. Each is run against four LLM engines."></textarea>
-                <p class="field-counter" data-counter="buyer_questions">
-                  <span data-counter-text>0 / 10</span> buyer questions entered
-                </p>
-              </div>
-
-              <div class="form__row">
-                <label for="brand-__IDX__-competitors">Competitors (optional)</label>
-                <textarea id="brand-__IDX__-competitors" data-field="competitors" rows="3" placeholder="One per line. URLs or brand names."></textarea>
-                <p class="hint">For citation-share comparison. Pulse: up to 2. SXO Audit and Enterprise: up to 4.</p>
-                <p class="field-counter" data-counter="competitors">
-                  <span data-counter-text>0 / 2</span> competitors entered
-                </p>
+                <input id="brand-__IDX__-brand_qualifier" data-field="brand_qualifier" type="text" maxlength="60" placeholder="HVAC contractor">
+                <p class="hint">Only if your brand name collides with a common word (e.g. Apple the company vs. the fruit). Adds a short category tag to entity-graph and SERP (Search Engine Results Page) lookups so the audit resolves to the right entity. Up to 60 characters.</p>
               </div>
 
               <div class="form__row">
@@ -313,19 +286,46 @@
 
               <fieldset id="brand-__IDX__-local_presence" class="radio-group brand-local-presence" data-field-group="local_presence">
                 <legend>Local presence</legend>
+                <p class="hint">Tells us whether to audit your Google Business Profile and local search pack.</p>
                 <label class="radio">
                   <input type="radio" data-field="local_presence" value="storefront" required>
-                  Storefront (customers come to you)
+                  <span><strong>Storefront</strong>, customers come to a physical address (retail, restaurant, clinic, service hub).</span>
                 </label>
                 <label class="radio">
                   <input type="radio" data-field="local_presence" value="service_area" required>
-                  Service area (you go to customers)
+                  <span><strong>Service area</strong>, you travel to customers within a defined region (plumber, installer, mobile service, regional consultant).</span>
                 </label>
                 <label class="radio">
                   <input type="radio" data-field="local_presence" value="online_only" required>
-                  Online only
+                  <span><strong>Online-only</strong>, no physical customer touchpoint. Discovery is national or global.</span>
                 </label>
               </fieldset>
+
+              <div class="form__row">
+                <label for="brand-__IDX__-buyer_questions">Buyer questions</label>
+                <textarea id="brand-__IDX__-buyer_questions" data-field="buyer_questions" rows="6" required placeholder="One per line, e.g.&#10;How much does it cost to replace a home furnace?&#10;Which heating and cooling company has the best reviews in Denver?&#10;Is Acme better than Competitor X?"></textarea>
+                <p class="field-counter" data-counter="buyer_questions">
+                  <span data-counter-text>0 / 10</span> buyer questions entered
+                </p>
+              </div>
+
+              <div class="form__row">
+                <label for="brand-__IDX__-competitors">Competitors (optional)</label>
+                <textarea id="brand-__IDX__-competitors" data-field="competitors" rows="3" placeholder="One per line, use domain URLs, e.g.&#10;https://competitor1.com&#10;https://competitor2.com"></textarea>
+                <p class="hint">For citation-share comparison. Pulse: up to 2. SXO Audit and Enterprise: up to 4.</p>
+                <p class="field-counter" data-counter="competitors">
+                  <span data-counter-text>0 / 2</span> competitors entered
+                </p>
+              </div>
+
+              <div class="form__row">
+                <label for="brand-__IDX__-urls">URLs (optional)</label>
+                <textarea id="brand-__IDX__-urls" data-field="urls" rows="4" placeholder="One URL per line."></textarea>
+                <p class="hint">Optional. If you list URLs here, the audit pipeline uses them as the seed instead of crawling from the homepage.</p>
+                <p class="field-counter" data-counter="urls">
+                  <span data-counter-text>0 / 10</span> URLs entered
+                </p>
+              </div>
             </div>
           </template>
 
