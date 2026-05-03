@@ -3,7 +3,7 @@
 **Campaign id:** `outbound_sxo_audit_2026_05`
 **Sequence:** 1 of 3 (first-touch)
 **Send timing:** immediate (Day 0)
-**Render target:** plain-text body for operator hand-send via Gmail; HTML version optional in v1.1.
+**Render target:** plain-text body for operator hand-send via Apple Mail (Migadu Mini-hosted `craig@web-cited.com`) or via Resend API per the Q12 outbound-path decision; HTML version optional in v1.1.
 **Audience:** B2B SaaS post-Series-A through Series-C, ARR (Annual Recurring Revenue) $5 to $50M, head-of-marketing or CMO (Chief Marketing Officer) buyer.
 
 ## Placeholders

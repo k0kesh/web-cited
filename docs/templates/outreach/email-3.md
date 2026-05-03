@@ -13,7 +13,7 @@
 
 ## Subject (operator picks one)
 
-A. `Re: {subject of email-1, verbatim}` (keeps thread continuity; Gmail auto-prepends Re:)
+A. `Re: {subject of email-1, verbatim}` (keeps thread continuity; mail client auto-prepends Re:)
 B. `Re: {subject of email-1}, last note` (signals finality without breaking thread)
 C. `Last note on AI-search measurement` (fresh subject; risk of triggering the recipient's "wait, who?" reflex)
 

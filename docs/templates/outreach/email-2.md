@@ -18,7 +18,7 @@
 Re: {subject of email-1, verbatim}
 ```
 
-(Operator hits Reply in Gmail on the email-1 thread; Gmail prepends "Re:" automatically. Keeping the thread together compounds reply rate vs starting a new thread.)
+(Operator hits Reply in Apple Mail on the email-1 thread; the mail client prepends "Re:" automatically. Keeping the thread together compounds reply rate vs starting a new thread. If outbound moves to Resend API per the Q12 decision, the agent generates the second-touch as a threaded reply via the In-Reply-To + References headers.)
 
 ## Body (plain-text)
 
