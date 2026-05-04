@@ -464,11 +464,110 @@
       padding: 8px 12px; margin-top: 8px; font-size: 12.5px;
     }
 
+    /* === Responsive CSS pass (operator-approved 2026-05-03 evening) ===
+       Pure responsive-only addition: no desktop CSS touched, no copy edits,
+       no brand tokens changed, no structural changes. Adds a phone-band
+       breakpoint (480px) and expands the existing tablet-band breakpoint
+       (720px) to cover grids + tab nav + headline scaling that previously
+       had no responsive behavior. Desktop renders byte-identically. */
+
     @media (max-width: 720px) {
+      /* Existing pre-2026-05-03 fixes. */
       .lib-grid { grid-template-columns: 1fr; }
       .scorecard-grid { grid-template-columns: 1fr 1fr; }
       .scorecard-cell { border-right: 0; border-bottom: var(--rule); }
       .scorecard-cell:nth-child(2), .scorecard-cell:last-child { border-right: 0; }
+
+      /* Tab nav scroll-affordance on mobile: the 7 section tabs total ~700px
+         of content but a phone viewport is ~393px, so 4 of the 7 tabs sit
+         offscreen to the right. The right-edge mask gradient fades the
+         rightmost visible tab into the paper background, signaling there's
+         more content reachable by horizontal swipe. The overflow-x: auto
+         scroll behavior on .pb-tabs is unchanged. Pure visual cue, no UI
+         elements added. */
+      .pb-tabs {
+        -webkit-mask-image: linear-gradient(to right, black 0%, black 88%, transparent 100%);
+                mask-image: linear-gradient(to right, black 0%, black 88%, transparent 100%);
+      }
+
+      /* Tablet-band fixes for grids that crammed on tablets:
+         4-col grids drop to 2x2; 5-col Priority Matrix drops to 2-col;
+         3-col Resource list stacks. The cell border-right that worked on
+         desktop creates a hanging right border at the wrap, so we reset it
+         on the now-rightmost cells. */
+      .kpi-strip { grid-template-columns: 1fr 1fr; }
+      .kpi-cell { border-right: 0; border-bottom: var(--rule); }
+      .kpi-cell:nth-child(2n) { border-right: 0; }
+      .kpi-cell:nth-last-child(-n+2):nth-child(odd),
+      .kpi-cell:last-child { border-bottom: 0; }
+
+      .engine-grid { grid-template-columns: 1fr 1fr; }
+      .engine-cell { border-right: 0; border-bottom: var(--rule); }
+      .engine-cell:nth-child(2n) { border-right: 0; }
+      .engine-cell:nth-last-child(-n+2):nth-child(odd),
+      .engine-cell:last-child { border-bottom: 0; }
+
+      .findings-grid { grid-template-columns: 1fr; }
+
+      .pm-grid { grid-template-columns: 1fr 1fr; }
+      .pm-cell { border-right: 0; border-bottom: var(--rule); min-height: auto; }
+      .pm-cell:nth-child(2n) { border-right: 0; }
+      .pm-cell:nth-last-child(-n+2):nth-child(odd),
+      .pm-cell:last-child { border-bottom: 0; }
+
+      .tools-grid { grid-template-columns: 1fr; }
+      .prompt-grid { grid-template-columns: 1fr; }
+
+      .resource-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+      .resource-tag { text-align: left; }
+
+      /* Page wrap padding tightens to recover horizontal space. */
+      .pb-wrap { padding: 22px 18px; }
+      .pb-foot { padding: 18px; }
+    }
+
+    @media (max-width: 480px) {
+      /* Phone-specific fixes: full single-column collapse, scaled-down
+         hero typography so the headline stays readable, and tighter
+         padding throughout to recover horizontal space. */
+      .pb-title { font-size: 28px; line-height: 1.15; letter-spacing: -0.3px; }
+      .pb-lede { font-size: 16px; }
+      .section-head { font-size: 22px; }
+
+      /* 2x2 grids collapse to 1-col on phones (4-col KPI/engine grids
+         become a single-column stack). */
+      .kpi-strip { grid-template-columns: 1fr; }
+      .kpi-value { font-size: 32px; }
+      .engine-grid { grid-template-columns: 1fr; }
+      .pm-grid { grid-template-columns: 1fr; }
+      .pm-rank { font-size: 30px; }
+      .scorecard-grid { grid-template-columns: 1fr; }
+      .scorecard-num { font-size: 36px; }
+
+      /* Top bar: tighten padding to keep the bar compact when the meta
+         line wraps below the brand on phones. */
+      .pb-top { padding: 12px 18px; gap: 10px; }
+      .pb-meta { font-size: 11px; }
+
+      /* Tab nav: keep the existing horizontal-scroll behavior (overflow-x:
+         auto already on .pb-tabs). Tighten tab padding so more tabs fit
+         visible at once while keeping the tap target tall enough. */
+      .pb-tabs { padding: 0 12px; }
+      .pb-tab { padding: 14px 14px; font-size: 12px; }
+
+      /* Page wrap padding tightens further on phones. */
+      .pb-wrap { padding: 18px 14px; }
+
+      /* FAQ summary tap target: ensure the touch zone stays comfortable. */
+      .faq summary { padding: 6px 20px 6px 0; min-height: 32px; }
+      .faq details { padding: 14px 16px; }
+
+      /* Schema code block font shrinks slightly so more characters fit
+         per line before horizontal scroll kicks in. */
+      .schema-block { font-size: 11.5px; padding: 14px 16px; }
     }
   </style>
 </head>
