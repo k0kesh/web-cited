@@ -10,6 +10,8 @@
 | Token | Source |
 |---|---|
 | `{FIRST_NAME}` | Recipient first name. |
+| `{COMPANY_NAME}` | Recipient company (used in the goodbye line; optional but improves warmth). |
+| `{UNSUBSCRIBE_URL}` | Per-recipient HMAC-signed unsubscribe link, same value as in email-1 and email-2. |
 
 ## Subject (operator picks one)
 
@@ -36,7 +38,7 @@ Craig
 Aliso, LLC dba Web Cited
 2108 N Street, Suite N, Sacramento, CA 95816
 
-Reply STOP to opt out.
+Unsubscribe: {UNSUBSCRIBE_URL}
 ```
 
 ## Notes
@@ -45,3 +47,4 @@ Reply STOP to opt out.
 - "I will stop" (not contracted) is intentional: more formal in writing than the contracted "I'll stop", reads as a deliberate sign-off.
 - "Either way, good luck with the rest of the quarter" is the warm goodbye that softens the close. Calibrates to B2B SaaS quarterly cadence (the ICP, Ideal Customer Profile).
 - After this email, the recipient is moved to the do-not-contact-via-this-campaign list in HubSpot (operator updates `outbound_campaign_id` to flag the close).
+- Unsubscribe path: same hosted-page click as email-1 and email-2; see the email-1 Notes section for full architecture detail.

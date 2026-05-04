@@ -11,6 +11,7 @@
 |---|---|
 | `{FIRST_NAME}` | Recipient first name. |
 | `{COMPANY_NAME}` | Recipient company. |
+| `{UNSUBSCRIBE_URL}` | Per-recipient HMAC-signed unsubscribe link, same value as in email-1 (the contact ID doesn't change between sequence touches; the URL is stable for a given recipient across the whole 3-touch campaign). |
 
 ## Subject
 
@@ -37,7 +38,7 @@ Craig
 Aliso, LLC dba Web Cited
 2108 N Street, Suite N, Sacramento, CA 95816
 
-Reply STOP to opt out.
+Unsubscribe: {UNSUBSCRIBE_URL}
 ```
 
 ## Notes
