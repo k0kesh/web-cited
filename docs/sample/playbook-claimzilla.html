@@ -465,11 +465,13 @@
     }
 
     /* === Responsive CSS pass (operator-approved 2026-05-03 evening) ===
-       Pure responsive-only addition: no desktop CSS touched, no copy edits,
-       no brand tokens changed, no structural changes. Adds a phone-band
-       breakpoint (480px) and expands the existing tablet-band breakpoint
-       (720px) to cover grids + tab nav + headline scaling that previously
-       had no responsive behavior. Desktop renders byte-identically. */
+       Mirror of the canonical sample at web-cited/docs/sample/playbook-
+       claimzilla.html. Pure responsive-only addition: no desktop CSS
+       touched, no copy edits, no brand tokens changed, no structural
+       changes. Adds a phone-band breakpoint (480px) and expands the
+       existing tablet-band breakpoint (720px) to cover grids + tab nav
+       + headline scaling that previously had no responsive behavior.
+       Desktop renders byte-identically. */
 
     @media (max-width: 720px) {
       /* Existing pre-2026-05-03 fixes. */
@@ -599,7 +601,7 @@
     <section class="pb-section" id="exec">
       <div class="pb-eyebrow">Section 01 &middot; Executive Summary</div>
       <h1 class="pb-title">Claimzilla cited 40%.<br>insurify.com cited 80%.</h1>
-      <p class="pb-lede">Across 10 buyer-question prompts run against 4 Large Language Model engines the audit surfaced 3 high-severity findings and 10 medium-severity findings. The gap is concentrated in structured data, E-E-A-T &amp; authority, crawl &amp; indexability. Each is a tractable fix; ranked by impact divided by effort, in the Priority 1 Fixes section.</p>
+      <p class="pb-lede">Across 10 buyer-question prompts run against 4 Large Language Model engines the audit surfaced 7 high-severity findings and 17 medium-severity findings. The gap is concentrated in structured data, E-E-A-T &amp; authority, crawl &amp; indexability. Each is a tractable fix; ranked by impact divided by effort, in the Priority 1 Fixes section.</p>
 
       
       <p style="margin: 0 0 18px 0; font-size: 11px; color: var(--ink); max-width: 620px;">
@@ -630,7 +632,7 @@
         
         <div class="kpi-cell">
           <div class="kpi-label">High-severity findings</div>
-          <div class="kpi-value"><span class="accent">3</span></div>
+          <div class="kpi-value"><span class="accent">7</span></div>
           
           <div class="kpi-delta">Fix this month for fastest lift on citation share.</div>
         </div>
@@ -794,7 +796,7 @@
     <!-- 02 Scorecard -->
     <section class="pb-section" id="scorecard">
       <div class="pb-eyebrow">Section 02 &middot; Scorecard</div>
-      <h1 class="pb-title">All 17 checks at a glance.</h1>
+      <h1 class="pb-title">All 33 checks at a glance.</h1>
       <p class="pb-lede">
         Every audit check, color-coded by severity. Click any row to jump to
         the All Checks library entry that explains the universal best practice
@@ -803,19 +805,19 @@
 
       <div class="scorecard-grid">
         <div class="scorecard-cell">
-          <div class="scorecard-num is-fail">3</div>
+          <div class="scorecard-num is-fail">7</div>
           <div class="scorecard-label">High severity</div>
         </div>
         <div class="scorecard-cell">
-          <div class="scorecard-num is-warn">10</div>
+          <div class="scorecard-num is-warn">17</div>
           <div class="scorecard-label">Medium severity</div>
         </div>
         <div class="scorecard-cell">
-          <div class="scorecard-num is-pass">4</div>
+          <div class="scorecard-num is-pass">8</div>
           <div class="scorecard-label">Clean / pass</div>
         </div>
         <div class="scorecard-cell">
-          <div class="scorecard-num">17</div>
+          <div class="scorecard-num">33</div>
           <div class="scorecard-label">Total checks</div>
         </div>
       </div>
@@ -835,14 +837,14 @@
             <td><a href="#lib-on-site-seo">Title, description, canonical, robots, viewport, H1/H2, lang</a></td>
             <td>content structure</td>
             <td><span class="sev-chip is-pass">Clean</span></td>
-            <td class="num">1</td>
+            <td class="num">2</td>
           </tr>
           
           <tr class="scorecard-row-link" data-jump="#lib-schema-jsonld">
             <td><a href="#lib-schema-jsonld">JSON-LD: Organization, WebSite, Service, FAQPage shapes</a></td>
             <td>structured data</td>
             <td><span class="sev-chip is-warn">Medium</span></td>
-            <td class="num">1</td>
+            <td class="num">5</td>
           </tr>
           
           <tr class="scorecard-row-link" data-jump="#lib-open-graph">
@@ -856,98 +858,210 @@
             <td><a href="#lib-llm-citation">OpenAI (ChatGPT) names the target domain for representative queries</a></td>
             <td>E-E-A-T &amp; authority</td>
             <td><span class="sev-chip is-warn">Medium</span></td>
-            <td class="num">1</td>
+            <td class="num"></td>
           </tr>
           
           <tr class="scorecard-row-link" data-jump="#lib-llm-citation">
             <td><a href="#lib-llm-citation">Anthropic (Claude) names the target domain for representative queries</a></td>
             <td>E-E-A-T &amp; authority</td>
             <td><span class="sev-chip is-warn">Medium</span></td>
-            <td class="num">1</td>
+            <td class="num"></td>
           </tr>
           
           <tr class="scorecard-row-link" data-jump="#lib-llm-citation">
             <td><a href="#lib-llm-citation">Gemini (Google) names the target domain for representative queries</a></td>
             <td>E-E-A-T &amp; authority</td>
             <td><span class="sev-chip is-fail">High</span></td>
-            <td class="num">1</td>
+            <td class="num"></td>
           </tr>
           
           <tr class="scorecard-row-link" data-jump="#lib-llm-citation">
             <td><a href="#lib-llm-citation">Perplexity (Sonar) names the target domain for representative queries</a></td>
             <td>E-E-A-T &amp; authority</td>
             <td><span class="sev-chip is-warn">Medium</span></td>
-            <td class="num">1</td>
+            <td class="num"></td>
           </tr>
           
           <tr class="scorecard-row-link" data-jump="#lib-llms-txt">
             <td><a href="#lib-llms-txt">llms.txt directive file at the site root</a></td>
             <td>crawl &amp; indexability</td>
             <td><span class="sev-chip is-fail">High</span></td>
-            <td class="num">1</td>
+            <td class="num"></td>
           </tr>
           
           <tr class="scorecard-row-link" data-jump="#lib-wikipedia">
             <td><a href="#lib-wikipedia">Wikipedia article + external citations</a></td>
             <td>E-E-A-T &amp; authority</td>
             <td><span class="sev-chip is-warn">Medium</span></td>
-            <td class="num">1</td>
+            <td class="num"></td>
           </tr>
           
           <tr class="scorecard-row-link" data-jump="#lib-wikidata-presence">
             <td><a href="#lib-wikidata-presence">Wikidata Q-ID + typed claims (instance of, industry, founded)</a></td>
             <td>E-E-A-T &amp; authority</td>
             <td><span class="sev-chip is-pass">Clean</span></td>
-            <td class="num">1</td>
+            <td class="num"></td>
           </tr>
           
           <tr class="scorecard-row-link" data-jump="#all-checks">
             <td><a href="#all-checks">Google Knowledge Graph entity entry</a></td>
             <td>E-E-A-T &amp; authority</td>
             <td><span class="sev-chip is-warn">Medium</span></td>
-            <td class="num">1</td>
+            <td class="num"></td>
           </tr>
           
           <tr class="scorecard-row-link" data-jump="#all-checks">
             <td><a href="#all-checks">Embedded YouTube videos have transcripts</a></td>
             <td>media</td>
             <td><span class="sev-chip is-warn">Medium</span></td>
-            <td class="num">1</td>
+            <td class="num">0</td>
           </tr>
           
           <tr class="scorecard-row-link" data-jump="#lib-youtube-mentions">
             <td><a href="#lib-youtube-mentions">Brand mentions in third-party YouTube content (titles, descriptions, transcripts)</a></td>
             <td>media</td>
             <td><span class="sev-chip is-warn">Medium</span></td>
-            <td class="num">1</td>
+            <td class="num"></td>
           </tr>
           
           <tr class="scorecard-row-link" data-jump="#all-checks">
             <td><a href="#all-checks">Google organic rank for brand-only and brand+modifier queries</a></td>
             <td>rendering &amp; visibility</td>
             <td><span class="sev-chip is-pass">Clean</span></td>
-            <td class="num">1</td>
+            <td class="num"></td>
           </tr>
           
           <tr class="scorecard-row-link" data-jump="#all-checks">
             <td><a href="#all-checks">Google AI Overview surfaces the target domain on commercial buyer queries</a></td>
             <td>rendering &amp; visibility</td>
             <td><span class="sev-chip is-fail">High</span></td>
-            <td class="num">1</td>
+            <td class="num"></td>
           </tr>
           
           <tr class="scorecard-row-link" data-jump="#all-checks">
             <td><a href="#all-checks">Bing Copilot answer + Bing organic rank for buyer queries</a></td>
             <td>rendering &amp; visibility</td>
             <td><span class="sev-chip is-warn">Medium</span></td>
-            <td class="num">1</td>
+            <td class="num"></td>
           </tr>
           
           <tr class="scorecard-row-link" data-jump="#all-checks">
             <td><a href="#all-checks">Google Business Profile completeness</a></td>
             <td>security &amp; trust</td>
             <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num"></td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">Effective meta title</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">3</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">Effective meta description</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-pass">Clean</span></td>
+            <td class="num">0</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">HowTo schema on step-by-step guides</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-skip">Skip</span></td>
+            <td class="num">0</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">BreadcrumbList schema</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-fail">High</span></td>
+            <td class="num">3</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">Author schema with linkable bios</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">2</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">sameAs entries on Organization schema</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
             <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">Consistent brand name across site and schema</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">5</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">Content freshness signals</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-fail">High</span></td>
+            <td class="num">3</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness) signals</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">4</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">robots.txt does not block AI crawlers</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-pass">Clean</span></td>
+            <td class="num"></td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">noindex AI directives</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-pass">Clean</span></td>
+            <td class="num">0</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">Page language declaration</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-pass">Clean</span></td>
+            <td class="num">0</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">XML sitemap lastmod coverage</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num"></td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">Answer-first paragraph in the first 80 to 110 words</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-fail">High</span></td>
+            <td class="num">2</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">Inline citations and external-source footnotes</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-fail">High</span></td>
+            <td class="num">4</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#all-checks">
+            <td><a href="#all-checks">Pricing page exists at the site root</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num"></td>
           </tr>
           
         </tbody>
@@ -1086,13 +1200,13 @@
           
           <div class="pm-cell">
             <div class="pm-rank">04</div>
-            <div class="pm-task">Three priority shapes to add. (1) WebSite JSON-LD with publisher pointing to your Organization. (2) Service schema with &#39;serviceType: &#34;Insurance comparison platform&#34;&#39; and &#39;areaServed: { &#34;@type&#34;: &#34;Country&#34;, &#34;name&#34;: &#34;United States&#34; }&#39;. (3) FAQPage JSON-LD on /faq with all 14 question/answer pairs marked up; this unlocks AIO + Bing Copilot FAQ-rich-result eligibility and feeds Perplexity&#39;s grounding. Ready-to-paste samples in your Playbook.</div>
-            <div class="pm-effort">LOW EFFORT</div>
+            <div class="pm-task">Mirror the visible breadcrumb hierarchy in JSON-LD. Each ListItem needs `position`, `name`, and `item` (the URL). Search engines and AI answer engines use this for entity site-hierarchy understanding.</div>
+            <div class="pm-effort">HIGH EFFORT</div>
           </div>
           
           <div class="pm-cell">
             <div class="pm-rank">05</div>
-            <div class="pm-task">Publish authoritative content on the 8 missed query topics (Texas Camry, Florida home, fastest claims handler, online quote credit-score impact, California-specific, $20 renters, plus 2 more). Use the buyer&#39;s exact phrasing in H2/H3 headings + answer-first paragraphs in the first 80 words. Targets to outrank: Insurify (cited in 8/10), The Zebra (7/10), NerdWallet (5/10).</div>
+            <div class="pm-task">Surface a visible last-updated date (e.g. &lt;time datetime=&#34;2026-05-05&#34;&gt;Updated May 5, 2026&lt;/time&gt;), add schema.org dateModified to the page&#39;s Article/WebPage JSON-LD, and ensure your CMS or CDN emits a Last-Modified HTTP header. LLMs prefer fresh sources when answering buyer questions; stale-looking pages lose answer-engine ranking even when their content is current.</div>
             <div class="pm-effort">HIGH EFFORT</div>
           </div>
           
@@ -1173,6 +1287,258 @@
         &#34;@id&#34;: &#34;https://claimzilla.example/#website&#34;
       },
       &#34;name&#34;: &#34;Claimzilla&#34;,
+      &#34;inLanguage&#34;: &#34;en-US&#34;
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+      
+      <div class="schema-card-head">
+        <h3>/auto-insurance  /  Organization, WebSite, BreadcrumbList, WebPage (combined @graph)</h3>
+        <button class="copy-pill" type="button" data-copy-target="schema-2">Copy</button>
+      </div>
+      <pre class="schema-block" id="schema-2">&lt;script type=&#34;application/ld+json&#34;&gt;
+{
+  &#34;@context&#34;: &#34;https://schema.org&#34;,
+  &#34;@graph&#34;: [
+    {
+      &#34;@context&#34;: &#34;https://schema.org&#34;,
+      &#34;@type&#34;: &#34;Organization&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/#organization&#34;,
+      &#34;name&#34;: &#34;Claimzilla&#34;,
+      &#34;url&#34;: &#34;https://claimzilla.example&#34;,
+      &#34;description&#34;: &#34;Claimzilla is a U.S.-based digital marketplace that compares personal-line insurance quotes (auto, home, renters, life) from 40+ carriers in under 90 seconds and pairs every quote with a transparent claims-history scorecard for the carrier behind it.&#34;,
+      &#34;areaServed&#34;: {
+        &#34;@type&#34;: &#34;Place&#34;,
+        &#34;name&#34;: &#34;United States&#34;
+      }
+    },
+    {
+      &#34;@context&#34;: &#34;https://schema.org&#34;,
+      &#34;@type&#34;: &#34;WebSite&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/#website&#34;,
+      &#34;url&#34;: &#34;https://claimzilla.example/&#34;,
+      &#34;name&#34;: &#34;Claimzilla&#34;,
+      &#34;publisher&#34;: {
+        &#34;@id&#34;: &#34;https://claimzilla.example/#organization&#34;
+      },
+      &#34;inLanguage&#34;: &#34;en-US&#34;,
+      &#34;description&#34;: &#34;Claimzilla is a U.S.-based digital marketplace that compares personal-line insurance quotes (auto, home, renters, life) from 40+ carriers in under 90 seconds and pairs every quote with a transparent claims-history scorecard for the carrier behind it.&#34;
+    },
+    {
+      &#34;@type&#34;: &#34;BreadcrumbList&#34;,
+      &#34;itemListElement&#34;: [
+        {
+          &#34;@type&#34;: &#34;ListItem&#34;,
+          &#34;position&#34;: 1,
+          &#34;name&#34;: &#34;Claimzilla&#34;,
+          &#34;item&#34;: &#34;https://claimzilla.example/&#34;
+        },
+        {
+          &#34;@type&#34;: &#34;ListItem&#34;,
+          &#34;position&#34;: 2,
+          &#34;name&#34;: &#34;Auto Insurance&#34;,
+          &#34;item&#34;: &#34;https://claimzilla.example/auto-insurance&#34;
+        }
+      ]
+    },
+    {
+      &#34;@type&#34;: &#34;WebPage&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/auto-insurance#webpage&#34;,
+      &#34;url&#34;: &#34;https://claimzilla.example/auto-insurance&#34;,
+      &#34;isPartOf&#34;: {
+        &#34;@id&#34;: &#34;https://claimzilla.example/#website&#34;
+      },
+      &#34;name&#34;: &#34;Auto Insurance&#34;,
+      &#34;inLanguage&#34;: &#34;en-US&#34;
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+      
+      <div class="schema-card-head">
+        <h3>/home-insurance  /  Organization, WebSite, BreadcrumbList, WebPage (combined @graph)</h3>
+        <button class="copy-pill" type="button" data-copy-target="schema-3">Copy</button>
+      </div>
+      <pre class="schema-block" id="schema-3">&lt;script type=&#34;application/ld+json&#34;&gt;
+{
+  &#34;@context&#34;: &#34;https://schema.org&#34;,
+  &#34;@graph&#34;: [
+    {
+      &#34;@context&#34;: &#34;https://schema.org&#34;,
+      &#34;@type&#34;: &#34;Organization&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/#organization&#34;,
+      &#34;name&#34;: &#34;Claimzilla&#34;,
+      &#34;url&#34;: &#34;https://claimzilla.example&#34;,
+      &#34;description&#34;: &#34;Claimzilla is a U.S.-based digital marketplace that compares personal-line insurance quotes (auto, home, renters, life) from 40+ carriers in under 90 seconds and pairs every quote with a transparent claims-history scorecard for the carrier behind it.&#34;,
+      &#34;areaServed&#34;: {
+        &#34;@type&#34;: &#34;Place&#34;,
+        &#34;name&#34;: &#34;United States&#34;
+      }
+    },
+    {
+      &#34;@context&#34;: &#34;https://schema.org&#34;,
+      &#34;@type&#34;: &#34;WebSite&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/#website&#34;,
+      &#34;url&#34;: &#34;https://claimzilla.example/&#34;,
+      &#34;name&#34;: &#34;Claimzilla&#34;,
+      &#34;publisher&#34;: {
+        &#34;@id&#34;: &#34;https://claimzilla.example/#organization&#34;
+      },
+      &#34;inLanguage&#34;: &#34;en-US&#34;,
+      &#34;description&#34;: &#34;Claimzilla is a U.S.-based digital marketplace that compares personal-line insurance quotes (auto, home, renters, life) from 40+ carriers in under 90 seconds and pairs every quote with a transparent claims-history scorecard for the carrier behind it.&#34;
+    },
+    {
+      &#34;@type&#34;: &#34;BreadcrumbList&#34;,
+      &#34;itemListElement&#34;: [
+        {
+          &#34;@type&#34;: &#34;ListItem&#34;,
+          &#34;position&#34;: 1,
+          &#34;name&#34;: &#34;Claimzilla&#34;,
+          &#34;item&#34;: &#34;https://claimzilla.example/&#34;
+        },
+        {
+          &#34;@type&#34;: &#34;ListItem&#34;,
+          &#34;position&#34;: 2,
+          &#34;name&#34;: &#34;Home Insurance&#34;,
+          &#34;item&#34;: &#34;https://claimzilla.example/home-insurance&#34;
+        }
+      ]
+    },
+    {
+      &#34;@type&#34;: &#34;WebPage&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/home-insurance#webpage&#34;,
+      &#34;url&#34;: &#34;https://claimzilla.example/home-insurance&#34;,
+      &#34;isPartOf&#34;: {
+        &#34;@id&#34;: &#34;https://claimzilla.example/#website&#34;
+      },
+      &#34;name&#34;: &#34;Home Insurance&#34;,
+      &#34;inLanguage&#34;: &#34;en-US&#34;
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+      
+      <div class="schema-card-head">
+        <h3>/about  /  Organization, WebSite, BreadcrumbList, WebPage (combined @graph)</h3>
+        <button class="copy-pill" type="button" data-copy-target="schema-4">Copy</button>
+      </div>
+      <pre class="schema-block" id="schema-4">&lt;script type=&#34;application/ld+json&#34;&gt;
+{
+  &#34;@context&#34;: &#34;https://schema.org&#34;,
+  &#34;@graph&#34;: [
+    {
+      &#34;@context&#34;: &#34;https://schema.org&#34;,
+      &#34;@type&#34;: &#34;Organization&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/#organization&#34;,
+      &#34;name&#34;: &#34;Claimzilla&#34;,
+      &#34;url&#34;: &#34;https://claimzilla.example&#34;,
+      &#34;description&#34;: &#34;Claimzilla is a U.S.-based digital marketplace that compares personal-line insurance quotes (auto, home, renters, life) from 40+ carriers in under 90 seconds and pairs every quote with a transparent claims-history scorecard for the carrier behind it.&#34;,
+      &#34;areaServed&#34;: {
+        &#34;@type&#34;: &#34;Place&#34;,
+        &#34;name&#34;: &#34;United States&#34;
+      }
+    },
+    {
+      &#34;@context&#34;: &#34;https://schema.org&#34;,
+      &#34;@type&#34;: &#34;WebSite&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/#website&#34;,
+      &#34;url&#34;: &#34;https://claimzilla.example/&#34;,
+      &#34;name&#34;: &#34;Claimzilla&#34;,
+      &#34;publisher&#34;: {
+        &#34;@id&#34;: &#34;https://claimzilla.example/#organization&#34;
+      },
+      &#34;inLanguage&#34;: &#34;en-US&#34;,
+      &#34;description&#34;: &#34;Claimzilla is a U.S.-based digital marketplace that compares personal-line insurance quotes (auto, home, renters, life) from 40+ carriers in under 90 seconds and pairs every quote with a transparent claims-history scorecard for the carrier behind it.&#34;
+    },
+    {
+      &#34;@type&#34;: &#34;BreadcrumbList&#34;,
+      &#34;itemListElement&#34;: [
+        {
+          &#34;@type&#34;: &#34;ListItem&#34;,
+          &#34;position&#34;: 1,
+          &#34;name&#34;: &#34;Claimzilla&#34;,
+          &#34;item&#34;: &#34;https://claimzilla.example/&#34;
+        },
+        {
+          &#34;@type&#34;: &#34;ListItem&#34;,
+          &#34;position&#34;: 2,
+          &#34;name&#34;: &#34;About&#34;,
+          &#34;item&#34;: &#34;https://claimzilla.example/about&#34;
+        }
+      ]
+    },
+    {
+      &#34;@type&#34;: &#34;WebPage&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/about#webpage&#34;,
+      &#34;url&#34;: &#34;https://claimzilla.example/about&#34;,
+      &#34;isPartOf&#34;: {
+        &#34;@id&#34;: &#34;https://claimzilla.example/#website&#34;
+      },
+      &#34;name&#34;: &#34;About&#34;,
+      &#34;inLanguage&#34;: &#34;en-US&#34;
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+      
+      <div class="schema-card-head">
+        <h3>/faq  /  Organization, WebSite, BreadcrumbList, WebPage (combined @graph)</h3>
+        <button class="copy-pill" type="button" data-copy-target="schema-5">Copy</button>
+      </div>
+      <pre class="schema-block" id="schema-5">&lt;script type=&#34;application/ld+json&#34;&gt;
+{
+  &#34;@context&#34;: &#34;https://schema.org&#34;,
+  &#34;@graph&#34;: [
+    {
+      &#34;@context&#34;: &#34;https://schema.org&#34;,
+      &#34;@type&#34;: &#34;Organization&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/#organization&#34;,
+      &#34;name&#34;: &#34;Claimzilla&#34;,
+      &#34;url&#34;: &#34;https://claimzilla.example&#34;,
+      &#34;description&#34;: &#34;Claimzilla is a U.S.-based digital marketplace that compares personal-line insurance quotes (auto, home, renters, life) from 40+ carriers in under 90 seconds and pairs every quote with a transparent claims-history scorecard for the carrier behind it.&#34;,
+      &#34;areaServed&#34;: {
+        &#34;@type&#34;: &#34;Place&#34;,
+        &#34;name&#34;: &#34;United States&#34;
+      }
+    },
+    {
+      &#34;@context&#34;: &#34;https://schema.org&#34;,
+      &#34;@type&#34;: &#34;WebSite&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/#website&#34;,
+      &#34;url&#34;: &#34;https://claimzilla.example/&#34;,
+      &#34;name&#34;: &#34;Claimzilla&#34;,
+      &#34;publisher&#34;: {
+        &#34;@id&#34;: &#34;https://claimzilla.example/#organization&#34;
+      },
+      &#34;inLanguage&#34;: &#34;en-US&#34;,
+      &#34;description&#34;: &#34;Claimzilla is a U.S.-based digital marketplace that compares personal-line insurance quotes (auto, home, renters, life) from 40+ carriers in under 90 seconds and pairs every quote with a transparent claims-history scorecard for the carrier behind it.&#34;
+    },
+    {
+      &#34;@type&#34;: &#34;BreadcrumbList&#34;,
+      &#34;itemListElement&#34;: [
+        {
+          &#34;@type&#34;: &#34;ListItem&#34;,
+          &#34;position&#34;: 1,
+          &#34;name&#34;: &#34;Claimzilla&#34;,
+          &#34;item&#34;: &#34;https://claimzilla.example/&#34;
+        },
+        {
+          &#34;@type&#34;: &#34;ListItem&#34;,
+          &#34;position&#34;: 2,
+          &#34;name&#34;: &#34;Faq&#34;,
+          &#34;item&#34;: &#34;https://claimzilla.example/faq&#34;
+        }
+      ]
+    },
+    {
+      &#34;@type&#34;: &#34;WebPage&#34;,
+      &#34;@id&#34;: &#34;https://claimzilla.example/faq#webpage&#34;,
+      &#34;url&#34;: &#34;https://claimzilla.example/faq&#34;,
+      &#34;isPartOf&#34;: {
+        &#34;@id&#34;: &#34;https://claimzilla.example/#website&#34;
+      },
+      &#34;name&#34;: &#34;Faq&#34;,
       &#34;inLanguage&#34;: &#34;en-US&#34;
     }
   ]
