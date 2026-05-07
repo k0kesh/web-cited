@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Mockup: Playbook to PDF link, Option A</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    /* Mockup-only chrome. Mirrors the canonical Playbook tokens
+       (web-cited/docs/sample/playbook-claimzilla.html) for byte-faithful
+       compare. Brutalist palette: ink #000000 / paper #f4f3ef. */
+    :root {
+      --ink: #000000;
+      --paper: #f4f3ef;
+      --paper-white: #ffffff;
+      --accent: #cc0000;
+      --slate-700: #475569;
+      --rule: 1.5px solid var(--ink);
+      --rule-thick: 3px solid var(--ink);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Helvetica, Arial, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      padding: 36px;
+    }
+
+    h1.label {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      margin: 0 0 8px;
+      color: var(--slate-700);
+    }
+    p.lede {
+      font-size: 13px;
+      max-width: 880px;
+      color: var(--slate-700);
+      line-height: 1.5;
+      margin: 0 0 28px;
+    }
+
+    /* Verbatim copies of .pb-top + children from the canonical Playbook,
+       so this mockup matches byte-faithfully. */
+    .pb-top {
+      background: var(--ink);
+      color: var(--paper-white);
+      padding: 14px 28px;
+      border-bottom: var(--rule-thick);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .pb-brand {
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      font-size: 14px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .pb-brand-mark {
+      width: 28px; height: 28px;
+      background: var(--paper-white);
+      color: var(--ink);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 13px;
+    }
+    .pb-meta { font-size: 12px; color: #d6d6d6; letter-spacing: 0.4px; }
+    .pb-meta strong { color: var(--paper-white); }
+
+    /* New for Option A: the appended PDF link chip. Same dot separator
+       as the existing masthead segments; underlined so it reads as a
+       link, paper-white so it scans as primary content (not muted
+       like the rest of the meta line). On hover, accent-red the
+       underline (mirrors the .pb-tab and link hover pattern from the
+       canonical Playbook). */
+    .pb-meta a.pb-pdf-link {
+      color: var(--paper-white);
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 3px;
+    }
+    .pb-meta a.pb-pdf-link:hover {
+      color: var(--paper-white);
+      text-decoration-color: var(--accent);
+    }
+
+    /* Mockup sample-strip wrapper. */
+    .strip {
+      max-width: 1100px;
+      border: var(--rule-thick);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      margin-bottom: 36px;
+      background: var(--paper-white);
+    }
+
+    .frame-after-note {
+      background: #fff8e1;
+      border: 1px solid #c9b675;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #6b4f00;
+      line-height: 1.5;
+      max-width: 1100px;
+      margin-bottom: 36px;
+    }
+
+    .key {
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 11px;
+      background: #f0eeea;
+      padding: 1px 6px;
+      border-radius: 2px;
+    }
+
+    .footnote {
+      max-width: 880px;
+      font-size: 12px;
+      color: var(--slate-700);
+      line-height: 1.6;
+      border-top: 1px solid #d6d2cc;
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+    .footnote ul { margin: 8px 0 0 18px; padding: 0; }
+    .footnote li { margin: 4px 0; }
+  </style>
+</head>
+<body>
+
+  <h1 class="label">Before (current canonical, post-Tier-5 ship)</h1>
+  <p class="lede">
+    Top bar of <code class="key">playbook-claimzilla.html</code> as it ships today (post web-cited PR #65, 2026-05-06 afternoon). Single-line meta strip with brand + tier + engagement id + render date, separated by middle-dots.
+  </p>
+  <div class="strip">
+    <header class="pb-top" role="banner">
+      <div class="pb-brand">
+        <span class="pb-brand-mark">WC</span>
+        Web Cited Playbook
+      </div>
+      <div class="pb-meta">
+        <strong>Claimzilla</strong> &middot; Audit &middot; Engagement #claimzilla-sample &middot; Generated 2026-04-27
+      </div>
+    </header>
+  </div>
+
+  <h1 class="label">After (Option A: append PDF chip to the meta line)</h1>
+  <p class="lede">
+    Same masthead, with one additional middle-dot-separated segment at the end: <code class="key">audit-report.pdf</code> rendered as an inline link. Same paper-white color as the brand-name strong, underlined so it scans as clickable. On hover, the underline turns accent-red (mirrors existing link patterns elsewhere in the Playbook). No new layout, no new visual elements; pure data addition to the existing meta-strip pattern.
+  </p>
+  <div class="strip">
+    <header class="pb-top" role="banner">
+      <div class="pb-brand">
+        <span class="pb-brand-mark">WC</span>
+        Web Cited Playbook
+      </div>
+      <div class="pb-meta">
+        <strong>Claimzilla</strong> &middot; Audit &middot; Engagement #claimzilla-sample &middot; Generated 2026-04-27 &middot; <a class="pb-pdf-link" href="https://artifacts.web-cited.com/claimzilla-sample/audit-report.pdf">audit-report.pdf</a>
+      </div>
+    </header>
+  </div>
+
+  <div class="frame-after-note">
+    <strong>Hover state:</strong> the <code class="key">audit-report.pdf</code> link underline turns accent-red on hover (matches the existing
+    <code class="key">.pb-tab</code> + <code class="key">a:hover</code> pattern from the canonical Playbook).
+  </div>
+
+  <div class="footnote">
+    <strong>Implementation footprint (if Option A approved):</strong>
+    <ul>
+      <li>Pipeline (<code class="key">src/pipeline/playbook_render/playbook_context.py</code>): new field <code class="key">pdf_url: str = ""</code> on <code class="key">PlaybookContext</code>.</li>
+      <li>Pipeline (<code class="key">src/pipeline/playbook_render/context_builder.py</code>): new <code class="key">pdf_url: str = ""</code> parameter on <code class="key">build_playbook_context()</code> threaded into the context.</li>
+      <li>Template (<code class="key">playbook.html.j2</code>): one-line addition inside <code class="key">.pb-meta</code> rendering <code class="key">{% if ctx.pdf_url %}&middot; &lt;a class="pb-pdf-link"&gt;{{ basename(ctx.pdf_url) }}&lt;/a&gt;{% endif %}</code>.</li>
+      <li>Template <code class="key">&lt;style&gt;</code>: one new selector <code class="key">.pb-meta a.pb-pdf-link</code> with the underline / hover rules above.</li>
+      <li>Canonical fixture (<code class="key">scripts/render_claimzilla_sample.py</code>): pass a fictional URL like <code class="key">https://artifacts.web-cited.com/claimzilla-sample/audit-report.pdf</code> so the canonical sample shows the chip.</li>
+      <li>Real-customer wiring: the api Worker's <code class="key">BrandDeliverable.pdfUrl</code> is already set at audit-complete time; pipeline pulls it via the existing intake-deliverable path. No api-side change.</li>
+    </ul>
+    <strong>H7:</strong> visible meta-strip change. Adds 1 link segment at end of the meta line. Operator approval required at byte-walk before canonical ship.
+  </div>
+
+</body>
+</html>
