@@ -62,6 +62,19 @@
     }
     .pb-meta { font-size: 12px; color: #d6d6d6; letter-spacing: 0.4px; }
     .pb-meta strong { color: var(--paper-white); }
+    /* PDF download chip appended to .pb-meta. Operator-approved Option A
+       2026-05-06 (Q19). Reciprocal of the PDF Section 5 chip
+       playbook.web-cited.com/{token}; ships when ctx.pdf_url is set. */
+    .pb-meta a.pb-pdf-link {
+      color: var(--paper-white);
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 3px;
+    }
+    .pb-meta a.pb-pdf-link:hover {
+      color: var(--paper-white);
+      text-decoration-color: var(--accent);
+    }
     .pb-tabs {
       background: var(--paper);
       border-bottom: var(--rule);
@@ -601,7 +614,7 @@
     <section class="pb-section" id="exec">
       <div class="pb-eyebrow">Section 01 &middot; Executive Summary</div>
       <h1 class="pb-title">Claimzilla cited 40%.<br>insurify.com cited 80%.</h1>
-      <p class="pb-lede">Across 10 buyer-question prompts run against 4 Large Language Model engines the audit surfaced 8 high-severity findings and 21 medium-severity findings. The gap is concentrated in structured data, E-E-A-T &amp; authority, crawl &amp; indexability. Each is a tractable fix; ranked by impact divided by effort, in the Priority 1 Fixes section.</p>
+      <p class="pb-lede">Across 10 buyer-question prompts run against 4 Large Language Model engines the audit surfaced 8 high-severity findings and 22 medium-severity findings. The gap is concentrated in structured data, E-E-A-T &amp; authority, crawl &amp; indexability. Each is a tractable fix; ranked by impact divided by effort, in the Priority 1 Fixes section.</p>
 
       
       <p style="margin: 0 0 18px 0; font-size: 11px; color: var(--ink); max-width: 620px;">
@@ -796,7 +809,7 @@
     <!-- 02 Scorecard -->
     <section class="pb-section" id="scorecard">
       <div class="pb-eyebrow">Section 02 &middot; Scorecard</div>
-      <h1 class="pb-title">All 38 checks at a glance.</h1>
+      <h1 class="pb-title">All 39 checks at a glance.</h1>
       <p class="pb-lede">
         Every audit check, color-coded by severity. Click any row to jump to
         the All Checks library entry that explains the universal best practice
@@ -809,7 +822,7 @@
           <div class="scorecard-label">High severity</div>
         </div>
         <div class="scorecard-cell">
-          <div class="scorecard-num is-warn">21</div>
+          <div class="scorecard-num is-warn">22</div>
           <div class="scorecard-label">Medium severity</div>
         </div>
         <div class="scorecard-cell">
@@ -817,7 +830,7 @@
           <div class="scorecard-label">Clean / pass</div>
         </div>
         <div class="scorecard-cell">
-          <div class="scorecard-num">38</div>
+          <div class="scorecard-num">39</div>
           <div class="scorecard-label">Total checks</div>
         </div>
       </div>
@@ -1099,6 +1112,13 @@
             <td class="num">3</td>
           </tr>
           
+          <tr class="scorecard-row-link" data-jump="#lib-html-data-visualizations">
+            <td><a href="#lib-html-data-visualizations">HTML data visualizations (tables, SVG)</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">2</td>
+          </tr>
+          
         </tbody>
       </table>
     </section>
@@ -1313,6 +1333,13 @@
           <h3>Pricing page exists at the site root</h3>
           <p>Buyers ask AI engines "how much does X cost from Y" as a top-of-funnel question. Brands without a discoverable /pricing page lose those citations to competitors with concrete pricing language, even when the brand's actual prices are competitive.</p>
           <div class="lib-fix">Fix: publish /pricing (or /plans, /cost) listing representative price ranges by tier. Even if exact quotes require buyer details, the static reference page captures the AI citation. Link from the header nav so crawlers reliably find it.</div>
+        </div>
+
+        <div class="lib-card" id="lib-html-data-visualizations">
+          <div class="lib-theme">Content &middot; Data</div>
+          <h3>HTML data visualizations (tables, SVG)</h3>
+          <p>AI answer engines extract data from native &lt;table&gt; rows and &lt;svg&gt; chart shapes directly into structured citations. Pages that ship the same data as a flat rasterized image (PNG / JPG of a chart) lose the data from extraction entirely; the alt text might describe the chart but the underlying numbers are unreachable.</p>
+          <div class="lib-fix">Fix: convert chart-shaped images to native HTML. &lt;table&gt; with &lt;thead&gt; and &lt;tbody&gt; for tabular data; &lt;svg&gt; with &lt;text&gt; labels for charts. If the image must stay (brand-rendered chart, third-party screenshot), ship the same data as a &lt;details&gt;&lt;summary&gt;Data table&lt;/summary&gt;&lt;table&gt;...&lt;/table&gt;&lt;/details&gt; block beside the image so AI extractors can still read the numbers.</div>
         </div>
 
         <div class="lib-card" id="lib-missing-comparison-content">
