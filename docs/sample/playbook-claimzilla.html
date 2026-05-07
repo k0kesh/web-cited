@@ -601,7 +601,7 @@
     <section class="pb-section" id="exec">
       <div class="pb-eyebrow">Section 01 &middot; Executive Summary</div>
       <h1 class="pb-title">Claimzilla cited 40%.<br>insurify.com cited 80%.</h1>
-      <p class="pb-lede">Across 10 buyer-question prompts run against 4 Large Language Model engines the audit surfaced 7 high-severity findings and 17 medium-severity findings. The gap is concentrated in structured data, E-E-A-T &amp; authority, crawl &amp; indexability. Each is a tractable fix; ranked by impact divided by effort, in the Priority 1 Fixes section.</p>
+      <p class="pb-lede">Across 10 buyer-question prompts run against 4 Large Language Model engines the audit surfaced 8 high-severity findings and 21 medium-severity findings. The gap is concentrated in structured data, E-E-A-T &amp; authority, crawl &amp; indexability. Each is a tractable fix; ranked by impact divided by effort, in the Priority 1 Fixes section.</p>
 
       
       <p style="margin: 0 0 18px 0; font-size: 11px; color: var(--ink); max-width: 620px;">
@@ -632,7 +632,7 @@
         
         <div class="kpi-cell">
           <div class="kpi-label">High-severity findings</div>
-          <div class="kpi-value"><span class="accent">7</span></div>
+          <div class="kpi-value"><span class="accent">8</span></div>
           
           <div class="kpi-delta">Fix this month for fastest lift on citation share.</div>
         </div>
@@ -796,7 +796,7 @@
     <!-- 02 Scorecard -->
     <section class="pb-section" id="scorecard">
       <div class="pb-eyebrow">Section 02 &middot; Scorecard</div>
-      <h1 class="pb-title">All 33 checks at a glance.</h1>
+      <h1 class="pb-title">All 38 checks at a glance.</h1>
       <p class="pb-lede">
         Every audit check, color-coded by severity. Click any row to jump to
         the All Checks library entry that explains the universal best practice
@@ -805,11 +805,11 @@
 
       <div class="scorecard-grid">
         <div class="scorecard-cell">
-          <div class="scorecard-num is-fail">7</div>
+          <div class="scorecard-num is-fail">8</div>
           <div class="scorecard-label">High severity</div>
         </div>
         <div class="scorecard-cell">
-          <div class="scorecard-num is-warn">17</div>
+          <div class="scorecard-num is-warn">21</div>
           <div class="scorecard-label">Medium severity</div>
         </div>
         <div class="scorecard-cell">
@@ -817,7 +817,7 @@
           <div class="scorecard-label">Clean / pass</div>
         </div>
         <div class="scorecard-cell">
-          <div class="scorecard-num">33</div>
+          <div class="scorecard-num">38</div>
           <div class="scorecard-label">Total checks</div>
         </div>
       </div>
@@ -1064,6 +1064,41 @@
             <td class="num"></td>
           </tr>
           
+          <tr class="scorecard-row-link" data-jump="#lib-missing-comparison-content">
+            <td><a href="#lib-missing-comparison-content">Comparison content (X vs Y, alternatives)</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-fail">High</span></td>
+            <td class="num"></td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#lib-effective-h1">
+            <td><a href="#lib-effective-h1">Effective H1 headline</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">2</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#lib-heading-hierarchy">
+            <td><a href="#lib-heading-hierarchy">Heading hierarchy (H1 to H6)</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">2</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#lib-semantic-html-landmarks">
+            <td><a href="#lib-semantic-html-landmarks">Semantic HTML landmarks</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">1</td>
+          </tr>
+          
+          <tr class="scorecard-row-link" data-jump="#lib-alt-text-on-images">
+            <td><a href="#lib-alt-text-on-images">Alt text on images</a></td>
+            <td>crawl &amp; indexability</td>
+            <td><span class="sev-chip is-warn">Medium</span></td>
+            <td class="num">3</td>
+          </tr>
+          
         </tbody>
       </table>
     </section>
@@ -1278,6 +1313,42 @@
           <h3>Pricing page exists at the site root</h3>
           <p>Buyers ask AI engines "how much does X cost from Y" as a top-of-funnel question. Brands without a discoverable /pricing page lose those citations to competitors with concrete pricing language, even when the brand's actual prices are competitive.</p>
           <div class="lib-fix">Fix: publish /pricing (or /plans, /cost) listing representative price ranges by tier. Even if exact quotes require buyer details, the static reference page captures the AI citation. Link from the header nav so crawlers reliably find it.</div>
+        </div>
+
+        <div class="lib-card" id="lib-missing-comparison-content">
+          <div class="lib-theme">Content &middot; Competitive</div>
+          <h3>Comparison content (X vs Y, alternatives)</h3>
+          <p>"X vs Y" pages, /alternatives indexes, and /compare routes are the strongest content signal for competitive buyer queries: "is X better than Y", "X alternatives", "switch from X to Y". AI answer engines treat comparison pages as authoritative buyer-decision content and cite them disproportionately on these queries.</p>
+          <p>Why it matters: brands without published comparison content lose the entire competitive-query class to competitors who have. This is one of the highest-leverage content gaps to close because the queries are bottom-funnel (the buyer is comparing before purchase) and the citation slot is a near-direct conversion signal.</p>
+          <div class="lib-fix">Fix: publish 2 to 4 comparison pages targeting your top competitive queries. "Brand vs Competitor" pages with honest feature matrices and cited evidence; an /alternatives index page that routes to specific pairings; a /compare hub linked from header nav. Add all to sitemap.xml so crawlers find them without URL-pattern guessing.</div>
+        </div>
+
+        <div class="lib-card" id="lib-effective-h1">
+          <div class="lib-theme">On-page &middot; Headline</div>
+          <h3>Effective H1 headline</h3>
+          <p>The H1 is the strongest single "what does this page address" signal alongside the &lt;title&gt;. Scored on 4 sub-signals: presence (one H1, not zero, not multiple), length (20 to 70 char sweet spot), differentiation from &lt;title&gt; (aligned but not byte-identical), and non-emptiness.</p>
+          <div class="lib-fix">Fix: aim for exactly one &lt;h1&gt; per page, 20 to 70 chars long, naming the page's primary buyer topic. The H1 should complement the &lt;title&gt; (which carries brand framing), not duplicate it. Demote secondary H1s emitted by CMS hero blocks to H2.</div>
+        </div>
+
+        <div class="lib-card" id="lib-heading-hierarchy">
+          <div class="lib-theme">On-page &middot; Structure</div>
+          <h3>Heading hierarchy (H1 to H6)</h3>
+          <p>AI engines chunk pages by heading hierarchy when extracting answers. A clean H1 to H6 tree (no skipped levels, no empty headings) makes the page parseable; a broken tree makes the page less likely to be selected as a citation source for buyer questions.</p>
+          <div class="lib-fix">Fix: walk the page's headings in document order. Every Hn must have an Hn-1 ancestor: if the page has an &lt;h3&gt;, the previous heading must be H1 or H2, not nothing. Remove empty heading tags (&lt;h2&gt;&lt;/h2&gt;); these are usually CMS template artifacts.</div>
+        </div>
+
+        <div class="lib-card" id="lib-semantic-html-landmarks">
+          <div class="lib-theme">On-page &middot; Markup</div>
+          <h3>Semantic HTML landmarks</h3>
+          <p>HTML5 semantic landmarks (&lt;header&gt;, &lt;nav&gt;, &lt;main&gt;, &lt;article&gt;, &lt;section&gt;, &lt;aside&gt;, &lt;footer&gt;) give AI page-structure parsers explicit page-region boundaries. Pages built entirely from &lt;div&gt; wrappers get worse answer-extraction quality: the crawler can't tell navigation from content.</p>
+          <div class="lib-fix">Fix: wrap your page in semantic landmarks. &lt;header&gt; for the masthead, &lt;nav&gt; for primary navigation, exactly one &lt;main&gt; for primary content, &lt;article&gt; or &lt;section&gt; for content regions inside &lt;main&gt;, &lt;footer&gt; for the closing region. AI extractors (notably ChatGPT browsing and Perplexity Sonar) use landmarks to exclude nav and footer from extraction.</div>
+        </div>
+
+        <div class="lib-card" id="lib-alt-text-on-images">
+          <div class="lib-theme">On-page &middot; Accessibility</div>
+          <h3>Alt text on images</h3>
+          <p>AI engines extract image-described content (product photos, diagrams, charts) via the &lt;img alt&gt; attribute. Pages with poor alt coverage lose this content from citation eligibility entirely. Coverage rule: every &lt;img&gt; needs either alt="" (decorative; explicit empty marker for icons and spacers) or non-empty alt describing what the image conveys.</p>
+          <div class="lib-fix">Fix: audit every &lt;img&gt; on the page. Add 8 to 16 word alt text describing what each content image shows. For purely decorative images, set alt="" explicitly so screen readers skip them. Avoid filename-as-alt (alt="hero-banner.jpg"); it passes presence checks but conveys no information.</div>
         </div>
       </div>
     </section>
