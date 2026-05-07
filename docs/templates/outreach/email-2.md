@@ -26,7 +26,7 @@ Re: {subject of email-1, verbatim}
 ```
 Hi {FIRST_NAME},
 
-Following up on the AI-search audit note from earlier this week. If the timing is wrong, no problem.
+Following up on the AI-search audit note from last week. If the timing is wrong, no problem.
 
 One stat from the Claimzilla sample (a fictional B2B brand we built the Playbook for): 40% citation share on the buyer prompts that drive their funnel, 67% for the nearest competitor. The audit tells you which one is you, on the prompts that matter to {COMPANY_NAME}.
 
