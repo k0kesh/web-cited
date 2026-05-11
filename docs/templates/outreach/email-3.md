@@ -35,7 +35,7 @@ Order: https://web-cited.com/start?utm_source=outbound&utm_medium=email&utm_camp
 Either way, good luck with the rest of the quarter.
 
 Craig
-Aliso, LLC dba Web Cited
+Aliso LLC dba Web Cited
 2108 N Street, Suite N, Sacramento, CA 95816
 
 Unsubscribe: {UNSUBSCRIBE_URL}

@@ -8,12 +8,16 @@
   #     first day. Browsers honoring this won't be locked into HTTPS
   #     beyond the 5-minute window.
   #   2026-04-30 (24+ hrs stable behavior): bumped to 86400 (1 day).
-  #   After 7 days of stable behavior: bump to 31536000 (1 year).
-  #   After 30 days of stable behavior: bump to 63072000 (2 years).
-  #   At 2-year max-age + 30+ days of stability: submit to https://hstspreload.org.
+  #   2026-05-10 (10+ days stable at 86400): bumped to 31536000 (1 year).
+  #     Pre-bump verification: HTTP -> HTTPS 301 on apex; all subdomains
+  #     (www, api, audit, artifacts, status) confirmed HTTPS-functional.
+  #   After 30 days of stable behavior: consider bump to 63072000 (2 years).
+  #   At 2-year max-age + 30+ days of stability: consider submitting to
+  #   https://hstspreload.org (deliberate, one-way decision; subdomains
+  #   must be permanently HTTPS-only before submission).
   # The includeSubDomains flag is safe today: every web-cited subdomain
-  # (api, audit, artifacts) already uses HTTPS.
-  Strict-Transport-Security: max-age=86400; includeSubDomains
+  # (api, audit, artifacts, status) already uses HTTPS.
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
 
   # Standard security headers.
   X-Content-Type-Options: nosniff

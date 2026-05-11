@@ -35,7 +35,7 @@ Sample (same link as before): https://web-cited.com/docs/sample/playbook-claimzi
 Order: https://web-cited.com/start?utm_source=outbound&utm_medium=email&utm_campaign=outbound_sxo_audit_2026_05&utm_content=email-2
 
 Craig
-Aliso, LLC dba Web Cited
+Aliso LLC dba Web Cited
 2108 N Street, Suite N, Sacramento, CA 95816
 
 Unsubscribe: {UNSUBSCRIBE_URL}

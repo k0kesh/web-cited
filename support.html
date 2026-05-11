@@ -36,7 +36,11 @@
         "@id": "https://web-cited.com/#business",
         "name": "Web Cited",
         "url": "https://web-cited.com/",
-        "email": "hello@web-cited.com"
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "url": "https://web-cited.com/contact",
+          "contactType": "Customer Support"
+        }
       },
       {
         "@type": "WebSite",
@@ -70,7 +74,7 @@
           { "@type": "Question", "name": "Why didn't you find X?", "acceptedAnswer": { "@type": "Answer", "text": "Common reasons we did not surface a finding you expected: (a) the URL was not in the audit set we crawled (each tier caps URLs; see Terms §3); (b) the prompt phrasing did not trigger the engine to cite the topic (LLM responses are non-deterministic across runs); (c) the signal is real but lives in a deliverable section you have not opened yet (try the Playbook Findings tab and the schema pack); (d) the signal exists but does not meet our scoring threshold (we explicitly de-prioritize trivia-grade findings to keep the backlog tractable). If you believe we missed something material, send a Defect Notice within 7 business days of delivery per Terms §4.7 and we will review." } },
           { "@type": "Question", "name": "How often should I re-audit?", "acceptedAnswer": { "@type": "Answer", "text": "For most B2B brands, every 6 months is the right cadence; for fast-moving categories or sites doing active SEO work, quarterly. LLM engines and search algorithms change continuously and unpredictably (see Terms §6.8); a finding that was true at audit time may shift in 60-90 days as platforms update. Re-audits are separately scoped paid engagements." } },
           { "@type": "Question", "name": "Do you implement the fixes?", "acceptedAnswer": { "@type": "Answer", "text": "No. We hand off a prioritized fix backlog with implementation guidance, but we do not execute the fixes ourselves. The Playbook includes paste-ready JSON-LD blocks for the schema pack, draft copy improvements, and URL-level remediation hints; you or your existing agency execute. This is a deliberate scope choice, it lets us audit without the conflict-of-interest of also being the implementer." } },
-          { "@type": "Question", "name": "How do I request data deletion?", "acceptedAnswer": { "@type": "Answer", "text": "Email hello@web-cited.com with the subject 'Customer Content deletion'. We acknowledge within 5 business days and complete the deletion within 30 business days, except for materials we are required or permitted to retain for legal, tax, audit, accounting, or dispute-resolution purposes (typically up to 7 years for financial records). See Privacy Policy and Terms of Service §5.6 for the full mechanism." } },
+          { "@type": "Question", "name": "How do I request data deletion?", "acceptedAnswer": { "@type": "Answer", "text": "Send a message through the contact form at https://web-cited.com/contact with the subject 'Customer Content deletion'. We acknowledge within 5 business days and complete the deletion within 30 business days, except for materials we are required or permitted to retain for legal, tax, audit, accounting, or dispute-resolution purposes (typically up to 7 years for financial records). See Privacy Policy and Terms of Service §5.6 for the full mechanism." } },
           { "@type": "Question", "name": "What payment methods do you accept?", "acceptedAnswer": { "@type": "Answer", "text": "Stripe checkout: card or ACH. We do not accept checks, wires outside Stripe, or PO-based billing. Stripe sends a receipt automatically; if you need an invoice PDF in advance, the scope-confirmation email links to a downloadable invoice PDF." } }
         ]
       },
@@ -233,7 +237,7 @@
         <div class="faq">
           <details class="faq__item">
             <summary>How do I request data deletion?</summary>
-            <p>Email <a href="mailto:hello@web-cited.com?subject=Customer%20Content%20deletion">hello@web-cited.com</a> with the subject "Customer Content deletion". This is a direct legal-action route, not the contact form, because it triggers a specific GDPR / CCPA process timeline.</p>
+            <p>Send a message through the <a href="/contact?subject=Customer%20Content%20deletion">contact form</a> with the subject "Customer Content deletion". We log submission timestamps so this starts the GDPR / CCPA response timeline.</p>
             <p>We acknowledge within 5 business days and complete the deletion within 30 business days, across our CRM, the email-delivery service's message logs, the intake API's operational storage, and our email threads. Materials we are required or permitted to retain (paid invoices, tax records, anything under legal hold) are kept for the period the law requires (typically up to 7 years for financial records).</p>
             <p>Full text in <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms of Service §5.6</a>.</p>
           </details>
@@ -298,7 +302,10 @@
             <li><a href="why-sxo.html">Why SXO</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="support.html">Support</a></li>
+            <li><a href="accessibility.html">Accessibility</a></li>
+            <li><a href="security.html">Security</a></li>
             <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="subprocessors.html">Subprocessors</a></li>
             <li><a href="terms.html">Terms of Service</a></li>
           </ul>
         </div>
@@ -311,10 +318,8 @@
         </div>
       </div>
       <div class="footer__meta">
-        <span>&copy; <span id="year">2026</span> Web Cited</span>
+        <span>&copy; <span id="year">2026</span> Aliso LLC dba Web Cited. All rights reserved.</span>
         <span>Search Experience Optimization</span>
-        <span><a href="privacy.html">Privacy</a></span>
-        <span><a href="terms.html">Terms</a></span>
       </div>
     </div>
   </footer>

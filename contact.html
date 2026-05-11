@@ -42,7 +42,11 @@
         "@id": "https://web-cited.com/#business",
         "name": "Web Cited",
         "url": "https://web-cited.com/",
-        "email": "hello@web-cited.com"
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "url": "https://web-cited.com/contact",
+          "contactType": "Customer Support"
+        }
       },
       {
         "@type": "WebSite",
@@ -208,6 +212,8 @@
             <ul id="contact-error-summary-list"></ul>
           </div>
 
+          <p class="hint form-consent">By submitting, you agree to our <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms</a>. We respond within 1 business day.</p>
+
           <div class="submit-row">
             <button class="btn btn--primary btn--lg" type="submit">Send message</button>
             <span class="submit-note">We reply inside 1 business day</span>
@@ -228,7 +234,7 @@
           <span class="eyebrow">Couldn't send</span>
           <h2>Your message is still here.</h2>
           <p>We couldn't reach our contact server. This is almost always a flaky connection, not a problem with your note.</p>
-          <p>Your form is still filled in below. Try again, or email <a href="mailto:hello@web-cited.com">hello@web-cited.com</a> and paste your message in the body.</p>
+          <p>Your form is still filled in below. Try again, or email <a href="mailto:hello@web-cited.com">&#104;&#101;&#108;&#108;&#111;&#64;&#119;&#101;&#98;&#45;&#99;&#105;&#116;&#101;&#100;&#46;&#99;&#111;&#109;</a> and paste your message in the body.</p>
           <div class="submit-row">
             <button class="btn btn--primary" id="contact-retry-button" type="button">Try again</button>
             <span class="submit-note">Your message is kept on-page</span>
@@ -260,7 +266,10 @@
             <li><a href="why-sxo.html">Why SXO</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="support.html">Support</a></li>
+            <li><a href="accessibility.html">Accessibility</a></li>
+            <li><a href="security.html">Security</a></li>
             <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="subprocessors.html">Subprocessors</a></li>
             <li><a href="terms.html">Terms of Service</a></li>
           </ul>
         </div>
@@ -273,10 +282,8 @@
         </div>
       </div>
       <div class="footer__meta">
-        <span>&copy; <span id="year">2026</span> Web Cited</span>
+        <span>&copy; <span id="year">2026</span> Aliso LLC dba Web Cited. All rights reserved.</span>
         <span>Search Experience Optimization</span>
-        <span><a href="privacy.html">Privacy</a></span>
-        <span><a href="terms.html">Terms</a></span>
       </div>
     </div>
   </footer>

@@ -1,0 +1,15 @@
+# Security policy for Web Cited (Aliso LLC dba Web Cited).
+#
+# Vulnerability disclosure: please use the contact form rather than
+# email. The form is at the Contact URL below and accepts a subject
+# of SECURITY to route correctly. We acknowledge within 1 business
+# day and substantively respond within 5 business days.
+#
+# Renew this file by 2027-05-10. A reminder is tracked in the
+# operator's task system.
+
+Contact: https://web-cited.com/contact?subject=SECURITY
+Expires: 2027-05-10T00:00:00.000Z
+Canonical: https://web-cited.com/.well-known/security.txt
+Policy: https://web-cited.com/security
+Preferred-Languages: en

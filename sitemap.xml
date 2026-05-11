@@ -7,62 +7,80 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://web-cited.com/services.html</loc>
+    <loc>https://web-cited.com/services</loc>
     <lastmod>2026-04-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://web-cited.com/pricing.html</loc>
+    <loc>https://web-cited.com/pricing</loc>
     <lastmod>2026-04-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://web-cited.com/how-it-works.html</loc>
+    <loc>https://web-cited.com/how-it-works</loc>
     <lastmod>2026-04-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://web-cited.com/why-sxo.html</loc>
+    <loc>https://web-cited.com/why-sxo</loc>
     <lastmod>2026-04-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://web-cited.com/about.html</loc>
+    <loc>https://web-cited.com/about</loc>
     <lastmod>2026-04-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://web-cited.com/start.html</loc>
+    <loc>https://web-cited.com/start</loc>
     <lastmod>2026-04-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://web-cited.com/contact.html</loc>
+    <loc>https://web-cited.com/contact</loc>
     <lastmod>2026-04-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://web-cited.com/support.html</loc>
+    <loc>https://web-cited.com/support</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://web-cited.com/terms.html</loc>
+    <loc>https://web-cited.com/terms</loc>
     <lastmod>2026-04-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://web-cited.com/privacy.html</loc>
+    <loc>https://web-cited.com/privacy</loc>
     <lastmod>2026-04-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://web-cited.com/security</loc>
+    <lastmod>2026-05-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://web-cited.com/accessibility</loc>
+    <lastmod>2026-05-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://web-cited.com/subprocessors</loc>
+    <lastmod>2026-05-10</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Security and data handling | Web Cited</title>
+  <meta name="description" content="How Web Cited collects, stores, and protects intake submissions and audit content. Zero analytics, zero tracking cookies, named subprocessors, and a published retention schedule." />
+  <link rel="canonical" href="https://web-cited.com/security" />
+  <meta name="theme-color" content="#f4f3ef" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <meta name="color-scheme" content="light" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Web Cited" />
+  <meta property="og:title" content="Security and data handling | Web Cited" />
+  <meta property="og:description" content="How Web Cited collects, stores, and protects intake submissions and audit content. Zero analytics, named subprocessors, published retention schedule." />
+  <meta property="og:url" content="https://web-cited.com/security" />
+  <meta property="og:image" content="https://web-cited.com/og/home.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Web Cited - security and data handling" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Security and data handling | Web Cited" />
+  <meta name="twitter:description" content="How Web Cited collects, stores, and protects intake submissions and audit content." />
+  <meta name="twitter:image" content="https://web-cited.com/og/home.png" />
+
+  <link rel="stylesheet" href="css/styles.css?v=2026-05-01a" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://web-cited.com/#organization",
+        "name": "Web Cited",
+        "legalName": "Aliso LLC",
+        "alternateName": "Aliso LLC dba Web Cited",
+        "url": "https://web-cited.com/",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "url": "https://web-cited.com/contact",
+          "contactType": "Customer Support"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://web-cited.com/#website",
+        "url": "https://web-cited.com/",
+        "name": "Web Cited",
+        "publisher": { "@id": "https://web-cited.com/#organization" },
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://web-cited.com/security#webpage",
+        "url": "https://web-cited.com/security",
+        "name": "Security and data handling",
+        "description": "How Web Cited collects, stores, and protects intake submissions and audit content. Zero analytics, named subprocessors, published retention schedule.",
+        "isPartOf": { "@id": "https://web-cited.com/#website" },
+        "about": { "@id": "https://web-cited.com/#organization" },
+        "inLanguage": "en-US",
+        "datePublished": "2026-05-10",
+        "dateModified": "2026-05-10"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://web-cited.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Security", "item": "https://web-cited.com/security" }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap nav" role="navigation" aria-label="Primary">
+      <a class="brand" href="index.html" aria-label="Web Cited - home">
+        <span class="brand__mark" aria-hidden="true">WC</span>
+        <span>Web Cited</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+      <ul class="nav-menu" id="primary-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="how-it-works.html">How It Works</a></li>
+        <li><a href="why-sxo.html">Why SXO</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="about.html">About</a></li>
+        <li class="mobile-cta"><a class="btn btn--primary" href="start.html">Start Your Audit</a></li>
+      </ul>
+      <a class="nav-cta btn" href="start.html">Start Your Audit</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="banner">
+      <div class="wrap">
+        <span class="eyebrow">Security and data handling</span>
+        <h1>Where your intake data lives, and who can see it.</h1>
+        <p class="lead">
+          Web Cited collects a short list of inputs at intake: your contact details, your company, the buyer questions you want us to test, your competitor list, and the audit tier you've selected. This page documents exactly what we collect, where it lives, who has access, what we never do with it, and how long we keep it. The marketing site itself runs no analytics, no tracking cookies, and no third-party scripts. If anything here is unclear, <a href="contact.html">reach out via the contact form</a>.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="collect-head">
+      <div class="wrap">
+        <h2 id="collect-head">What we collect</h2>
+        <div class="prose">
+          <p>Two surfaces, both customer-initiated. Nothing happens until you submit a form.</p>
+          <p><strong>The marketing site (web-cited.com).</strong> Zero cookies, zero analytics, zero third-party scripts. We do not count visits, sessions, referrers, IPs, or any other identifier. The only thing the site writes to your browser is a single local-storage key (<code>wc-notice-dismissed-v1</code>) that remembers you closed the privacy notice. That key never leaves your browser and is never transmitted to us.</p>
+          <p><strong>The intake form at <a href="start.html">/start</a>.</strong> The fields you fill in are submitted to our own API at <code>api.web-cited.com</code>:</p>
+          <ul>
+            <li><strong>Contact</strong>: first and last name, work email.</li>
+            <li><strong>Company</strong>: company name and website.</li>
+            <li><strong>Audit scope</strong>: the primary market you serve, whether you have a storefront or service area, a short business description, the buyer questions you want us to test across the engines, and your competitor list.</li>
+            <li><strong>Tier and consent</strong>: the audit tier you've selected (Pulse, SXO Audit, or Enterprise) and your explicit acknowledgment of our scope and consent language.</li>
+          </ul>
+          <p><strong>The contact form at <a href="contact.html">/contact</a>.</strong> The same API endpoint receives your name, email, subject category, and message body. Nothing else.</p>
+          <p>We do not have an upload widget. The only files that ever move into our systems are the ones we generate during an audit (your report PDF, your Playbook, your Schema Pack) - we do not accept arbitrary file uploads from customers.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="storage-head">
+      <div class="wrap">
+        <h2 id="storage-head">Where the data lives</h2>
+        <div class="prose">
+          <p><strong>Marketing site - Cloudflare Pages.</strong> The static HTML, CSS, JavaScript, and images at web-cited.com are served by Cloudflare Pages through Cloudflare's global edge network. DNS for web-cited.com is also provided by Cloudflare. Cloudflare may retain access logs (including IP addresses and request headers) at the infrastructure level for security and content delivery; Web Cited does not access, request, or retrieve those infrastructure logs.</p>
+          <p><strong>Intake API - Cloudflare Workers.</strong> The endpoint at <code>api.web-cited.com</code> that receives intake and contact submissions runs on Cloudflare's edge-compute platform. At-rest operational data for the intake API (the submission record, scope notes, and audit-trail metadata) is stored on Cloudflare's storage backends, encrypted at rest and in transit (TLS terminating at Cloudflare's edge).</p>
+          <p><strong>Audit pipeline - Railway.</strong> The audit pipeline at <code>audit.web-cited.com</code> runs on Railway, a managed application hosting platform. Railway executes the audit and stores intermediate audit state (your submitted URLs, buyer questions, and per-engine LLM responses) during processing. Railway may retain access logs at the infrastructure level under its own privacy policy.</p>
+          <p><strong>CRM and email transit.</strong> Your contact record and deal record live in HubSpot. Transactional emails (scope confirmation, kickoff, follow-up) are sent through Resend on a verified Web Cited sub-domain. Invoices and hosted checkout run through Stripe; Web Cited never sees your card data.</p>
+          <p><strong>No analytics, no tracking, no fingerprinting.</strong> The marketing site makes no third-party requests on page load - every asset on every page is served from web-cited.com itself. There is no Google Analytics, no Plausible, no Fathom, no server-side analytics, no chat widget, no embedded video, no marketing pixel.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="access-head">
+      <div class="wrap">
+        <h2 id="access-head">Who has access</h2>
+        <div class="prose">
+          <p><strong>Web Cited personnel.</strong> Aliso LLC dba Web Cited personnel with engagement scope. Today this is the founder. Access to the intake API, CRM, and audit pipeline is via per-platform consoles with two-factor authentication.</p>
+          <p><strong>Subprocessors.</strong> The current subprocessor list mirrors <a href="terms.html">Terms of Service §6.7</a> and our <a href="privacy.html">Privacy Policy</a>:</p>
+          <p><em>Personal-data processors</em> (handle your contact details, company information, and payment information):</p>
+          <ul>
+            <li><strong>Cloudflare</strong> - marketing site (Pages), intake API (Workers), and at-rest operational storage.</li>
+            <li><strong>HubSpot</strong> - CRM holding your contact and deal records.</li>
+            <li><strong>Resend</strong> - transactional email delivery for scope, kickoff, and follow-up emails.</li>
+            <li><strong>Stripe</strong> - payment processor for invoices and hosted checkout. Web Cited never sees your card data.</li>
+          </ul>
+          <p><em>Audit-content backends</em> (process your Customer Content - buyer questions, brand and competitor list, URLs; do not directly receive your name, email, or other contact details):</p>
+          <ul>
+            <li><strong>Railway</strong> - managed hosting that runs the audit pipeline and stores intermediate audit state during processing.</li>
+            <li><strong>OpenAI</strong>, <strong>Anthropic</strong>, <strong>Google</strong> (Gemini), and <strong>Perplexity</strong> - LLM backends queried with your buyer questions to test how each engine answers.</li>
+            <li><strong>DataForSEO</strong> - structured search-engine and SERP data provider.</li>
+          </ul>
+          <p>Each provider acts as a data processor under our instructions and is governed by its own privacy policy and our data-processing agreement with it. The authoritative current list is in our <a href="privacy.html#hosting">Privacy Policy</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="never-head">
+      <div class="wrap">
+        <h2 id="never-head">What we never do</h2>
+        <div class="prose">
+          <ul>
+            <li><strong>We never train AI models on your data.</strong> Your buyer questions, competitor list, URLs, and intake content are used to produce your audit and nothing else. We do not feed your Customer Content into model training pipelines, embeddings stores, or fine-tuning datasets.</li>
+            <li><strong>We never sell, share, or transfer your data to third parties beyond the named subprocessors above.</strong> Not for analytics, not for marketing, not for any commercial purpose. No data brokers. No advertising partners.</li>
+            <li><strong>We never add you to a marketing list.</strong> Submitting the intake form or the contact form does not enroll you in a newsletter, drip sequence, or nurture campaign.</li>
+            <li><strong>We never run analytics or tracking on the marketing site.</strong> No Google Analytics, Plausible, Fathom, Mixpanel, Segment, or server-side analytics. No ad pixels. No fingerprinting. No third-party fonts. The site sets zero cookies.</li>
+            <li><strong>We never transmit sensitive content through email bodies.</strong> Transactional emails contain links to documents and engagement metadata, not the underlying Customer Content.</li>
+            <li><strong>We never store your card data.</strong> Payment data is handled entirely by Stripe under Stripe's terms; Web Cited's systems do not see card numbers, CVCs, or expirations.</li>
+            <li><strong>We never publish your audit content.</strong> Public sample artifacts on the site are built from publicly available data or from customers who have explicitly approved publication; real customer Customer Content never lands in marketing assets.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="retention-head">
+      <div class="wrap">
+        <h2 id="retention-head">How long we keep it</h2>
+        <div class="prose">
+          <p>Default retention periods, mirrored from our <a href="privacy.html">Privacy Policy</a>. You can request earlier deletion at any time (see <a href="#incident-head">below</a>).</p>
+          <ul>
+            <li><strong>Intake-form data and CRM record</strong> (your contact details, company, deal record, scope notes): retained while the relationship is active and for as long as we may reasonably need it for follow-up engagements, dispute resolution, and operational records. Indefinite by default; deleted within 30 business days of a deletion request, subject to the legal-records carve-out below.</li>
+            <li><strong>Email correspondence</strong> (scope, kickoff, follow-up, support, ad-hoc threads): retained in Resend's logs and in our mail provider's archive while the relationship is active. Indefinite by default; deleted within 30 business days of a deletion request.</li>
+            <li><strong>Intake API operational data</strong> (the at-rest record on Cloudflare's storage): retained for the duration of the engagement and for normal operational purposes (debugging, audit-trail integrity, abuse prevention) thereafter. Deleted within 30 business days of a deletion request.</li>
+            <li><strong>Playbook URL content</strong> (Audit and Enterprise tiers): 12 months hosted at a private URL, plus 12 months in archive, then deleted at 24 months from delivery unless a separate retention agreement applies. Full schedule in <a href="terms.html">Terms of Service §6.1</a>.</li>
+            <li><strong>Paid invoices and tax records</strong>: 7 years, retained by Stripe and by Web Cited as required by U.S. and California tax and accounting law. We can remove your name and company from any draft, unpaid, or voided invoice on request, but cannot delete paid-invoice records during the retention period.</li>
+            <li><strong>Local-storage notice-dismissed key</strong> (<code>wc-notice-dismissed-v1</code>): set in your browser only; never transmitted to Web Cited or any third party. Persists until you clear browser site data.</li>
+          </ul>
+          <p><em>Legal-records carve-out.</em> We may retain specific records longer than the periods above where required by law (tax and accounting records, records under legal hold or active dispute resolution). The carve-out is narrow and applies only to the specific records covered.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="incident-head">
+      <div class="wrap">
+        <h2 id="incident-head">If something goes wrong</h2>
+        <div class="prose">
+          <p><strong>Breach notification.</strong> If we confirm unauthorized access to, loss of, or disclosure of personal data we control, we will notify affected customers without undue delay - and in any event consistent with our obligations under applicable law. The notification will identify the nature of the incident, the data categories involved, our containment steps, and any action we recommend you take.</p>
+          <p><strong>How to report a suspected incident or vulnerability.</strong> Use the <a href="contact.html?subject=SECURITY">contact form with subject "SECURITY"</a>. The form routes straight to a human inbox. We commit to acknowledging within one business day and substantively responding within five business days. Please include enough detail to reproduce the issue: affected URL, expected vs observed behavior, and any payload or steps. We do not currently operate a paid bug-bounty program but we credit responsible disclosure in any post-incident notes when the reporter requests it.</p>
+          <p>We ask that you do not publicly disclose a suspected vulnerability before we have had a reasonable opportunity to respond and remediate.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="compliance-head">
+      <div class="wrap">
+        <h2 id="compliance-head">Compliance posture, honestly</h2>
+        <div class="prose">
+          <p>We aim to be straight about what we do and do not have today.</p>
+          <ul>
+            <li><strong>SOC 2:</strong> not currently certified. If your procurement function requires SOC 2 to onboard a vendor, <a href="contact.html?subject=SECURITY">contact us</a>; we can provide our subprocessor list, this security page, the privacy policy, and security questionnaire responses as an interim.</li>
+            <li><strong>ISO 27001:</strong> not currently certified.</li>
+            <li><strong>GDPR / UK GDPR:</strong> we serve a primarily US business audience but where GDPR or UK GDPR applies to a given engagement we honor the data-subject rights described in our <a href="privacy.html#your-rights">Privacy Policy</a> (access, rectification, deletion, portability, objection) and rely on the legal bases set out there (performance of contract, legitimate interests, legal obligation, consent).</li>
+            <li><strong>California privacy laws (CCPA / CPRA):</strong> we honor data-subject access and deletion requests through the process described in the Privacy Policy. We do not sell or share personal information as those terms are defined under the CCPA/CPRA.</li>
+            <li><strong>HIPAA:</strong> not applicable. Web Cited does not collect, store, or process Protected Health Information (PHI). Audits in regulated industries (healthcare, finance, etc.) should not include PHI or other regulated data in the intake.</li>
+            <li><strong>PCI DSS:</strong> Web Cited's systems do not store, process, or transmit cardholder data. All card handling is performed by Stripe, which maintains its own PCI DSS attestation.</li>
+            <li><strong>Governing law and entity:</strong> Web Cited is the trade name of Aliso LLC, a California limited liability company located in Orange County, California. These commitments are governed by California law, consistent with <a href="terms.html">Terms of Service §15</a>.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="verify-head">
+      <div class="wrap">
+        <h2 id="verify-head">How to verify these claims</h2>
+        <div class="prose">
+          <p>Three ways to confirm what is on this page.</p>
+          <ol>
+            <li><strong>Read the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a>.</strong> Both are click-wrap accepted at intake and are the binding versions of the commitments above. If anything on this page differs from those documents, the legal documents govern.</li>
+            <li><strong>Inspect the marketing site.</strong> Open browser devtools on any page of web-cited.com and watch the network tab: every asset is served from the same origin, no third-party requests fire on page load, and no cookies are set. The single local-storage key is named <code>wc-notice-dismissed-v1</code> and never leaves your browser.</li>
+            <li><strong>Ask a security or procurement question.</strong> Use the <a href="contact.html?subject=SECURITY">contact form</a> with subject "SECURITY" and we will respond in writing within two business days.</li>
+          </ol>
+          <p class="hint">This page is a public commitment. We update it as our infrastructure changes; the date below shows when it was last reviewed.</p>
+          <p class="hint">Last reviewed: May 10, 2026.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="wrap">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand">Web Cited</div>
+          <p class="footer__tag">A Search Experience Optimization practice for mid-market and enterprise teams. Audits only. No retainers.</p>
+        </div>
+        <div>
+          <h3>Work</h3>
+          <ul class="footer__nav">
+            <li><a href="services.html">Services</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="how-it-works.html">How It Works</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Learn</h3>
+          <ul class="footer__nav">
+            <li><a href="why-sxo.html">Why SXO</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="accessibility.html">Accessibility</a></li>
+            <li><a href="security.html">Security</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="subprocessors.html">Subprocessors</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Start</h3>
+          <ul class="footer__nav">
+            <li><a href="pricing.html">Get an Audit</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__meta">
+        <span>&copy; <span id="year">2026</span> Aliso LLC dba Web Cited. All rights reserved.</span>
+        <span>Search Experience Optimization</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js?v=2026-04-28w" defer></script>
+</body>
+</html>

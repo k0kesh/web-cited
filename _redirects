@@ -1,0 +1,10 @@
+# Legacy / alternate path aliases. Permanent (301) so search engines
+# consolidate ranking signals to the canonical URLs and don't index
+# duplicate content. We do NOT have a /* catch-all; Cloudflare Pages
+# will serve /404.html with HTTP 404 for anything not matched above
+# or by a static file.
+/privacy-policy          /privacy        301
+/terms-of-service        /terms          301
+/accessibility-statement /accessibility  301
+/cookies                 /privacy        301
+/cookie-policy           /privacy        301

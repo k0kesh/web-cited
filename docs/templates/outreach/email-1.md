@@ -44,7 +44,7 @@ https://web-cited.com/start?utm_source=outbound&utm_medium=email&utm_campaign=ou
 Worth a look?
 
 Craig Kokesh
-Aliso, LLC dba Web Cited
+Aliso LLC dba Web Cited
 hello@web-cited.com
 2108 N Street, Suite N, Sacramento, CA 95816
 
@@ -57,5 +57,5 @@ If this is not relevant for {COMPANY_NAME}, unsubscribe here: {UNSUBSCRIBE_URL}
 - No em or en dashes (H1).
 - Initialisms expanded on first use (H4): LLM (Large Language Model), CI (Confidence Interval), ARR (Annual Recurring Revenue), CAN-SPAM. Universal abbreviations skipped: AI, URL.
 - The deliverable framing aligns with the SXO Audit + Enterprise tier scope per `feedback_pulse_marketing_no_playbook.md`. Pulse is NOT pitched in this campaign per the customer-acquisition v1 lock.
-- Mailing address: `2108 N Street, Suite N, Sacramento, CA 95816` (operator-approved Q10:A 2026-05-03; reuses Site Brace's address since both DBAs share Aliso, LLC as the legal entity).
+- Mailing address: `2108 N Street, Suite N, Sacramento, CA 95816` (operator-approved Q10:A 2026-05-03; reuses Site Brace's address since both DBAs share Aliso LLC as the legal entity).
 - Unsubscribe path: hosted-page click (operator-approved Q11:A + 2026-05-03 architecture re-pick after the Postmark $30/mo path was rejected on H5 grounds). Recipient clicks the per-recipient link in the footer, the Worker's `/unsubscribe` handler verifies the HMAC token and PATCHes the HubSpot Contact's `outbound_unsubscribed=true`. Operator overhead: zero. Send pipeline (`scripts/render_drafts_v1.py` + future `send_outbound_v1.py`) also writes `List-Unsubscribe` + `List-Unsubscribe-Post: List-Unsubscribe=One-Click` headers per RFC 8058 + Gmail/Yahoo bulk-sender 2024 rules, which surfaces a one-click unsubscribe button in compatible mail clients in addition to the body link.
