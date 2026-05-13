@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Page not found | Web Cited</title>
-  <meta name="description" content="That URL does not match a page on web-cited.com. Quick links to the audit, pricing, and the rest of the site." />
+  <meta name="description" content="That URL does not match a page on web-cited.com. We tested it against four AI engines. Citation share: 0%." />
   <!-- 404 pages should not be indexed. They are served on unmatched
        routes so each URL would otherwise look like duplicate content. -->
   <meta name="robots" content="noindex,follow" />
@@ -14,6 +14,127 @@
   <meta name="color-scheme" content="light" />
 
   <link rel="stylesheet" href="css/styles.css?v=2026-05-01a" />
+  <style>
+    .audit-card {
+      max-width: 520px;
+      border: var(--rule-thick);
+      background: var(--paper-white);
+      margin: 0 auto;
+    }
+    .audit-card__header {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .audit-card__header-left {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      line-height: 1.8;
+    }
+    .audit-card__header-left span {
+      display: block;
+      color: #999;
+    }
+    .audit-card__grade {
+      background: var(--accent);
+      color: #fff;
+      font-size: 26px;
+      font-weight: 700;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .audit-card__url {
+      padding: 12px 20px;
+      border-bottom: 1.5px solid var(--ink);
+    }
+    .audit-card__url-label {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #6e6e6e;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .audit-card__url code {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--ink);
+    }
+    .audit-card__table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .audit-card__table thead th {
+      padding: 8px 20px;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #6e6e6e;
+      font-weight: 600;
+      text-align: left;
+      border-bottom: 1.5px solid var(--ink);
+    }
+    .audit-card__table thead th:not(:first-child) {
+      text-align: center;
+    }
+    .audit-card__table tbody td {
+      padding: 11px 20px;
+      border-bottom: 1px solid #e8e6e0;
+      color: var(--ink);
+    }
+    .audit-card__table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .audit-card__table td.result {
+      text-align: center;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .audit-card__total {
+      padding: 14px 20px;
+      border-top: var(--rule-thick);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .audit-card__total-label {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .audit-card__total-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .audit-card__footnote {
+      padding: 8px 20px;
+      font-size: 9px;
+      color: #999;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-top: 1px solid #e8e6e0;
+    }
+    .audit-caption {
+      text-align: center;
+      font-size: 13px;
+      color: #6e6e6e;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body class="page-404">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -43,52 +164,85 @@
     <section class="banner">
       <div class="wrap">
         <span class="eyebrow" aria-hidden="true">404</span>
-        <h1>We can&rsquo;t find that page.</h1>
+        <h1>This URL has 0% citation share.</h1>
         <p class="lead">
-          That URL doesn&rsquo;t match anything we publish on web-cited.com. Here&rsquo;s where you were most likely headed.
+          We ran it through all four engines. ChatGPT, Perplexity, Gemini, and Claude are in unanimous agreement for the first time in recorded history: this page does not exist.
         </p>
+      </div>
+    </section>
+
+    <section class="section" aria-label="Citation audit results">
+      <div class="wrap">
+        <div class="audit-card" role="figure" aria-label="Mock citation audit scorecard - 0% citation share across all four engines">
+          <div class="audit-card__header">
+            <div class="audit-card__header-left">
+              Web Cited
+              <span>Citation Audit Report</span>
+            </div>
+            <div class="audit-card__grade" aria-label="Grade: F">F</div>
+          </div>
+          <div class="audit-card__url">
+            <div class="audit-card__url-label">URL tested</div>
+            <code id="audit-url">web-cited.com/404</code>
+          </div>
+          <table class="audit-card__table">
+            <thead>
+              <tr>
+                <th scope="col">Engine</th>
+                <th scope="col">Cited?</th>
+                <th scope="col">Share</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>ChatGPT</td>
+                <td class="result" aria-label="Not cited">No</td>
+                <td class="result" aria-label="Zero percent">0%</td>
+              </tr>
+              <tr>
+                <td>Perplexity</td>
+                <td class="result" aria-label="Not cited">No</td>
+                <td class="result" aria-label="Zero percent">0%</td>
+              </tr>
+              <tr>
+                <td>Gemini</td>
+                <td class="result" aria-label="Not cited">No</td>
+                <td class="result" aria-label="Zero percent">0%</td>
+              </tr>
+              <tr>
+                <td>Claude</td>
+                <td class="result" aria-label="Not cited">No</td>
+                <td class="result" aria-label="Zero percent">0%</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="audit-card__total">
+            <span class="audit-card__total-label">Total citation share</span>
+            <span class="audit-card__total-value">0%</span>
+          </div>
+          <div class="audit-card__footnote">4 engines tested &middot; 0 citations found &middot; unanimous verdict</div>
+        </div>
+        <p class="audit-caption">This is the only thing they&rsquo;ve ever fully agreed on.</p>
       </div>
     </section>
 
     <section class="section" aria-labelledby="paths-head">
       <div class="wrap">
-        <h2 id="paths-head">Where to next</h2>
-        <div class="prose">
-
-          <h3>Start here</h3>
-          <ul>
-            <li><a href="index.html">Home</a> &mdash; what we do and who we do it for.</li>
-            <li><a href="services.html">Services</a> &mdash; Pulse, SXO Audit, and Enterprise.</li>
-            <li><a href="how-it-works.html">How It Works</a> &mdash; the fixed-scope engagement flow from intake through delivery.</li>
-            <li><a href="why-sxo.html">Why SXO</a> &mdash; SEO vs AEO vs GEO vs SXO.</li>
-          </ul>
-
-          <h3>Audit &amp; pricing</h3>
-          <ul>
-            <li><a href="pricing.html">Pricing</a> &mdash; three tiers, fixed fee, no retainer.</li>
-            <li><a href="about.html">About</a> &mdash; the practice and the founder.</li>
-          </ul>
-
-          <h3>Get started or follow up</h3>
-          <ul>
-            <li><a href="start.html">Start the audit</a> &mdash; intake takes about three minutes.</li>
-            <li><a href="contact.html">Contact</a> &mdash; general inquiries.</li>
-            <li><a href="support.html">Support</a> &mdash; for current and prior clients.</li>
-          </ul>
-
-          <h3>Legal &amp; security</h3>
-          <ul>
-            <li><a href="security.html">Security and data handling</a></li>
-            <li><a href="privacy.html">Privacy Policy</a></li>
-            <li><a href="terms.html">Terms of Service</a></li>
-            <li><a href="subprocessors.html">Subprocessors</a></li>
-            <li><a href="accessibility.html">Accessibility</a></li>
-          </ul>
-
-          <p class="hint" style="margin-top:32px">
-            If you followed a link from somewhere we publish and landed here, please <a href="contact.html">let us know</a> so we can fix it.
-          </p>
-
+        <div class="split">
+          <div>
+            <span class="eyebrow">Where to next</span>
+            <h2 id="paths-head">Pages that do exist.</h2>
+          </div>
+          <div>
+            <ul>
+              <li><a href="index.html">Home</a> - what we do and who we do it for.</li>
+              <li><a href="services.html">Services</a> - Pulse, SXO Audit, and Enterprise.</li>
+              <li><a href="pricing.html">Pricing</a> - three tiers, fixed fee, no retainer.</li>
+              <li><a href="how-it-works.html">How It Works</a> - the engagement from intake through delivery.</li>
+              <li><a href="start.html">Start the audit</a> - intake takes about three minutes.</li>
+              <li><a href="contact.html">Contact</a> - if you followed a broken link, let us know.</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -139,5 +293,13 @@
   </footer>
 
   <script src="js/script.js?v=2026-04-28w" defer></script>
+  <script>
+    // Show the actual URL path the visitor tried in the audit card
+    var urlEl = document.getElementById('audit-url');
+    if (urlEl) {
+      var path = location.pathname.replace(/^\//, '') || '404';
+      urlEl.textContent = 'web-cited.com/' + path;
+    }
+  </script>
 </body>
 </html>
