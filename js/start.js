@@ -8,16 +8,19 @@
     var TIER_MAX_PROMPTS_PER_BRAND = { Pulse: 10, Audit: 25, Enterprise: 25 };
     var TIER_MAX_COMPETITORS = { Pulse: 2, Audit: 4, Enterprise: 4 };
     var TIER_MAX_BRANDS = { Pulse: 1, Audit: 1, Enterprise: 3 };
+    var MONITOR_PRICES = { Pulse: '$4,200', Audit: '$11,940', Enterprise: '$30,000' };
 
-    // Pre-select tier from ?tier=pulse|audit|enterprise
-    (function () {
-      var params = new URLSearchParams(window.location.search);
-      var tier = (params.get('tier') || '').toLowerCase();
-      var map = { pulse: 'Pulse', audit: 'Audit', enterprise: 'Enterprise' };
-      if (map[tier]) {
-        var input = document.querySelector('input[name="tier"][value="' + map[tier] + '"]');
-        if (input) input.checked = true;
-      }
+    // Pre-select tier from ?tier=pulse|audit|enterprise.
+    // The actual check-and-set runs inside the main IIFE (initial render
+    // block) so that monitoring visibility and brand counters see the
+    // pre-selected tier on first paint. See "initial render" below.
+    var _preselectedTier = (function () {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var raw = (params.get('tier') || '').toLowerCase();
+        var map = { pulse: 'Pulse', audit: 'Audit', enterprise: 'Enterprise' };
+        return map[raw] || null;
+      } catch (e) { return null; }
     }());
 
     // Stamp the time the form rendered. Submissions faster than ~3s are almost always bots.
@@ -214,6 +217,17 @@
         updateAddBrandVisibility();
       }
 
+      // ---- monitoring add-on visibility ----
+      var monitoringRow = document.getElementById('monitoring-addon-row');
+      var monitoringPriceEl = document.getElementById('monitoring-price');
+      function updateMonitoringVisibility() {
+        var tier = currentTier();
+        if (monitoringRow) monitoringRow.hidden = !tier;
+        if (monitoringPriceEl && tier && MONITOR_PRICES[tier]) {
+          monitoringPriceEl.textContent = MONITOR_PRICES[tier];
+        }
+      }
+
       // ---- tier change handler ----
       form.querySelectorAll('input[name="tier"]').forEach(function (radio) {
         radio.addEventListener('change', function () {
@@ -233,6 +247,7 @@
             reindexBrands();
           }
           updateAddBrandVisibility();
+          updateMonitoringVisibility();
           recountAllCounters();
         });
       });
@@ -653,6 +668,7 @@
           return el ? el.value : '';
         }
 
+        var monitoringCheckbox = document.getElementById('monitoring_addon');
         var payload = {
           tier: currentTier(),
           first_name: form.first_name.value.trim(),
@@ -660,6 +676,7 @@
           email: form.email.value.trim(),
           audit_type: form.audit_type.value,
           acknowledgement: 'yes',
+          monitoring_addon: monitoringCheckbox && monitoringCheckbox.checked ? true : false,
           _gotcha: form._gotcha.value,
           ts_loaded: form.ts_loaded.value,
           // UTM (Urchin Tracking Module) campaign attribution. Populated
@@ -716,6 +733,14 @@
       });
 
       // ---- initial render ----
+      // Apply URL pre-select (e.g. ?tier=audit from pricing page links)
+      // before computing counters and monitoring visibility, so the first
+      // paint shows the correct tier state.
+      if (_preselectedTier) {
+        var preInput = form.querySelector('input[name="tier"][value="' + _preselectedTier + '"]');
+        if (preInput) preInput.checked = true;
+      }
       addBrandBlock();              // Render Brand 1.
       updateAddBrandVisibility();
+      updateMonitoringVisibility();
     }());

@@ -1188,6 +1188,7 @@ details.faq__item p {
   max-width: 720px;
 }
 .form__row { display: grid; gap: 0.5rem; }
+.form__row[hidden] { display: none; }
 .form__row--split { grid-template-columns: 1fr; gap: 1.25rem; }
 @media (min-width: 680px) {
   .form__row--split { grid-template-columns: 1fr 1fr; }
