@@ -29,6 +29,7 @@
   <meta name="twitter:image" content="https://web-cited.com/og/why-sxo.png" />
 
   <link rel="stylesheet" href="/css/styles.css?v=2026-05-15" />
+  <link rel="stylesheet" href="/css/research-study.css?v=2026-05-15a" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -74,47 +75,6 @@
     ]
   }
   </script>
-  <style>
-    .study-banner { background: var(--ink); color: var(--paper); padding: 96px 0 64px; }
-    .study-banner .eyebrow { color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; font-size: 12px; display: block; }
-    .study-banner h1 { font-size: clamp(48px, 8vw, 96px); line-height: 1.0; margin: 12px 0 16px; font-weight: 900; color: var(--paper); }
-    .study-banner .lead { font-size: clamp(18px, 2vw, 22px); max-width: 720px; color: var(--paper); }
-    .study-banner .meta { margin-top: 24px; font-size: 13px; opacity: 0.7; letter-spacing: 0.08em; text-transform: uppercase; color: var(--paper); }
-    .headline-num { background: var(--paper); border-top: 8px solid var(--accent); padding: 48px 0; }
-    .headline-num .wrap { display: flex; align-items: baseline; gap: 32px; flex-wrap: wrap; }
-    .headline-num__big { font-size: clamp(96px, 16vw, 200px); font-weight: 900; line-height: 0.9; color: var(--ink); }
-    .headline-num__label { font-size: clamp(18px, 2vw, 24px); font-weight: 700; max-width: 480px; line-height: 1.3; }
-    .study-section { padding: 64px 0; border-top: 1px solid #d6d4ce; }
-    .study-section h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 900; line-height: 1.1; margin: 0 0 16px; }
-    .study-section h2 .num { color: var(--accent); }
-    .study-section .lead { font-size: 18px; max-width: 720px; line-height: 1.5; margin-bottom: 24px; }
-    .study-section p { font-size: 16px; line-height: 1.6; max-width: 720px; margin: 0 0 16px; }
-    .invisible-table { width: 100%; border-collapse: collapse; margin: 24px 0; }
-    .invisible-table th { background: var(--ink); color: var(--paper); padding: 12px 16px; text-align: left; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
-    .invisible-table td { padding: 14px 16px; border-bottom: 1px solid #d6d4ce; font-size: 15px; vertical-align: top; }
-    .invisible-table .score { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); font-weight: 700; white-space: nowrap; }
-    .cited-list { list-style: none; padding: 0; margin: 24px 0; }
-    .cited-list li { display: grid; grid-template-columns: 32px 1fr 80px; gap: 16px; padding: 10px 0; border-bottom: 1px solid #e5e3dd; align-items: center; }
-    .cited-list .rank { font-weight: 900; color: var(--accent); font-size: 18px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-    .cited-list .name { font-weight: 700; font-size: 16px; }
-    .cited-list .bar { height: 8px; background: #e5e3dd; position: relative; min-width: 60px; }
-    .cited-list .bar__fill { height: 100%; background: var(--ink); }
-    .cited-list .count { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; color: #555; text-align: right; }
-    .method-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin: 24px 0; }
-    .method-card { padding: 20px; border: 2px solid var(--ink); background: var(--paper); }
-    .method-card .key { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #555; }
-    .method-card .val { font-size: 18px; font-weight: 900; margin-top: 6px; line-height: 1.2; }
-    .method-card .val.small { font-size: 14px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; word-break: break-word; }
-    .prompt-list { background: #f9f8f4; border-left: 4px solid var(--accent); padding: 20px 24px; margin: 24px 0; }
-    .prompt-list ol { margin: 0; padding-left: 20px; }
-    .prompt-list li { padding: 8px 0; font-size: 15px; line-height: 1.5; }
-    .study-cta { background: var(--ink); color: var(--paper); padding: 80px 0; text-align: center; }
-    .study-cta h2 { font-size: clamp(28px, 4vw, 40px); margin: 0 0 16px; }
-    .study-cta p { font-size: 18px; max-width: 600px; margin: 0 auto 24px; opacity: 0.9; }
-    .study-cta .btn { background: var(--accent); color: var(--paper); padding: 16px 32px; font-size: 16px; font-weight: 700; text-decoration: none; display: inline-block; }
-    .study-cta .btn:hover { background: var(--paper); color: var(--ink); }
-    .disclosure { font-size: 13px; color: #555; line-height: 1.5; padding: 16px; background: #f9f8f4; border: 1px solid #d6d4ce; margin-top: 16px; }
-  </style>
 </head>
 <body>
   <a class="skip-link" href="/#main">Skip to content</a>
@@ -158,7 +118,7 @@
     </section>
 
     <section class="study-section">
-      <div class="wrap" style="max-width: 880px;">
+      <div class="wrap wrap--narrow">
         <h2>The finding in one paragraph</h2>
         <p>We picked 10 funded B2B compliance and risk-management software companies. We asked four leading LLMs (ChatGPT, Claude, Gemini, Perplexity) five buyer-research questions any compliance officer or VP of risk would plausibly type into an AI assistant. We ran each question 3 times per engine to account for response variance. That produced 600 distinct LLM responses, 296,329 characters of compliance recommendations. None of the 10 brands we measured appeared anywhere in any of those responses, by domain or by brand name. The category is being defined by a different set of brands entirely. Below: who got cited instead, what we measured, and what this means if your name is on the invisible list.</p>
       </div>
@@ -198,24 +158,24 @@
         <h2>Who LLMs cite instead</h2>
         <p class="lead">The same 600 responses cite the brands below by name, repeatedly. These are the companies that have entered the AI-search conversation for compliance buyer prompts.</p>
         <ol class="cited-list">
-          <li><span class="rank">1</span><span class="name">TalentLMS</span><span class="bar"><span class="bar__fill" style="width:100%"></span></span><span class="count">107</span></li>
-          <li><span class="rank">2</span><span class="name">LogicGate</span><span class="bar"><span class="bar__fill" style="width:68%"></span></span><span class="count">73</span></li>
-          <li><span class="rank">3</span><span class="name">AuditBoard</span><span class="bar"><span class="bar__fill" style="width:64%"></span></span><span class="count">69</span></li>
-          <li><span class="rank">4</span><span class="name">Workiva</span><span class="bar"><span class="bar__fill" style="width:63%"></span></span><span class="count">67</span></li>
-          <li><span class="rank">5</span><span class="name">Absorb LMS</span><span class="bar"><span class="bar__fill" style="width:60%"></span></span><span class="count">64</span></li>
-          <li><span class="rank">6</span><span class="name">ServiceNow</span><span class="bar"><span class="bar__fill" style="width:59%"></span></span><span class="count">63</span></li>
-          <li><span class="rank">7</span><span class="name">Drata</span><span class="bar"><span class="bar__fill" style="width:58%"></span></span><span class="count">62</span></li>
-          <li><span class="rank">8</span><span class="name">Domo</span><span class="bar"><span class="bar__fill" style="width:52%"></span></span><span class="count">56</span></li>
-          <li><span class="rank">9</span><span class="name">Vanta</span><span class="bar"><span class="bar__fill" style="width:52%"></span></span><span class="count">56</span></li>
-          <li><span class="rank">10</span><span class="name">Secureframe</span><span class="bar"><span class="bar__fill" style="width:46%"></span></span><span class="count">49</span></li>
-          <li><span class="rank">11</span><span class="name">OneTrust</span><span class="bar"><span class="bar__fill" style="width:43%"></span></span><span class="count">46</span></li>
-          <li><span class="rank">12</span><span class="name">KnowBe4</span><span class="bar"><span class="bar__fill" style="width:39%"></span></span><span class="count">42</span></li>
-          <li><span class="rank">13</span><span class="name">Docebo</span><span class="bar"><span class="bar__fill" style="width:36%"></span></span><span class="count">38</span></li>
-          <li><span class="rank">14</span><span class="name">MetricStream</span><span class="bar"><span class="bar__fill" style="width:34%"></span></span><span class="count">36</span></li>
-          <li><span class="rank">15</span><span class="name">Compliance.ai</span><span class="bar"><span class="bar__fill" style="width:31%"></span></span><span class="count">33</span></li>
-          <li><span class="rank">16</span><span class="name">VComply</span><span class="bar"><span class="bar__fill" style="width:31%"></span></span><span class="count">33</span></li>
+          <li><span class="rank">1</span><span class="name">TalentLMS</span><span class="bar"><span class="bar__fill"></span></span><span class="count">107</span></li>
+          <li><span class="rank">2</span><span class="name">LogicGate</span><span class="bar"><span class="bar__fill"></span></span><span class="count">73</span></li>
+          <li><span class="rank">3</span><span class="name">AuditBoard</span><span class="bar"><span class="bar__fill"></span></span><span class="count">69</span></li>
+          <li><span class="rank">4</span><span class="name">Workiva</span><span class="bar"><span class="bar__fill"></span></span><span class="count">67</span></li>
+          <li><span class="rank">5</span><span class="name">Absorb LMS</span><span class="bar"><span class="bar__fill"></span></span><span class="count">64</span></li>
+          <li><span class="rank">6</span><span class="name">ServiceNow</span><span class="bar"><span class="bar__fill"></span></span><span class="count">63</span></li>
+          <li><span class="rank">7</span><span class="name">Drata</span><span class="bar"><span class="bar__fill"></span></span><span class="count">62</span></li>
+          <li><span class="rank">8</span><span class="name">Domo</span><span class="bar"><span class="bar__fill"></span></span><span class="count">56</span></li>
+          <li><span class="rank">9</span><span class="name">Vanta</span><span class="bar"><span class="bar__fill"></span></span><span class="count">56</span></li>
+          <li><span class="rank">10</span><span class="name">Secureframe</span><span class="bar"><span class="bar__fill"></span></span><span class="count">49</span></li>
+          <li><span class="rank">11</span><span class="name">OneTrust</span><span class="bar"><span class="bar__fill"></span></span><span class="count">46</span></li>
+          <li><span class="rank">12</span><span class="name">KnowBe4</span><span class="bar"><span class="bar__fill"></span></span><span class="count">42</span></li>
+          <li><span class="rank">13</span><span class="name">Docebo</span><span class="bar"><span class="bar__fill"></span></span><span class="count">38</span></li>
+          <li><span class="rank">14</span><span class="name">MetricStream</span><span class="bar"><span class="bar__fill"></span></span><span class="count">36</span></li>
+          <li><span class="rank">15</span><span class="name">Compliance.ai</span><span class="bar"><span class="bar__fill"></span></span><span class="count">33</span></li>
+          <li><span class="rank">16</span><span class="name">VComply</span><span class="bar"><span class="bar__fill"></span></span><span class="count">33</span></li>
         </ol>
-        <p style="font-size: 14px; color: #555;">Mention counts are bolded-product-name references across all 600 LLM responses. Several of the top results (TalentLMS, Absorb LMS, Docebo, LinkedIn Learning) reflect citations for the "compliance training" buyer prompt specifically.</p>
+        <p class="study-section__caption">Mention counts are bolded-product-name references across all 600 LLM responses. Several of the top results (TalentLMS, Absorb LMS, Docebo, LinkedIn Learning) reflect citations for the "compliance training" buyer prompt specifically.</p>
       </div>
     </section>
 
@@ -236,7 +196,7 @@
           <div class="method-card">
             <div class="key">Total LLM calls</div>
             <div class="val">600</div>
-            <div class="key" style="margin-top:8px;">10 brands &times; 4 engines &times; 5 prompts &times; 3 trials</div>
+            <div class="key key--sub">10 brands &times; 4 engines &times; 5 prompts &times; 3 trials</div>
           </div>
           <div class="method-card">
             <div class="key">Match criteria</div>
@@ -244,7 +204,7 @@
           </div>
         </div>
 
-        <h3 style="margin-top:32px; font-size: 18px;">The five standardized buyer prompts</h3>
+        <h3>The five standardized buyer prompts</h3>
         <div class="prompt-list">
           <ol>
             <li>"What is the best compliance management software for a mid-market company in healthcare or finance?"</li>
@@ -264,7 +224,7 @@
     </section>
 
     <section class="study-section">
-      <div class="wrap" style="max-width: 880px;">
+      <div class="wrap wrap--narrow">
         <h2>What this means if your brand is on the invisible list</h2>
         <p>Most B2B compliance vendors have not entered the AI-search conversation. They built websites for SEO and email-driven demand, not for LLMs. When a CMO or compliance officer types a category question into ChatGPT, the answer comes back with a different set of brands: the ones that show up in Wikipedia, in long-form analyst writeups, in third-party comparison content, in podcast transcripts, in YouTube reviews. The dominant set is not necessarily better software. It is the set the LLMs have read about most often.</p>
         <p>The fix is mechanical. There are specific patterns that earn LLM citations: structured FAQ content matching exact buyer-prompt phrasing, schema-marked product pages, citation footprints on third-party sites the LLMs already index, and content that answers the "vs" and "alternatives to" queries directly. Brands at the top of the cited list above have done some combination of these things, intentionally or not.</p>

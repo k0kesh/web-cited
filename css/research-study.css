@@ -1,0 +1,80 @@
+/* Web Cited Research study-page styles.
+ * Scoped to pages under /research/. Uses the same brutalist tokens defined
+ * in css/styles.css (--ink, --paper, --accent). No global rules.
+ * Extracted from inline <style> to comply with the site's CSP
+ * (style-src 'self'). Loaded explicitly per page via <link>.
+ */
+
+.study-banner { background: var(--ink); color: var(--paper); padding: 96px 0 64px; }
+.study-banner .eyebrow { color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; font-size: 12px; display: block; }
+.study-banner h1 { font-size: clamp(48px, 8vw, 96px); line-height: 1.0; margin: 12px 0 16px; font-weight: 900; color: var(--paper); }
+.study-banner .lead { font-size: clamp(18px, 2vw, 22px); max-width: 720px; color: var(--paper); }
+.study-banner .meta { margin-top: 24px; font-size: 13px; opacity: 0.7; letter-spacing: 0.08em; text-transform: uppercase; color: var(--paper); }
+
+.headline-num { background: var(--paper); border-top: 8px solid var(--accent); padding: 48px 0; }
+.headline-num .wrap { display: flex; align-items: baseline; gap: 32px; flex-wrap: wrap; }
+.headline-num__big { font-size: clamp(96px, 16vw, 200px); font-weight: 900; line-height: 0.9; color: var(--ink); }
+.headline-num__label { font-size: clamp(18px, 2vw, 24px); font-weight: 700; max-width: 480px; line-height: 1.3; }
+
+.study-section { padding: 64px 0; border-top: 1px solid #d6d4ce; }
+.study-section h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 900; line-height: 1.1; margin: 0 0 16px; }
+.study-section h2 .num { color: var(--accent); }
+.study-section h3 { margin-top: 32px; font-size: 18px; }
+.study-section .lead { font-size: 18px; max-width: 720px; line-height: 1.5; margin-bottom: 24px; }
+.study-section p { font-size: 16px; line-height: 1.6; max-width: 720px; margin: 0 0 16px; }
+.study-section__caption { font-size: 14px; color: #555; }
+
+/* Narrow wrap variant used by some study sections for prose-width reading */
+.wrap--narrow { max-width: 880px; }
+
+.invisible-table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+.invisible-table th { background: var(--ink); color: var(--paper); padding: 12px 16px; text-align: left; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
+.invisible-table td { padding: 14px 16px; border-bottom: 1px solid #d6d4ce; font-size: 15px; vertical-align: top; }
+.invisible-table .score { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); font-weight: 700; white-space: nowrap; }
+
+.cited-list { list-style: none; padding: 0; margin: 24px 0; }
+.cited-list li { display: grid; grid-template-columns: 32px 1fr 80px; gap: 16px; padding: 10px 0; border-bottom: 1px solid #e5e3dd; align-items: center; }
+.cited-list .rank { font-weight: 900; color: var(--accent); font-size: 18px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.cited-list .name { font-weight: 700; font-size: 16px; }
+.cited-list .bar { height: 8px; background: #e5e3dd; position: relative; min-width: 60px; }
+.cited-list .bar__fill { height: 100%; background: var(--ink); }
+.cited-list .count { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; color: #555; text-align: right; }
+
+/* Per-position bar widths. nth-child instead of inline style="width:X%"
+ * so the page complies with style-src 'self'. The mention counts these
+ * proportions are derived from live in the study page text. */
+.cited-list li:nth-child(1) .bar__fill { width: 100%; }
+.cited-list li:nth-child(2) .bar__fill { width: 68%; }
+.cited-list li:nth-child(3) .bar__fill { width: 64%; }
+.cited-list li:nth-child(4) .bar__fill { width: 63%; }
+.cited-list li:nth-child(5) .bar__fill { width: 60%; }
+.cited-list li:nth-child(6) .bar__fill { width: 59%; }
+.cited-list li:nth-child(7) .bar__fill { width: 58%; }
+.cited-list li:nth-child(8) .bar__fill { width: 52%; }
+.cited-list li:nth-child(9) .bar__fill { width: 52%; }
+.cited-list li:nth-child(10) .bar__fill { width: 46%; }
+.cited-list li:nth-child(11) .bar__fill { width: 43%; }
+.cited-list li:nth-child(12) .bar__fill { width: 39%; }
+.cited-list li:nth-child(13) .bar__fill { width: 36%; }
+.cited-list li:nth-child(14) .bar__fill { width: 34%; }
+.cited-list li:nth-child(15) .bar__fill { width: 31%; }
+.cited-list li:nth-child(16) .bar__fill { width: 31%; }
+
+.method-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin: 24px 0; }
+.method-card { padding: 20px; border: 2px solid var(--ink); background: var(--paper); }
+.method-card .key { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #555; }
+.method-card .key--sub { margin-top: 8px; }
+.method-card .val { font-size: 18px; font-weight: 900; margin-top: 6px; line-height: 1.2; }
+.method-card .val.small { font-size: 14px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; word-break: break-word; }
+
+.prompt-list { background: #f9f8f4; border-left: 4px solid var(--accent); padding: 20px 24px; margin: 24px 0; }
+.prompt-list ol { margin: 0; padding-left: 20px; }
+.prompt-list li { padding: 8px 0; font-size: 15px; line-height: 1.5; }
+
+.study-cta { background: var(--ink); color: var(--paper); padding: 80px 0; text-align: center; }
+.study-cta h2 { font-size: clamp(28px, 4vw, 40px); margin: 0 0 16px; }
+.study-cta p { font-size: 18px; max-width: 600px; margin: 0 auto 24px; opacity: 0.9; }
+.study-cta .btn { background: var(--accent); color: var(--paper); padding: 16px 32px; font-size: 16px; font-weight: 700; text-decoration: none; display: inline-block; }
+.study-cta .btn:hover { background: var(--paper); color: var(--ink); }
+
+.disclosure { font-size: 13px; color: #555; line-height: 1.5; padding: 16px; background: #f9f8f4; border: 1px solid #d6d4ce; margin-top: 16px; }
