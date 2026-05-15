@@ -17,3 +17,6 @@
   .h2h-score__grid { grid-template-columns: 1fr; }
   .h2h-score__vs { padding: 8px 0; text-align: center; }
 }
+
+/* Fix-category section: per-business-type fix recommendation counts */
+.fix-count { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); font-weight: 700; white-space: nowrap; text-align: right; }
