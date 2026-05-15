@@ -20,3 +20,6 @@
 
 /* Fix-category section: per-business-type fix recommendation counts */
 .fix-count { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); font-weight: 700; white-space: nowrap; text-align: right; }
+.fix-band td { background: #f9f8f4; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); padding: 12px 16px; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.fix-total td { background: var(--ink); color: var(--paper); padding: 14px 16px; font-size: 15px; }
+.fix-total .fix-count { color: var(--accent); }
