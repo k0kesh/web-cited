@@ -135,7 +135,7 @@
     <section class="study-section">
       <div class="wrap">
         <h2>The Invisible 10</h2>
-        <p class="lead">All 10 brands score 0 / 60 LLM responses. They were not ranked low. They were not in the conversation at all. Every one of them has, on average, 44 specific fix recommendations available through the Web Cited audit.</p>
+        <p class="lead">All 10 brands score 0 / 60 LLM responses. They were not ranked low. They were not in the conversation at all. The "Homepage fixes" column shows the per-brand count of fix recommendations detectable from a single homepage fetch; the range across the 10 brands is 3 to 15. The full Web Cited audit identifies additional fixes from deeper page-by-page analysis.</p>
         <table class="invisible-table">
           <thead>
             <tr>
@@ -143,56 +143,56 @@
               <th scope="col">Domain</th>
               <th scope="col">Category</th>
               <th scope="col">Score</th>
-              <th scope="col">Fixes available</th>
+              <th scope="col">Homepage fixes</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td><strong>360factors</strong></td><td>360factors.com</td><td>Enterprise GRC platform</td><td class="score">0 / 60</td><td class="fixes">~44</td></tr>
-            <tr><td><strong>AssurX</strong></td><td>assurx.com</td><td>Quality management for regulated industries</td><td class="score">0 / 60</td><td class="fixes">~44</td></tr>
-            <tr><td><strong>EasyLlama</strong></td><td>easyllama.com</td><td>Workplace compliance training</td><td class="score">0 / 60</td><td class="fixes">~44</td></tr>
-            <tr><td><strong>RadarFirst</strong></td><td>radarfirst.com</td><td>Privacy incident response and breach notification</td><td class="score">0 / 60</td><td class="fixes">~44</td></tr>
-            <tr><td><strong>Evident</strong></td><td>evidentid.com</td><td>Third-party vendor risk and compliance</td><td class="score">0 / 60</td><td class="fixes">~44</td></tr>
-            <tr><td><strong>PreVeil</strong></td><td>preveil.com</td><td>CMMC and defense contractor compliance</td><td class="score">0 / 60</td><td class="fixes">~44</td></tr>
-            <tr><td><strong>Fama</strong></td><td>fama.io</td><td>Background screening and candidate compliance</td><td class="score">0 / 60</td><td class="fixes">~44</td></tr>
-            <tr><td><strong>Cranium AI</strong></td><td>cranium.ai</td><td>AI security and governance</td><td class="score">0 / 60</td><td class="fixes">~44</td></tr>
-            <tr><td><strong>Archive360</strong></td><td>archive360.com</td><td>Compliance data archival and retention</td><td class="score">0 / 60</td><td class="fixes">~44</td></tr>
-            <tr><td><strong>F&amp;I Sentinel</strong></td><td>fisentinel.com</td><td>Auto dealer F&amp;I compliance</td><td class="score">0 / 60</td><td class="fixes">~44</td></tr>
+            <tr><td><strong>360factors</strong></td><td>360factors.com</td><td>Enterprise GRC platform</td><td class="score">0 / 60</td><td class="fixes" aria-label="9 homepage fixes detected">9</td></tr>
+            <tr><td><strong>AssurX</strong></td><td>assurx.com</td><td>Quality management for regulated industries</td><td class="score">0 / 60</td><td class="fixes" aria-label="3 homepage fixes detected">3</td></tr>
+            <tr><td><strong>EasyLlama</strong></td><td>easyllama.com</td><td>Workplace compliance training</td><td class="score">0 / 60</td><td class="fixes" aria-label="9 homepage fixes detected">9</td></tr>
+            <tr><td><strong>RadarFirst</strong></td><td>radarfirst.com</td><td>Privacy incident response and breach notification</td><td class="score">0 / 60</td><td class="fixes" aria-label="5 homepage fixes detected">5</td></tr>
+            <tr><td><strong>Evident</strong></td><td>evidentid.com</td><td>Third-party vendor risk and compliance</td><td class="score">0 / 60</td><td class="fixes" aria-label="15 homepage fixes detected">15</td></tr>
+            <tr><td><strong>PreVeil</strong></td><td>preveil.com</td><td>CMMC and defense contractor compliance</td><td class="score">0 / 60</td><td class="fixes" aria-label="5 homepage fixes detected">5</td></tr>
+            <tr><td><strong>Fama</strong></td><td>fama.io</td><td>Background screening and candidate compliance</td><td class="score">0 / 60</td><td class="fixes" aria-label="8 homepage fixes detected">8</td></tr>
+            <tr><td><strong>Cranium AI</strong></td><td>cranium.ai</td><td>AI security and governance</td><td class="score">0 / 60</td><td class="fixes" aria-label="5 homepage fixes detected">5</td></tr>
+            <tr><td><strong>Archive360</strong></td><td>archive360.com</td><td>Compliance data archival and retention</td><td class="score">0 / 60</td><td class="fixes" aria-label="11 homepage fixes detected">11</td></tr>
+            <tr><td><strong>F&amp;I Sentinel</strong></td><td>fisentinel.com</td><td>Auto dealer F&amp;I compliance</td><td class="score">0 / 60</td><td class="fixes" aria-label="homepage inaccessible to the discovery audit">n/a</td></tr>
           </tbody>
         </table>
-        <p class="study-section__caption">"Fixes available" is the approximate count of distinct fix recommendations the Web Cited audit produces for an online-only / SaaS brand in this category. Every brand on the invisible list is leaving the same scope of remediation on the table. See the methodology section below for the fix-category breakdown.</p>
+        <p class="study-section__caption">"Homepage fixes" is the per-brand count of fix recommendations detectable from a single homepage fetch and the brand's robots.txt, llms.txt, and sitemap.xml endpoints. Roughly 25 distinct check categories: server-side rendering, structured-data JSON-LD presence (Organization, Product/Service, FAQPage, BreadcrumbList), OpenGraph + Twitter Card completeness, canonical + meta description + title + h1 health, alt-text coverage, mobile viewport, html lang attribute, robots.txt allow-list for AI crawlers (GPTBot, ClaudeBot, PerplexityBot, OAI-SearchBot, Google-Extended, anthropic-ai), and llms.txt + sitemap presence. The full Web Cited audit identifies additional fixes from deeper page-by-page analysis, schema validation, citation-footprint checks, and accessibility scans. "n/a" indicates the brand's homepage blocked our discovery user-agent (a fix in itself: AI crawlers may be blocked too).</p>
       </div>
     </section>
 
     <section class="study-section">
       <div class="wrap">
         <h2>Who LLMs cite instead</h2>
-        <p class="lead">The same 600 responses cite the brands below by name, repeatedly. These are the companies that have entered the AI-search conversation for compliance buyer prompts. Even brands at the top of this list have remaining fix scope: AI search visibility is rarely saturated.</p>
+        <p class="lead">The same 600 responses cite the brands below by name, repeatedly. These are the companies that have entered the AI-search conversation for compliance buyer prompts. Even brands at the top of this list have remaining homepage fixes available; AI search visibility is rarely saturated.</p>
         <div class="cited-list__head" aria-hidden="true">
           <span class="head-rank">Rank</span>
           <span class="head-name">Brand</span>
           <span class="head-bar">Share</span>
           <span class="head-count">Mentions</span>
-          <span class="head-fixes">Fixes available</span>
+          <span class="head-fixes">Homepage fixes</span>
         </div>
         <ol class="cited-list">
-          <li><span class="rank" aria-hidden="true">1</span><span class="name">TalentLMS</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="107 mentions">107</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
-          <li><span class="rank" aria-hidden="true">2</span><span class="name">LogicGate</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="73 mentions">73</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
-          <li><span class="rank" aria-hidden="true">3</span><span class="name">AuditBoard</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="69 mentions">69</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
-          <li><span class="rank" aria-hidden="true">4</span><span class="name">Workiva</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="67 mentions">67</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
-          <li><span class="rank" aria-hidden="true">5</span><span class="name">Absorb LMS</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="64 mentions">64</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
-          <li><span class="rank" aria-hidden="true">6</span><span class="name">ServiceNow</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="63 mentions">63</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
-          <li><span class="rank" aria-hidden="true">7</span><span class="name">Drata</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="62 mentions">62</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
-          <li><span class="rank" aria-hidden="true">8</span><span class="name">Domo</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="56 mentions">56</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
-          <li><span class="rank" aria-hidden="true">9</span><span class="name">Vanta</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="56 mentions">56</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
-          <li><span class="rank" aria-hidden="true">10</span><span class="name">Secureframe</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="49 mentions">49</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
-          <li><span class="rank" aria-hidden="true">11</span><span class="name">OneTrust</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="46 mentions">46</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
-          <li><span class="rank" aria-hidden="true">12</span><span class="name">KnowBe4</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="42 mentions">42</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
-          <li><span class="rank" aria-hidden="true">13</span><span class="name">Docebo</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="38 mentions">38</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
-          <li><span class="rank" aria-hidden="true">14</span><span class="name">MetricStream</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="36 mentions">36</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
-          <li><span class="rank" aria-hidden="true">15</span><span class="name">Compliance.ai</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="33 mentions">33</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
-          <li><span class="rank" aria-hidden="true">16</span><span class="name">VComply</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="33 mentions">33</span><span class="fixes" aria-label="approximately 44 fixes available">~44</span></li>
+          <li><span class="rank" aria-hidden="true">1</span><span class="name">TalentLMS</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="107 mentions">107</span><span class="fixes" aria-label="3 homepage fixes detected">3</span></li>
+          <li><span class="rank" aria-hidden="true">2</span><span class="name">LogicGate</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="73 mentions">73</span><span class="fixes" aria-label="6 homepage fixes detected">6</span></li>
+          <li><span class="rank" aria-hidden="true">3</span><span class="name">AuditBoard</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="69 mentions">69</span><span class="fixes" aria-label="7 homepage fixes detected">7</span></li>
+          <li><span class="rank" aria-hidden="true">4</span><span class="name">Workiva</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="67 mentions">67</span><span class="fixes" aria-label="homepage inaccessible to the discovery audit">n/a</span></li>
+          <li><span class="rank" aria-hidden="true">5</span><span class="name">Absorb LMS</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="64 mentions">64</span><span class="fixes" aria-label="10 homepage fixes detected">10</span></li>
+          <li><span class="rank" aria-hidden="true">6</span><span class="name">ServiceNow</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="63 mentions">63</span><span class="fixes" aria-label="homepage inaccessible to the discovery audit">n/a</span></li>
+          <li><span class="rank" aria-hidden="true">7</span><span class="name">Drata</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="62 mentions">62</span><span class="fixes" aria-label="homepage inaccessible to the discovery audit">n/a</span></li>
+          <li><span class="rank" aria-hidden="true">8</span><span class="name">Domo</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="56 mentions">56</span><span class="fixes" aria-label="homepage inaccessible to the discovery audit">n/a</span></li>
+          <li><span class="rank" aria-hidden="true">9</span><span class="name">Vanta</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="56 mentions">56</span><span class="fixes" aria-label="10 homepage fixes detected">10</span></li>
+          <li><span class="rank" aria-hidden="true">10</span><span class="name">Secureframe</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="49 mentions">49</span><span class="fixes" aria-label="4 homepage fixes detected">4</span></li>
+          <li><span class="rank" aria-hidden="true">11</span><span class="name">OneTrust</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="46 mentions">46</span><span class="fixes" aria-label="6 homepage fixes detected">6</span></li>
+          <li><span class="rank" aria-hidden="true">12</span><span class="name">KnowBe4</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="42 mentions">42</span><span class="fixes" aria-label="10 homepage fixes detected">10</span></li>
+          <li><span class="rank" aria-hidden="true">13</span><span class="name">Docebo</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="38 mentions">38</span><span class="fixes" aria-label="4 homepage fixes detected">4</span></li>
+          <li><span class="rank" aria-hidden="true">14</span><span class="name">MetricStream</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="36 mentions">36</span><span class="fixes" aria-label="8 homepage fixes detected">8</span></li>
+          <li><span class="rank" aria-hidden="true">15</span><span class="name">Compliance.ai</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="33 mentions">33</span><span class="fixes" aria-label="8 homepage fixes detected">8</span></li>
+          <li><span class="rank" aria-hidden="true">16</span><span class="name">VComply</span><span class="bar" aria-hidden="true"><span class="bar__fill"></span></span><span class="count" aria-label="33 mentions">33</span><span class="fixes" aria-label="5 homepage fixes detected">5</span></li>
         </ol>
-        <p class="study-section__caption">Mention counts are bolded-product-name references across all 600 LLM responses. "Fixes available" is the approximate count of distinct fix recommendations the Web Cited audit produces for an online-only / SaaS brand in this category; the count is roughly the same across all 16 because they are all in the same vertical. Several of the top results (TalentLMS, Absorb LMS, Docebo) reflect citations for the "compliance training" buyer prompt specifically.</p>
+        <p class="study-section__caption">Mention counts are bolded-product-name references across all 600 LLM responses. "Homepage fixes" is the per-brand count from the discovery audit described above. The leader on this list (TalentLMS) has only 3 homepage fixes detected; several Invisible 10 brands (Evident at 15, Archive360 at 11, 360factors at 9) have more homepage fixes than the brands LLMs already cite, so closing those gaps is a measurable opportunity. "n/a" indicates the brand's homepage blocked our discovery user-agent. Several of the top results (TalentLMS, Absorb LMS, Docebo) reflect citations for the "compliance training" buyer prompt specifically.</p>
       </div>
     </section>
 
