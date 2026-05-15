@@ -4,21 +4,20 @@
 //
     // Tier limits, mirror of web-cited-api/src/types.ts and
     // web-cited-pipeline/src/pipeline/tier_limits.py. Keep in sync.
-    var TIER_MAX_URLS_PER_BRAND = { Pulse: 10, Audit: 25, Enterprise: 25 };
-    var TIER_MAX_PROMPTS_PER_BRAND = { Pulse: 10, Audit: 25, Enterprise: 25 };
-    var TIER_MAX_COMPETITORS = { Pulse: 2, Audit: 4, Enterprise: 4 };
-    var TIER_MAX_BRANDS = { Pulse: 1, Audit: 1, Enterprise: 3 };
-    var MONITOR_PRICES = { Pulse: '$4,200', Audit: '$11,940', Enterprise: '$30,000' };
+    var TIER_MAX_URLS_PER_BRAND = { Audit: 25, Enterprise: 25 };
+    var TIER_MAX_PROMPTS_PER_BRAND = { Audit: 25, Enterprise: 25 };
+    var TIER_MAX_COMPETITORS = { Audit: 4, Enterprise: 4 };
+    var TIER_MAX_BRANDS = { Audit: 1, Enterprise: 3 };
+    var MONITOR_PRICES = { Audit: '$11,940', Enterprise: '$30,000' };
 
-    // Pre-select tier from ?tier=pulse|audit|enterprise.
-    // The actual check-and-set runs inside the main IIFE (initial render
-    // block) so that monitoring visibility and brand counters see the
-    // pre-selected tier on first paint. See "initial render" below.
+    // Pre-select tier from ?tier=audit|enterprise. Legacy ?tier=pulse
+    // is mapped to ?tier=audit so stale links from the pre-2026-05-15
+    // Pulse era still resolve to a usable tier.
     var _preselectedTier = (function () {
       try {
         var params = new URLSearchParams(window.location.search);
         var raw = (params.get('tier') || '').toLowerCase();
-        var map = { pulse: 'Pulse', audit: 'Audit', enterprise: 'Enterprise' };
+        var map = { pulse: 'Audit', audit: 'Audit', enterprise: 'Enterprise' };
         return map[raw] || null;
       } catch (e) { return null; }
     }());
@@ -156,7 +155,7 @@
           if (!counterText) return;
           function render() {
             var tier = currentTier();
-            var capVal = tier ? def.cap[tier] : def.cap.Pulse;
+            var capVal = tier ? def.cap[tier] : def.cap.Audit;
             var n = countLines(ta);
             counterText.textContent = n + ' / ' + capVal;
             counterP.classList.toggle('field-counter--over', n > capVal);
