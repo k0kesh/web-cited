@@ -33,12 +33,22 @@
 .invisible-table .score { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); font-weight: 700; white-space: nowrap; }
 
 .cited-list { list-style: none; padding: 0; margin: 24px 0; }
-.cited-list li { display: grid; grid-template-columns: 32px 1fr 80px; gap: 16px; padding: 10px 0; border-bottom: 1px solid #e5e3dd; align-items: center; }
+.cited-list li { display: grid; grid-template-columns: 32px 1fr 80px 60px 90px; gap: 12px; padding: 10px 0; border-bottom: 1px solid #e5e3dd; align-items: center; }
 .cited-list .rank { font-weight: 900; color: var(--accent); font-size: 18px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
 .cited-list .name { font-weight: 700; font-size: 16px; }
 .cited-list .bar { height: 8px; background: #e5e3dd; position: relative; min-width: 60px; }
 .cited-list .bar__fill { height: 100%; background: var(--ink); }
 .cited-list .count { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; color: #555; text-align: right; }
+.cited-list .fixes { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; color: var(--accent); font-weight: 700; text-align: right; }
+.cited-list__head { display: grid; grid-template-columns: 32px 1fr 80px 60px 90px; gap: 12px; padding: 6px 0; border-bottom: 2px solid var(--ink); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #555; margin-bottom: 4px; }
+.cited-list__head .head-count, .cited-list__head .head-fixes { text-align: right; }
+@media (max-width: 640px) {
+  .cited-list li, .cited-list__head { grid-template-columns: 28px 1fr 50px 70px; }
+  .cited-list li .bar { display: none; }
+  .cited-list__head .head-bar { display: none; }
+}
+
+.invisible-table .fixes { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--ink); font-weight: 700; white-space: nowrap; }
 
 /* Per-position bar widths. nth-child instead of inline style="width:X%"
  * so the page complies with style-src 'self'. The mention counts these
