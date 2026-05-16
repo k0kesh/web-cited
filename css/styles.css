@@ -1926,8 +1926,8 @@ details.faq__item p {
   background: var(--paper);
   border-bottom: var(--rule-thick);
 }
-.pmatrix .pmatrix-th-feature { width: 34%; }
-.pmatrix .pmatrix-th-tier { width: 22%; }
+.pmatrix .pmatrix-th-feature { width: 28%; }
+.pmatrix .pmatrix-th-tier { width: 24%; }
 .pmatrix .pmatrix-tag {
   display: inline-block;
   font-family: "SF Mono", Menlo, Consolas, monospace;
@@ -1961,6 +1961,13 @@ details.faq__item p {
   vertical-align: top;
   margin-right: 0.05em;
   font-weight: 700;
+}
+.pmatrix .pmatrix-price .pmatrix-per {
+  font-size: 0.45em;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--slate-600);
+  margin-left: 0.1em;
 }
 .pmatrix .pmatrix-th-tier--featured {
   background: var(--paper-white);
@@ -2095,7 +2102,7 @@ details.faq__item p {
   .pmatrix tbody .pmatrix-cell--featured {
     background: rgba(204, 0, 0, 0.04);
   }
-  .pmatrix tbody .pmatrix-cell:nth-of-type(2)::before { content: "Pulse"; }
+  .pmatrix tbody .pmatrix-cell:nth-of-type(2)::before { content: "Citation Monitor"; }
   .pmatrix tbody .pmatrix-cell:nth-of-type(3)::before { content: "SXO Audit"; }
   .pmatrix tbody .pmatrix-cell:nth-of-type(4)::before { content: "Enterprise"; }
   .pmatrix tbody .pmatrix-cell::before {
