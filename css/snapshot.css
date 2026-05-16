@@ -43,6 +43,20 @@
 
 .snapshot-error { max-width: 720px; margin: 24px auto 0; padding: 16px 20px; background: #fff5f5; border: 2px solid var(--accent); color: var(--accent); font-weight: 600; }
 
+/* Competitors block - sits ABOVE the fixes block when present. The competitor
+ * list is the strongest pain hook for invisible brands ("Claude named these
+ * 4 instead of you") so it gets the most prominent placement. */
+.snapshot-competitors { margin-top: 20px; padding: 20px; background: #1a1a1a; border-left: 4px solid var(--accent); }
+.snapshot-competitors__head { display: flex; align-items: baseline; gap: 12px; }
+.snapshot-competitors__count { font-family: 'Helvetica Neue', 'Arial Black', sans-serif; font-weight: 900; font-size: 48px; line-height: 1; color: var(--accent); letter-spacing: -0.03em; }
+.snapshot-competitors__label { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--paper); }
+.snapshot-competitors__sub { font-size: 13px; color: rgba(244, 243, 239, 0.7); margin: 8px 0 14px; line-height: 1.5; }
+.snapshot-competitors__list { margin: 0; padding-left: 0; list-style: none; }
+.snapshot-competitors__list li { position: relative; padding: 6px 0 6px 22px; font-size: 15px; font-weight: 700; color: var(--paper); line-height: 1.4; border-top: 1px solid #2a2a2a; }
+.snapshot-competitors__list li:first-child { border-top: none; padding-top: 0; }
+.snapshot-competitors__list li::before { content: "\25B6"; position: absolute; left: 0; top: 8px; font-size: 9px; color: var(--accent); }
+.snapshot-competitors__list li:first-child::before { top: 2px; }
+
 /* Homepage fixes block (rendered inside the dark result panel, below the response preview) */
 .snapshot-fixes { margin-top: 20px; padding: 20px; background: #1a1a1a; border-left: 4px solid var(--accent); }
 .snapshot-fixes__head { display: flex; align-items: baseline; gap: 12px; }

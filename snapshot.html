@@ -24,7 +24,7 @@
   <meta name="twitter:description" content="Free 5-second check: is your brand cited by AI search?" />
   <meta name="twitter:image" content="https://web-cited.com/og/snapshot.png" />
   <link rel="stylesheet" href="/css/styles.css?v=2026-05-15i" />
-  <link rel="stylesheet" href="/css/snapshot.css?v=2026-05-16f" />
+  <link rel="stylesheet" href="/css/snapshot.css?v=2026-05-16g" />
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -101,6 +101,15 @@
             <summary>Show what Claude said</summary>
             <pre id="snapshot-response-preview" class="snapshot-result__preview-text"></pre>
           </details>
+
+          <div id="snapshot-competitors" class="snapshot-competitors" hidden>
+            <div class="snapshot-competitors__head">
+              <span class="snapshot-competitors__count" id="snapshot-competitors-count">0</span>
+              <span class="snapshot-competitors__label" id="snapshot-competitors-label">competitors named by Claude</span>
+            </div>
+            <p class="snapshot-competitors__sub" id="snapshot-competitors-sub">Brands Claude surfaced in the same response that decided your citation verdict.</p>
+            <ul class="snapshot-competitors__list" id="snapshot-competitors-list"></ul>
+          </div>
 
           <div id="snapshot-fixes" class="snapshot-fixes" hidden>
             <div class="snapshot-fixes__head">
@@ -185,7 +194,7 @@
     </div>
   </footer>
 
-  <script src="/js/snapshot.js?v=2026-05-16f" defer></script>
+  <script src="/js/snapshot.js?v=2026-05-16g" defer></script>
   <script src="/js/script.js?v=2026-04-28w" defer></script>
 </body>
 </html>

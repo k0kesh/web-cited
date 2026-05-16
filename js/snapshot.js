@@ -55,9 +55,44 @@
     }
     if (domainDisplay) domainDisplay.textContent = data.domain || "";
     if (preview) preview.textContent = data.response_preview || "(no response preview)";
+    renderCompetitors(data.competitors, data.cited);
     renderFixes(data.fixes);
     show(verdictBlock);
     verdictBlock.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function renderCompetitors(competitors, cited) {
+    var block = document.getElementById("snapshot-competitors");
+    var countEl = document.getElementById("snapshot-competitors-count");
+    var labelEl = document.getElementById("snapshot-competitors-label");
+    var subEl = document.getElementById("snapshot-competitors-sub");
+    var listEl = document.getElementById("snapshot-competitors-list");
+    if (!block || !countEl || !labelEl || !subEl || !listEl) return;
+
+    if (!competitors || !Array.isArray(competitors.items) || competitors.items.length === 0) {
+      hide(block);
+      return;
+    }
+
+    var n = competitors.items.length;
+    countEl.textContent = String(n);
+    if (cited) {
+      // Brand was cited - competitors are useful context, not a wound
+      labelEl.textContent = n === 1 ? "competitor also named by Claude" : "competitors also named by Claude";
+      subEl.textContent = "Claude named these brands alongside you. Useful intel for your positioning and outbound.";
+    } else {
+      // Brand was NOT cited - this IS the wound
+      labelEl.textContent = n === 1 ? "competitor named by Claude. You weren't." : "competitors named by Claude. You weren't one of them.";
+      subEl.textContent = "These brands surfaced when Claude was asked about your category. You did not.";
+    }
+
+    while (listEl.firstChild) listEl.removeChild(listEl.firstChild);
+    competitors.items.forEach(function (name) {
+      var li = document.createElement("li");
+      li.textContent = String(name);
+      listEl.appendChild(li);
+    });
+    show(block);
   }
 
   function renderFixes(fixes) {
@@ -114,6 +149,7 @@
     hide($("snapshot-error"));
     hide($("snapshot-result"));
     hide($("snapshot-fixes"));
+    hide($("snapshot-competitors"));
 
     var form = e.target;
     var submitBtn = $("snapshot-submit");
