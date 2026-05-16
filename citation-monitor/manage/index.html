@@ -12,7 +12,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <meta name="color-scheme" content="light" />
   <link rel="stylesheet" href="/css/styles.css?v=2026-05-15i" />
-  <link rel="stylesheet" href="/css/citation-monitor.css?v=2026-05-16b" />
+  <link rel="stylesheet" href="/css/citation-monitor.css?v=2026-05-16c" />
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -43,7 +43,7 @@
       <div class="wrap wrap--narrow">
         <span class="eyebrow">CITATION MONITOR &middot; SUBSCRIPTION MANAGEMENT</span>
 
-        <div id="cm-manage-loading">
+        <div id="cm-manage-loading" hidden>
           <h1>Opening your Stripe portal...</h1>
           <p class="lead">One moment - we are creating a secure session so you can manage your billing.</p>
         </div>
@@ -52,7 +52,32 @@
           <h1 id="cm-manage-error-title">Link is invalid</h1>
           <p class="lead" id="cm-manage-error-detail">This subscription management link is not valid. It may have expired (links last 7 days) or already been used.</p>
           <p class="cm-welcome__cta-row">
-            <a class="cm-welcome__cta" href="mailto:hello@web-cited.com?subject=Citation%20Monitor%20support">Email support</a>
+            <a class="cm-welcome__cta" href="#" id="cm-manage-error-request-fresh">Request a fresh link</a>
+            <a class="cm-welcome__secondary" href="mailto:hello@web-cited.com?subject=Citation%20Monitor%20support">Email support</a>
+          </p>
+        </div>
+
+        <div id="cm-manage-request" hidden>
+          <h1>Manage your subscription</h1>
+          <p class="lead">Enter the email on your Citation Monitor subscription. If it matches an active record, we will email you a fresh link to the Stripe-hosted management portal within a few minutes.</p>
+          <form id="cm-manage-request-form" class="cm-form cm-manage-form" novalidate>
+            <div class="cm-form__row">
+              <label for="cm-manage-email" class="cm-form__label cm-manage-label">Subscription email</label>
+              <input id="cm-manage-email" name="email" type="email" required autocomplete="email"
+                     placeholder="you@yourcompany.com" class="cm-form__input cm-manage-input" />
+            </div>
+            <button type="submit" class="cm-form__submit cm-manage-submit" id="cm-manage-request-submit">
+              <span class="cm-manage-submit-label">Send me a fresh link &rarr;</span>
+              <span class="cm-manage-submit-loading" hidden>Sending...</span>
+            </button>
+          </form>
+          <p class="cm-manage-fineprint">No information is leaked: we always return the same confirmation whether or not the email matches a subscription.</p>
+        </div>
+
+        <div id="cm-manage-sent" hidden>
+          <h1>Check your inbox.</h1>
+          <p class="lead">If that email matches an active Citation Monitor subscription, a fresh management link is on its way (Stripe-hosted, valid 7 days). If you don't see it within 10 minutes, check spam, or contact <a class="cm-welcome__inline-link" href="mailto:hello@web-cited.com">hello@web-cited.com</a>.</p>
+          <p class="cm-welcome__cta-row">
             <a class="cm-welcome__secondary" href="/citation-monitor">Back to Citation Monitor</a>
           </p>
         </div>
@@ -107,7 +132,7 @@
     </div>
   </footer>
 
-  <script src="/js/citation-monitor-manage.js?v=2026-05-16b" defer></script>
+  <script src="/js/citation-monitor-manage.js?v=2026-05-16c" defer></script>
   <script src="/js/script.js?v=2026-04-28w" defer></script>
 </body>
 </html>

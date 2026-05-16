@@ -64,3 +64,13 @@
 .cm-welcome__inline-link { color: var(--paper); text-decoration: underline; }
 .cm-welcome__inline-link:hover { color: var(--accent); }
 .cm-welcome__cta-row { margin-top: 32px; }
+
+/* Manage page: fresh-link request form (rendered inside the dark cm-welcome section) */
+.cm-manage-form { max-width: 480px; margin: 24px 0 12px; background: transparent; }
+.cm-manage-label { color: var(--paper); }
+.cm-manage-input { background: var(--paper); color: var(--ink); }
+.cm-manage-submit { background: var(--accent); color: var(--paper); }
+.cm-manage-submit:hover { background: var(--paper); color: var(--ink); }
+.cm-manage-submit[data-loading="true"] .cm-manage-submit-label { display: none; }
+.cm-manage-submit[data-loading="true"] .cm-manage-submit-loading { display: inline; }
+.cm-manage-fineprint { font-size: 12px; color: rgba(244, 243, 239, 0.7); line-height: 1.5; margin-top: 12px; max-width: 520px; }
