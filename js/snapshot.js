@@ -55,14 +55,65 @@
     }
     if (domainDisplay) domainDisplay.textContent = data.domain || "";
     if (preview) preview.textContent = data.response_preview || "(no response preview)";
+    renderFixes(data.fixes);
     show(verdictBlock);
     verdictBlock.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function renderFixes(fixes) {
+    var block = $("snapshot-fixes");
+    var countEl = $("snapshot-fixes-count");
+    var labelEl = $("snapshot-fixes-label");
+    var subEl = $("snapshot-fixes-sub");
+    var listWrap = $("snapshot-fixes-list-wrap");
+    var listEl = $("snapshot-fixes-list");
+    var noteEl = $("snapshot-fixes-note");
+    if (!block || !countEl || !labelEl || !subEl) return;
+
+    if (!fixes) { hide(block); return; }
+
+    // Fetch failure or non-HTML response
+    if (fixes.note) {
+      show(block);
+      countEl.textContent = "-";
+      labelEl.textContent = "homepage check skipped";
+      subEl.textContent = "We could not fetch your homepage HTML. Try the full SXO Audit for a full per-URL pass.";
+      if (noteEl) {
+        noteEl.textContent = fixes.note;
+        show(noteEl);
+      }
+      hide(listWrap);
+      return;
+    }
+
+    var n = (fixes.count >>> 0);
+    show(block);
+    countEl.textContent = String(n);
+    labelEl.textContent = (n === 1 ? "fix on your homepage" : "fixes on your homepage");
+    subEl.textContent = "Same checks the full SXO Audit runs - against just your homepage (" +
+      (fixes.total_checks || 10) + " checks total).";
+    if (noteEl) { noteEl.textContent = ""; hide(noteEl); }
+
+    if (listEl) {
+      while (listEl.firstChild) listEl.removeChild(listEl.firstChild);
+      if (Array.isArray(fixes.items) && fixes.items.length > 0) {
+        fixes.items.forEach(function (item) {
+          var li = document.createElement("li");
+          li.textContent = item.title || item.id || "(fix)";
+          listEl.appendChild(li);
+        });
+        show(listWrap);
+      } else {
+        hide(listWrap);
+      }
+    }
   }
 
   function onSubmit(e) {
     e.preventDefault();
     hide($("snapshot-error"));
     hide($("snapshot-result"));
+    hide($("snapshot-fixes"));
 
     var form = e.target;
     var submitBtn = $("snapshot-submit");

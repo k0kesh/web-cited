@@ -24,7 +24,7 @@
   <meta name="twitter:description" content="Free 5-second check: is your brand cited by AI search?" />
   <meta name="twitter:image" content="https://web-cited.com/og/snapshot.png" />
   <link rel="stylesheet" href="/css/styles.css?v=2026-05-15i" />
-  <link rel="stylesheet" href="/css/snapshot.css?v=2026-05-15" />
+  <link rel="stylesheet" href="/css/snapshot.css?v=2026-05-16f" />
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -101,8 +101,22 @@
             <summary>Show what Claude said</summary>
             <pre id="snapshot-response-preview" class="snapshot-result__preview-text"></pre>
           </details>
+
+          <div id="snapshot-fixes" class="snapshot-fixes" hidden>
+            <div class="snapshot-fixes__head">
+              <span class="snapshot-fixes__count" id="snapshot-fixes-count">0</span>
+              <span class="snapshot-fixes__label" id="snapshot-fixes-label">fixes on your homepage</span>
+            </div>
+            <p class="snapshot-fixes__sub" id="snapshot-fixes-sub">Same checks the full SXO Audit runs - against just your homepage.</p>
+            <details class="snapshot-fixes__list-wrap" id="snapshot-fixes-list-wrap" hidden>
+              <summary>See the fix titles</summary>
+              <ul class="snapshot-fixes__list" id="snapshot-fixes-list"></ul>
+            </details>
+            <p class="snapshot-fixes__note" id="snapshot-fixes-note" hidden></p>
+          </div>
+
           <div class="snapshot-result__cta">
-            <p>This was one prompt against one engine. The full Web Cited audit runs <strong>60 measurements per brand</strong> (5 buyer prompts &times; 4 LLM engines &times; 3 trials each) and ships with a click-to-copy Playbook your engineers fix from in the next sprint.</p>
+            <p>This was one prompt against one engine and one URL. The full SXO Audit covers <strong>up to 25 URLs</strong> with the same checks shown above plus 60 LLM measurements per brand (5 buyer prompts &times; 4 engines &times; 3 trials), and ships with a click-to-copy Playbook your engineers fix from in the next sprint.</p>
             <a href="/start.html" class="btn btn--primary snapshot-result__cta-btn">Order the full audit ($5,000)</a>
             <a href="/research/compliance/2026-05/" class="snapshot-result__cta-secondary">Or read our published research first</a>
           </div>
@@ -171,7 +185,7 @@
     </div>
   </footer>
 
-  <script src="/js/snapshot.js?v=2026-05-15" defer></script>
+  <script src="/js/snapshot.js?v=2026-05-16f" defer></script>
   <script src="/js/script.js?v=2026-04-28w" defer></script>
 </body>
 </html>

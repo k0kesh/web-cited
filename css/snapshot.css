@@ -43,6 +43,20 @@
 
 .snapshot-error { max-width: 720px; margin: 24px auto 0; padding: 16px 20px; background: #fff5f5; border: 2px solid var(--accent); color: var(--accent); font-weight: 600; }
 
+/* Homepage fixes block (rendered inside the dark result panel, below the response preview) */
+.snapshot-fixes { margin-top: 20px; padding: 20px; background: #1a1a1a; border-left: 4px solid var(--accent); }
+.snapshot-fixes__head { display: flex; align-items: baseline; gap: 12px; }
+.snapshot-fixes__count { font-family: 'Helvetica Neue', 'Arial Black', sans-serif; font-weight: 900; font-size: 48px; line-height: 1; color: var(--accent); letter-spacing: -0.03em; }
+.snapshot-fixes__label { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--paper); }
+.snapshot-fixes__sub { font-size: 13px; color: rgba(244, 243, 239, 0.7); margin: 8px 0 12px; line-height: 1.5; }
+.snapshot-fixes__list-wrap { margin: 8px 0 0; }
+.snapshot-fixes__list-wrap summary { cursor: pointer; font-size: 13px; font-weight: 700; color: rgba(244, 243, 239, 0.85); padding: 6px 0; }
+.snapshot-fixes__list-wrap summary:hover { color: var(--paper); }
+.snapshot-fixes__list { margin: 8px 0 0; padding-left: 0; list-style: none; }
+.snapshot-fixes__list li { position: relative; padding: 4px 0 4px 18px; font-size: 13px; color: var(--paper); line-height: 1.5; }
+.snapshot-fixes__list li::before { content: "\25A0"; position: absolute; left: 0; top: 6px; font-size: 9px; color: var(--accent); }
+.snapshot-fixes__note { font-size: 12px; color: rgba(244, 243, 239, 0.55); margin-top: 12px; font-style: italic; }
+
 .snapshot-explain { padding: 64px 0; border-top: 1px solid #d6d4ce; }
 .snapshot-explain h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 900; line-height: 1.1; margin: 0 0 24px; }
 .snapshot-explain__list { padding-left: 24px; }
