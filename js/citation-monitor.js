@@ -67,13 +67,23 @@
 
     setLoading(submitBtn, true);
 
+    function readUtm(name) {
+      var el = form.elements.namedItem(name);
+      return (el && el.value) ? String(el.value).slice(0, 200) : "";
+    }
+
     var body = {
       domain: domain,
       email: email,
       prompt: prompt,
       competitors: competitors,
       _gotcha: gotcha,
-      ts_loaded: tsLoaded || Date.now()
+      ts_loaded: tsLoaded || Date.now(),
+      utm_source: readUtm("utm_source"),
+      utm_medium: readUtm("utm_medium"),
+      utm_campaign: readUtm("utm_campaign"),
+      utm_content: readUtm("utm_content"),
+      utm_term: readUtm("utm_term")
     };
 
     fetch(API_URL, {
@@ -107,9 +117,29 @@
       });
   }
 
+  function captureUtm() {
+    // Mirrors web-cited/js/start.js: read 5 UTM keys from the URL and write
+    // them into matching hidden inputs. Each value capped at 200 chars to
+    // mirror the server-side validation in citation-monitor.ts.
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+      UTM_KEYS.forEach(function (k) {
+        var el = $(k);
+        if (!el) return;
+        var v = params.get(k);
+        if (v) el.value = String(v).slice(0, 200);
+      });
+    } catch (e) {
+      // URLSearchParams unavailable on very old browsers; silently fall through.
+    }
+  }
+
   function init() {
     var tsInput = $(TS_INPUT_ID);
     if (tsInput) tsInput.value = String(Date.now());
+
+    captureUtm();
 
     var form = $(FORM_ID);
     if (form) form.addEventListener("submit", onSubmit);
