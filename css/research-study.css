@@ -51,8 +51,10 @@
   .cited-list .fixes--unreachable { font-size: 13px; }
 }
 
-.invisible-table .fixes { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); font-weight: 900; font-size: 18px; white-space: nowrap; letter-spacing: -0.02em; }
+.invisible-table .fixes { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); font-weight: 900; font-size: 18px; white-space: nowrap; letter-spacing: -0.02em; text-align: center; }
 .invisible-table .fixes--unreachable { color: #b8b6b0; font-size: 14px; font-weight: 700; font-style: italic; letter-spacing: 0; }
+/* Center the "Homepage fixes" column header to match the centered cells below */
+.invisible-table thead th:last-child { text-align: center; }
 
 /* Per-position bar widths. nth-child instead of inline style="width:X%"
  * so the page complies with style-src 'self'. The mention counts these
