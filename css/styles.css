@@ -427,6 +427,13 @@ h4 {
   padding-top: 1rem;
   margin-top: 2rem;
 }
+
+.hero__fine {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--slate-700);
+  max-width: 36rem;
+}
 .hero__meta span::before {
   content: "◆";
   margin-right: 0.5rem;
