@@ -75,12 +75,25 @@
   Cache-Control: public, max-age=300, must-revalidate
   Link: </css/styles.css?v=2026-04-28w>; rel=preload; as=style
 
-# Long-cache static assets (CSS, JS, fonts, images, favicons).
+# CSS: 1-hour TTL with must-revalidate.
+# History: ran with `max-age=31536000, immutable` from 2026-04-26 until
+# 2026-05-15. Hit a deploy-race trap on 2026-05-15 where the edge cached
+# stale CSS under a query-string-versioned URL during the Pages deploy
+# window; immutable means never-revalidate, so the stale entry was
+# pinned at the edge forever and required a one-more cache-bust to
+# escape. For a marketing site with weekly CSS changes at moderate
+# traffic, `immutable` is the wrong header on a stable-URL CSS file
+# (it is the right header only for content-addressed/fingerprinted
+# build-output URLs like `app.a3f8b91.css`). 1-hour TTL with revalidation
+# self-heals any race within an hour while still letting browsers cache
+# CSS aggressively client-side. The `?v=YYYY-MM-DD` query-string cache-
+# bust pattern continues to work as defense in depth.
 /css/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, must-revalidate
 
+# JS: 1-hour TTL with must-revalidate (same reasoning as /css/ above).
 /js/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, must-revalidate
 
 /og/*
   Cache-Control: public, max-age=31536000, immutable
