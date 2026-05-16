@@ -91,6 +91,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://web-cited.com/citation-monitor</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://web-cited.com/research/compliance/2026-05/</loc>
     <lastmod>2026-05-15</lastmod>
     <changefreq>yearly</changefreq>
