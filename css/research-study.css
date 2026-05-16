@@ -32,23 +32,27 @@
 .invisible-table td { padding: 14px 16px; border-bottom: 1px solid #d6d4ce; font-size: 15px; vertical-align: top; }
 .invisible-table .score { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); font-weight: 700; white-space: nowrap; }
 
-.cited-list { list-style: none; padding: 0; margin: 24px 0; }
-.cited-list li { display: grid; grid-template-columns: 32px 1fr 120px; gap: 16px; padding: 14px 0; border-bottom: 1px solid #e5e3dd; align-items: center; }
-.cited-list .rank { font-weight: 900; color: var(--accent); font-size: 18px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-.cited-list .name-block { display: flex; flex-direction: column; gap: 2px; }
-.cited-list .name { font-weight: 700; font-size: 16px; color: var(--ink); }
-.cited-list .mentions-sub { font-size: 12px; color: #555; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.02em; }
-.cited-list .fixes-cell { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-.cited-list .fixes { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); font-weight: 900; font-size: 28px; line-height: 1; }
-.cited-list .fixes-label { font-size: 10px; color: #555; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
-.cited-list__head { display: grid; grid-template-columns: 32px 1fr 120px; gap: 16px; padding: 6px 0; border-bottom: 2px solid var(--ink); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #555; margin-bottom: 4px; }
-.cited-list__head .head-fixes { text-align: right; }
+.cited-list { list-style: none; padding: 0; margin: 24px 0; border-top: 1px solid #e5e3dd; }
+.cited-list li { display: grid; grid-template-columns: 40px 1fr auto; gap: 20px; padding: 18px 12px; border-bottom: 1px solid #e5e3dd; align-items: center; transition: background-color 120ms ease-out; }
+.cited-list li:hover { background-color: #f9f8f4; }
+.cited-list .rank { font-weight: 900; color: var(--accent); font-size: 18px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: -0.02em; }
+.cited-list .name-block { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.cited-list .name { font-weight: 700; font-size: 17px; color: var(--ink); line-height: 1.2; }
+.cited-list .mentions-sub { font-size: 13px; color: #555; font-weight: 600; letter-spacing: 0.01em; }
+.cited-list .fixes-cell { text-align: right; min-width: 72px; }
+.cited-list .fixes { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); font-weight: 900; font-size: 34px; line-height: 1; letter-spacing: -0.04em; display: inline-block; }
+.cited-list .fixes--unreachable { color: #b8b6b0; font-size: 22px; font-weight: 700; letter-spacing: 0; font-style: italic; }
+.cited-list__head { display: grid; grid-template-columns: 40px 1fr auto; gap: 20px; padding: 8px 12px; border-bottom: 2px solid var(--ink); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: var(--ink); margin-bottom: 0; align-items: end; }
+.cited-list__head .head-fixes { text-align: right; min-width: 72px; }
 @media (max-width: 640px) {
-  .cited-list li, .cited-list__head { grid-template-columns: 28px 1fr 90px; gap: 10px; }
-  .cited-list .fixes { font-size: 22px; }
+  .cited-list li, .cited-list__head { grid-template-columns: 32px 1fr auto; gap: 14px; padding-left: 8px; padding-right: 8px; }
+  .cited-list .fixes { font-size: 26px; }
+  .cited-list .fixes--unreachable { font-size: 18px; }
+  .cited-list .name { font-size: 16px; }
 }
 
-.invisible-table .fixes { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--ink); font-weight: 700; white-space: nowrap; }
+.invisible-table .fixes { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--accent); font-weight: 900; font-size: 18px; white-space: nowrap; letter-spacing: -0.02em; }
+.invisible-table .fixes--unreachable { color: #b8b6b0; font-size: 14px; font-weight: 700; font-style: italic; letter-spacing: 0; }
 
 /* Per-position bar widths. nth-child instead of inline style="width:X%"
  * so the page complies with style-src 'self'. The mention counts these
