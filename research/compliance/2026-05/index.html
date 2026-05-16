@@ -217,6 +217,10 @@
             <div class="key">Match criteria</div>
             <div class="val small">case-insensitive substring match of brand domain OR brand name anywhere in the LLM response, including any cited URLs</div>
           </div>
+          <div class="method-card">
+            <div class="key">Brand selection</div>
+            <div class="val small">curated from industry knowledge plus LLM-assisted candidate suggestions; each company independently verified via direct homepage fetch to exist, operate in the compliance and risk-management category, and disclose funding. List frozen before any buyer-prompt testing began.</div>
+          </div>
         </div>
 
         <h3>The five standardized buyer prompts</h3>
@@ -232,8 +236,12 @@
 
         <p>The same five prompts were applied to every brand audit. This is the only way to make a category comparison defensible: if each brand got its own custom prompts, the rankings would reflect the prompt selection, not the brand visibility.</p>
 
+        <h3>Enumeration control</h3>
+        <p>One challenge any "AI doesn't surface these brands" study has to answer: are these brands missing because LLMs don't know them at all, or because LLMs know them but choose not to recommend them when buyers ask? To distinguish, we ran a separate <em>enumeration prompt</em> against three of the four engines: <q>List 10 funded B2B compliance and risk-management software companies in the United States. Include both well-known names and smaller / less-well-known funded vendors.</q> One prompt, three engines (OpenAI, Anthropic, Google; Perplexity skipped for this control), three trials each. Same temperature and max-tokens settings as the main study. 9 enumeration responses total.</p>
+        <p><strong>Zero of the 10 brands on the Invisible list appeared in any of those 9 enumeration responses.</strong> The same ~20 brands took the slots: LogicGate (5 mentions), Resolver (5), OneTrust (4), ComplyAdvantage (3), ZenGRC (3), TrustArc (3), SAI Global (3), Workiva (3), AuditBoard (3), plus Vanta, Drata, MetricStream, Mitratech, Diligent, RiskLens, Convercent, RiskWatch, and a handful of others. The Invisible 10 never made the cut at any tier. The 0-of-600 buyer-prompt result is corroborated by 0-of-9 enumeration responses: these brands are absent from AI category awareness, not just from buyer-recommendation responses.</p>
+
         <div class="disclosure">
-          <strong>Known limitations of this methodology.</strong> Substring matching can miss paraphrased mentions where the LLM references a product without naming the company or domain ("the Predict360 platform" rather than "360factors" or "360factors.com"). LLM responses vary between calls; N = 3 trials per prompt reduces but does not eliminate variance. Buyer prompts evolve; this set reflects May 2026 category language. LLM training data has a knowledge cutoff that may not include recently-launched brands or recent rebrands. None of these limitations explain the 0-of-600 result in this study: it would require a paraphrase miss across every one of 600 distinct responses, which independent inspection of the responses rules out.
+          <strong>Known limitations of this methodology.</strong> Substring matching can miss paraphrased mentions where the LLM references a product without naming the company or domain ("the Predict360 platform" rather than "360factors" or "360factors.com"). LLM responses vary between calls; N = 3 trials per prompt reduces but does not eliminate variance. Buyer prompts evolve; this set reflects May 2026 category language. LLM training data has a knowledge cutoff that may not include recently-launched brands or recent rebrands. None of these limitations explain the 0-of-600 result in this study: it would require a paraphrase miss across every one of 600 distinct responses, which independent inspection of the responses rules out, and the Enumeration Control above (0 of 9 enumeration responses surfaced any of the 10 brands) corroborates the buyer-prompt result independently.
         </div>
       </div>
     </section>
