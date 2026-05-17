@@ -10,14 +10,22 @@
     var TIER_MAX_BRANDS = { Audit: 1, Enterprise: 3 };
     var MONITOR_PRICES = { Audit: '$11,940', Enterprise: '$30,000' };
 
-    // Pre-select tier from ?tier=audit|enterprise. Legacy ?tier=pulse
+    // Pre-select tier from ?tier=audit|enterprise|monitor. Legacy ?tier=pulse
     // is mapped to ?tier=audit so stale links from the pre-2026-05-15
-    // Pulse era still resolve to a usable tier.
+    // Pulse era still resolve to a usable tier. ?tier=monitor maps to the
+    // Citation Monitor option for /pricing CTA parity.
     var _preselectedTier = (function () {
       try {
         var params = new URLSearchParams(window.location.search);
         var raw = (params.get('tier') || '').toLowerCase();
-        var map = { pulse: 'Audit', audit: 'Audit', enterprise: 'Enterprise' };
+        var map = {
+          pulse: 'Audit',
+          audit: 'Audit',
+          enterprise: 'Enterprise',
+          monitor: 'CitationMonitor',
+          'citation-monitor': 'CitationMonitor',
+          citationmonitor: 'CitationMonitor'
+        };
         return map[raw] || null;
       } catch (e) { return null; }
     }());
@@ -221,10 +229,63 @@
       var monitoringPriceEl = document.getElementById('monitoring-price');
       function updateMonitoringVisibility() {
         var tier = currentTier();
-        if (monitoringRow) monitoringRow.hidden = !tier;
+        // 12-month monitoring + $99/mo bundle row only shows on audit tiers
+        var isAudit = (tier === 'Audit' || tier === 'Enterprise');
+        if (monitoringRow) monitoringRow.hidden = !isAudit;
         if (monitoringPriceEl && tier && MONITOR_PRICES[tier]) {
           monitoringPriceEl.textContent = MONITOR_PRICES[tier];
         }
+      }
+
+      // ---- tier-mode (audit vs CM) section visibility ----
+      // Show/hide blocks tagged with data-tier-mode="audit" or "cm" based on
+      // the selected tier. CM-only fields collapse the audit form; audit-only
+      // sections hide when CM is picked. Also toggles `required` on the
+      // tier-specific inputs so browser-native form validation matches.
+      function updateTierMode() {
+        var tier = currentTier();
+        var mode = (tier === 'CitationMonitor') ? 'cm' : (tier ? 'audit' : null);
+        var allTagged = form.querySelectorAll('[data-tier-mode]');
+        Array.prototype.forEach.call(allTagged, function (el) {
+          var want = el.getAttribute('data-tier-mode');
+          el.hidden = (mode === null) ? true : (want !== mode);
+        });
+        // Toggle required attrs on tier-specific inputs so HTML5 validation
+        // doesn't fail on hidden audit fields when CM is selected.
+        var auditType = document.getElementById('audit_type');
+        var ackAudit = form.querySelector('input[name="acknowledgement"]');
+        var cmDomain = document.getElementById('cm_domain');
+        var cmPrompt = document.getElementById('cm_prompt');
+        var cmAck = form.querySelector('input[name="cm_acknowledgement"]');
+        if (mode === 'audit') {
+          if (auditType) auditType.setAttribute('required', '');
+          if (ackAudit) ackAudit.setAttribute('required', '');
+          if (cmDomain) cmDomain.removeAttribute('required');
+          if (cmPrompt) cmPrompt.removeAttribute('required');
+          if (cmAck) cmAck.removeAttribute('required');
+        } else if (mode === 'cm') {
+          if (auditType) auditType.removeAttribute('required');
+          if (ackAudit) ackAudit.removeAttribute('required');
+          if (cmDomain) cmDomain.setAttribute('required', '');
+          if (cmPrompt) cmPrompt.setAttribute('required', '');
+          if (cmAck) cmAck.setAttribute('required', '');
+        }
+      }
+
+      // ---- mutual-exclusion: 12-Month Monitoring vs $99/mo Citation Monitor ----
+      // Both checkboxes live in the same monitoring-addon-row. Only one is
+      // valid at a time (per the 2026-05-16 pricing spec - the triple-stack
+      // of audit + 12-month bundle + $99/mo subscription was not listed as
+      // a supported combo).
+      var monitoringAddonEl = document.getElementById('monitoring_addon');
+      var citationAddonEl = document.getElementById('citation_monitor_addon');
+      if (monitoringAddonEl && citationAddonEl) {
+        monitoringAddonEl.addEventListener('change', function () {
+          if (monitoringAddonEl.checked) citationAddonEl.checked = false;
+        });
+        citationAddonEl.addEventListener('change', function () {
+          if (citationAddonEl.checked) monitoringAddonEl.checked = false;
+        });
       }
 
       // ---- tier change handler ----
@@ -232,6 +293,8 @@
         radio.addEventListener('change', function () {
           var tier = currentTier();
           var blocks = brandBlocks();
+          // Switching to CitationMonitor or downgrading from Enterprise:
+          // confirm before silently destroying brand 2/3 data.
           if (tier !== 'Enterprise' && blocks.length > 1) {
             var ok = window.confirm(
               'Switching to ' + tierDisplay(tier) +
@@ -247,6 +310,7 @@
           }
           updateAddBrandVisibility();
           updateMonitoringVisibility();
+          updateTierMode();
           recountAllCounters();
         });
       });
@@ -440,6 +504,47 @@
       function validateBeforeSubmit() {
         clearAllErrors();
         var errors = [];
+
+        // Citation Monitor short-circuits the audit-form validation. CM
+        // requires only: email, cm_domain, cm_prompt, cm_acknowledgement.
+        // Audit-only fields (audit_type, brand-repeater, etc.) are hidden
+        // when CM is selected, so don't validate them.
+        if (currentTier() === 'CitationMonitor') {
+          var tierChecked = form.querySelector('input[name="tier"]:checked');
+          if (!tierChecked) {
+            var tmsg = 'Please choose a tier.';
+            setEngagementError('tier', tmsg);
+            errors.push({ name: 'tier', message: tmsg });
+          }
+          var emailEl = engagementInput('email');
+          if (emailEl && !emailEl.checkValidity()) {
+            var msg = messageForPreSubmit(emailEl, 'Email');
+            setEngagementError('email', msg);
+            errors.push({ name: 'email', message: msg });
+          }
+          var domainEl = document.getElementById('cm_domain');
+          if (domainEl && !(domainEl.value || '').trim()) {
+            errors.push({ name: 'cm_domain', message: 'Please enter your domain.' });
+          }
+          var promptEl = document.getElementById('cm_prompt');
+          var promptVal = ((promptEl && promptEl.value) || '').trim();
+          if (!promptVal) {
+            errors.push({ name: 'cm_prompt', message: 'Please enter a buyer prompt.' });
+          } else if (promptVal.length < 10) {
+            errors.push({ name: 'cm_prompt', message: 'Buyer prompt is too short (10 to 300 characters).' });
+          } else if (promptVal.length > 300) {
+            errors.push({ name: 'cm_prompt', message: 'Buyer prompt is too long (10 to 300 characters).' });
+          }
+          var cmAck = form.querySelector('input[name="cm_acknowledgement"]');
+          if (cmAck && !cmAck.checked) {
+            errors.push({ name: 'cm_acknowledgement', message: 'Please acknowledge the Citation Monitor terms.' });
+          }
+          if (errors.length) {
+            showSummary(errors);
+            return false;
+          }
+          return true;
+        }
 
         // Engagement-level fields.
         var engagementOrder = ['tier', 'first_name', 'last_name', 'email', 'audit_type', 'acknowledgement'];
@@ -658,6 +763,63 @@
         var submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
 
+        // Citation Monitor branches: customer picked the $99/mo subscription
+        // as a stand-alone product (no audit). POST to the existing CM
+        // endpoint and redirect to Stripe Checkout. The Worker /api/citation-
+        // monitor/start handles validation, customer creation, subscription
+        // setup, and returns { checkout_url } we navigate to.
+        if (currentTier() === 'CitationMonitor') {
+          var cmCompetitorsRaw = (document.getElementById('cm_competitors') || {}).value || '';
+          var cmCompetitors = cmCompetitorsRaw.split(',')
+            .map(function (c) {
+              return c.trim().toLowerCase()
+                .replace(/^https?:\/\//, '')
+                .replace(/\/.*$/, '')
+                .replace(/^www\./, '');
+            })
+            .filter(Boolean)
+            .slice(0, 3);
+          var cmPayload = {
+            domain: (document.getElementById('cm_domain').value || '').trim(),
+            email: form.email.value.trim(),
+            prompt: (document.getElementById('cm_prompt').value || '').trim(),
+            competitors: cmCompetitors,
+            _gotcha: form._gotcha.value,
+            ts_loaded: parseInt(form.ts_loaded.value, 10) || Date.now(),
+            utm_source: (form.utm_source && form.utm_source.value) || '',
+            utm_medium: (form.utm_medium && form.utm_medium.value) || '',
+            utm_campaign: (form.utm_campaign && form.utm_campaign.value) || '',
+            utm_content: (form.utm_content && form.utm_content.value) || '',
+            utm_term: (form.utm_term && form.utm_term.value) || ''
+          };
+          fetch('https://api.web-cited.com/api/citation-monitor/start', {
+            method: 'POST',
+            body: JSON.stringify(cmPayload),
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+          }).then(function (resp) {
+            return resp.json().then(function (data) { return { status: resp.status, data: data }; });
+          }).then(function (out) {
+            if (out.status >= 200 && out.status < 300 && out.data && out.data.checkout_url) {
+              window.location.href = out.data.checkout_url;
+              return;
+            }
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit intake'; }
+            var msg = (out.data && out.data.error) ? out.data.error : 'We could not start your subscription. Please try again or contact hello@web-cited.com.';
+            announce(msg);
+            // Reuse the engagement-error pipeline so the UI shows the message
+            // in the same place as audit-side errors.
+            summaryList.innerHTML = '';
+            var li = document.createElement('li');
+            li.textContent = msg;
+            summaryList.appendChild(li);
+            summary.hidden = false;
+          }).catch(function () {
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit intake'; }
+            showRetryPanel();
+          });
+          return;
+        }
+
         function v(block, field) {
           var el = block.querySelector('[data-field="' + field + '"]');
           return el ? el.value.trim() : '';
@@ -668,6 +830,7 @@
         }
 
         var monitoringCheckbox = document.getElementById('monitoring_addon');
+        var citationAddonCheckbox = document.getElementById('citation_monitor_addon');
         var payload = {
           tier: currentTier(),
           first_name: form.first_name.value.trim(),
@@ -676,6 +839,7 @@
           audit_type: form.audit_type.value,
           acknowledgement: 'yes',
           monitoring_addon: monitoringCheckbox && monitoringCheckbox.checked ? true : false,
+          citation_monitor_addon: citationAddonCheckbox && citationAddonCheckbox.checked ? true : false,
           _gotcha: form._gotcha.value,
           ts_loaded: form.ts_loaded.value,
           // UTM (Urchin Tracking Module) campaign attribution. Populated
@@ -742,4 +906,5 @@
       addBrandBlock();              // Render Brand 1.
       updateAddBrandVisibility();
       updateMonitoringVisibility();
+      updateTierMode();             // Apply audit-vs-CM section visibility.
     }());

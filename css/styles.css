@@ -1310,6 +1310,8 @@ details.faq__item p {
 }
 .form .tier-opt input[type="radio"]:checked + .tier-opt__inner .tier-opt__scope { color: var(--slate-200); }
 .form .tier-opt__price { font-family: var(--font-mono); font-weight: 700; font-size: 0.95rem; }
+.form .tier-opt__price-per { font-family: var(--font-mono); font-weight: 400; font-size: 0.75rem; color: var(--slate-700); margin-left: 1px; }
+.form .cm-fieldset { background: var(--paper); }
 
 .form .check {
   display: grid;

@@ -32,7 +32,7 @@
   <meta name="twitter:description" content="Submit the intake form. Scope confirmed, invoice sent, crawl kicked off inside one business day." />
   <meta name="twitter:image" content="https://web-cited.com/og/pricing.png" />
 
-  <link rel="stylesheet" href="css/styles.css?v=2026-05-15i" />
+  <link rel="stylesheet" href="css/styles.css?v=2026-05-16j" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -139,7 +139,18 @@
 
           <fieldset class="form__row">
             <legend>Tier</legend>
-            <div class="tiers" role="radiogroup" aria-label="Audit tier selection">
+            <div class="tiers" role="radiogroup" aria-label="Tier selection">
+              <label class="tier-opt">
+                <input type="radio" name="tier" value="CitationMonitor" required />
+                <span class="tier-opt__inner">
+                  <span class="tier-opt__dot" aria-hidden="true"></span>
+                  <span>
+                    <span class="tier-opt__label">Citation Monitor <span class="tier-opt__badge">- recurring subscription</span></span>
+                    <span class="tier-opt__scope">1 buyer prompt across 4 LLM engines (ChatGPT, Claude, Gemini, Perplexity), 3 trials per engine each month, monthly citation-share report with up to 3 competitors benchmarked. Cancel anytime, no proration on partial months (TOS §4.8).</span>
+                  </span>
+                  <span class="tier-opt__price">$99<span class="tier-opt__price-per">/mo</span></span>
+                </span>
+              </label>
               <label class="tier-opt">
                 <input type="radio" name="tier" value="Audit" required />
                 <span class="tier-opt__inner">
@@ -165,10 +176,14 @@
             </div>
           </fieldset>
 
-          <div class="form__row monitoring-addon-row" id="monitoring-addon-row" hidden>
+          <div class="form__row monitoring-addon-row" id="monitoring-addon-row" data-tier-mode="audit" hidden>
             <label class="check">
               <input type="checkbox" name="monitoring_addon" id="monitoring_addon" value="yes" />
-              <span>Add 12-Month Monitoring - <strong id="monitoring-price">$4,200</strong> <span class="hint">(12 monthly delta reports, one upfront payment, no subscription)</span></span>
+              <span>Add 12-Month Monitoring - <strong id="monitoring-price">$4,200</strong> <span class="hint">(12 monthly delta reports + Playbook updates, one upfront payment, no subscription)</span></span>
+            </label>
+            <label class="check u-mt-1">
+              <input type="checkbox" name="citation_monitor_addon" id="citation_monitor_addon" value="yes" />
+              <span>Add Citation Monitor - <strong>$99/month</strong> <span class="hint">(separate Stripe subscription on the same card, billed monthly starting after your audit invoice is paid; cancel anytime)</span></span>
             </label>
           </div>
 
@@ -217,9 +232,9 @@
             </div>
           </div>
 
-          <div class="form__row">
+          <div class="form__row" data-tier-mode="audit">
             <label for="audit_type">What are you auditing?</label>
-            <select id="audit_type" name="audit_type" required>
+            <select id="audit_type" name="audit_type">
               <option value="" disabled selected>Select one</option>
               <option value="Own brand">My own brand</option>
               <option value="Competitor / market intel">A competitor / market intel</option>
@@ -228,7 +243,7 @@
             </select>
           </div>
 
-          <fieldset class="form__row brands-fieldset">
+          <fieldset class="form__row brands-fieldset" data-tier-mode="audit">
             <legend>Your business info</legend>
             <div id="brands-container">
               <!-- Brand blocks rendered by JS on page load. -->
@@ -236,10 +251,52 @@
             <button type="button" id="add-brand-btn" class="add-brand-btn" hidden aria-label="Add another brand">+ Add another brand</button>
           </fieldset>
 
-          <div class="form__row">
+          <fieldset class="form__row cm-fieldset" data-tier-mode="cm" hidden>
+            <legend>Citation Monitor setup</legend>
+            <p class="hint u-hint-narrow-mb-1">We track one buyer prompt per month across 4 LLM engines. Your monthly report lands by email with a private link.</p>
+            <div class="form__row">
+              <label for="cm_domain">Your domain</label>
+              <input id="cm_domain"
+                     name="cm_domain"
+                     type="text"
+                     inputmode="url"
+                     autocomplete="url"
+                     placeholder="example.com"
+                     aria-describedby="cm_domain_hint" />
+              <p id="cm_domain_hint" class="hint">No https:// or www needed. We strip both.</p>
+            </div>
+            <div class="form__row">
+              <label for="cm_prompt">Buyer prompt to track</label>
+              <textarea id="cm_prompt"
+                        name="cm_prompt"
+                        rows="3"
+                        maxlength="300"
+                        placeholder="e.g. What are the best alternatives to Asana for product teams in 2026?"
+                        aria-describedby="cm_prompt_hint"></textarea>
+              <p id="cm_prompt_hint" class="hint">10 to 300 characters. Same prompt every month so monthly results are comparable.</p>
+            </div>
+            <div class="form__row">
+              <label for="cm_competitors">Competitor domains <span class="hint">(optional, up to 3)</span></label>
+              <input id="cm_competitors"
+                     name="cm_competitors"
+                     type="text"
+                     placeholder="competitor1.com, competitor2.com, competitor3.com"
+                     aria-describedby="cm_competitors_hint" />
+              <p id="cm_competitors_hint" class="hint">Leave blank to let us auto-detect competitors from each engine's response. Comma-separated.</p>
+            </div>
+          </fieldset>
+
+          <div class="form__row" data-tier-mode="audit">
             <label class="check">
-              <input type="checkbox" name="acknowledgement" value="yes" required />
+              <input type="checkbox" name="acknowledgement" value="yes" />
               <span>I understand the audit is a one-time fixed-scope deliverable, runs entirely on public-web data, and crawls the submitted site at a respectful rate. By submitting, I agree to the <a href="privacy.html">privacy policy</a> and <a href="terms.html">Terms of Service</a>. No data is sent to third-party analytics.</span>
+            </label>
+          </div>
+
+          <div class="form__row" data-tier-mode="cm" hidden>
+            <label class="check">
+              <input type="checkbox" name="cm_acknowledgement" value="yes" />
+              <span>I understand Citation Monitor is a recurring $99/month subscription (TOS §3.3): 1 buyer prompt × 4 engines × 3 trials = 12 LLM calls per calendar month. Cancel anytime; no proration on partial months (TOS §4.8). I agree to the <a href="privacy.html">privacy policy</a> and <a href="terms.html">Terms of Service</a>.</span>
             </label>
           </div>
 
@@ -410,7 +467,7 @@
     </div>
   </footer>
 
-  <script src="js/start.js?v=2026-05-13" defer></script>
+  <script src="js/start.js?v=2026-05-16j" defer></script>
   <script src="js/script.js?v=2026-04-28w" defer></script>
 </body>
 </html>
