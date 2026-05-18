@@ -1327,6 +1327,22 @@ details.faq__item p {
   font-weight: 400;
   cursor: pointer;
 }
+
+/* /start monitoring add-on row: intro + per-checkbox value-prop hint
+   (shipped 2026-05-17 for the CM-vs-Audit-Monitoring price-gap explainer). */
+.monitoring-addon-intro {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--slate-700, #5a5a5a);
+  margin: 0 0 0.75rem;
+}
+.hint--block {
+  display: block;
+  margin-top: 0.5rem;
+  line-height: 1.55;
+}
 .form .check input[type="checkbox"] {
   width: 1.2rem; height: 1.2rem;
   margin-top: 0.15rem;
