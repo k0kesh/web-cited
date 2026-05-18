@@ -21,7 +21,7 @@ Result: zero of 600 LLM responses cited {COMPANY_NAME} by domain or by brand nam
 Full study, methodology, and the 16 brands AI cites instead:
 https://web-cited.com/research/compliance/2026-05/
 
-If you want to know specifically what content patterns the cited brands have that {COMPANY_NAME} does not, that is what our SXO Audit measures across your domain, your buyer prompts, and 35+ specific checks. Five business days, $5,000 fixed price, no sales call.
+If you want to know specifically what content patterns the cited brands have that {COMPANY_NAME} does not, that is what our SXO Audit measures across your domain, your buyer prompts, and 35+ specific checks. Usually delivers in less than 24 hours, $5,000 fixed price, no sales call.
 
 Order: https://web-cited.com/start?utm_source=outbound&utm_medium=email&utm_campaign=invisible_10_compliance_2026_05&utm_content=email-1
 
