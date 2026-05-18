@@ -49,6 +49,28 @@
 .cm-explain a { color: var(--ink); text-decoration: underline; }
 .cm-explain a:hover { color: var(--accent); }
 
+/* Comparison section: SXO Audit vs Citation Monitor */
+.cm-compare-section { padding: 64px 0; background: var(--paper); border-top: 1px solid #d6d4ce; }
+.cm-compare-section h2 { font-size: clamp(24px, 3vw, 32px); font-weight: 900; line-height: 1.1; margin: 0 0 16px; color: var(--ink); }
+.cm-compare-lead { font-size: 16px; line-height: 1.6; color: #444; margin: 0 0 24px; max-width: 720px; }
+.cm-compare-wrap { overflow-x: auto; margin: 0 0 24px; -webkit-overflow-scrolling: touch; }
+.cm-compare { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 560px; }
+.cm-compare th, .cm-compare td { padding: 12px 16px; text-align: left; border: 1.5px solid var(--ink); vertical-align: top; }
+.cm-compare thead th { background: var(--ink); color: var(--paper); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+.cm-compare thead tr th:first-child { background: var(--paper); color: var(--ink); border-color: var(--paper); border-bottom-color: var(--ink); }
+.cm-compare tbody th { background: #ededea; font-weight: 700; width: 30%; }
+.cm-compare tbody tr:nth-child(even) td { background: #faf9f5; }
+.cm-compare-foot { font-size: 16px; line-height: 1.6; color: #444; margin: 16px 0 0; }
+.cm-compare-foot a { color: var(--ink); text-decoration: underline; font-weight: 600; }
+.cm-compare-foot a:hover { color: var(--accent); }
+
+/* FAQ section: reuses global .faq + .faq__item styles from /css/styles.css */
+.cm-faq-section { padding: 64px 0 96px; background: var(--paper); border-top: 1px solid #d6d4ce; }
+.cm-faq-section h2 { font-size: clamp(24px, 3vw, 32px); font-weight: 900; line-height: 1.1; margin: 0 0 24px; color: var(--ink); }
+.cm-faq-foot { font-size: 14px; line-height: 1.6; color: #555; margin: 32px 0 0; padding-top: 24px; border-top: 1.5px solid var(--ink); }
+.cm-faq-foot a { color: var(--ink); text-decoration: underline; font-weight: 600; }
+.cm-faq-foot a:hover { color: var(--accent); }
+
 /* Welcome page */
 .cm-welcome { background: var(--ink); color: var(--paper); padding: 120px 0 80px; min-height: 60vh; }
 .cm-welcome .eyebrow { color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; font-size: 12px; display: block; margin-bottom: 16px; }

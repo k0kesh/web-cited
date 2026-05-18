@@ -24,7 +24,96 @@
   <meta name="twitter:description" content="Monthly AI citation tracking. $99/month. Cancel anytime." />
   <meta name="twitter:image" content="https://web-cited.com/og/citation-monitor.png" />
   <link rel="stylesheet" href="/css/styles.css?v=2026-05-15i" />
-  <link rel="stylesheet" href="/css/citation-monitor.css?v=2026-05-16a" />
+  <link rel="stylesheet" href="/css/citation-monitor.css?v=2026-05-17a" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": "https://web-cited.com/citation-monitor#faq",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can I change my buyer prompt later?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Email hello@web-cited.com with the new prompt and we will swap it for your next monthly run. Changing the prompt mid-tracking resets the trend baseline (different question, different denominator) so the next report reads like a fresh start."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why only one prompt? The SXO Audit covers more.",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Trend isolation. With one prompt and 12 monthly trials, the citation share movement you see is the change in your positioning - not noise from comparing different prompts. The SXO Audit covers 5 to 25 prompts per brand for breadth; Citation Monitor covers 1 prompt monthly for depth in trend signal. Different jobs."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When does my first report arrive?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "After the current calendar month ends. If you subscribe on the 5th, your first report covers the rest of that month and is delivered in the first week of the next month. Subsequent reports run on calendar boundaries, not your billing date."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a good citation share number?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It depends on your category and prompt breadth more than positioning does. A niche-tool prompt with 3 to 5 real competitors will show much higher share than a broad-category prompt with 50+ named brands. Watch your month-over-month delta - the direction matters more than the absolute number."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I cancel?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Click Manage subscription in any monthly report email; Stripe handles the rest. Cancellation takes effect at the end of your current billing period. Reports already delivered stay accessible at their private URLs for 30 days after cancellation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I get a refund?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Cancel anytime and you will not be charged again. We do not prorate partial months (TOS §4.8). For refunds on specific charges, email hello@web-cited.com - we handle those case by case."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What if my domain is not cited at all?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The report shows 0% citation share, lists every competitor that did get cited, and includes a pointer toward the full SXO Audit. Citation Monitor is a tracker, not a remediation tool - if your domain is invisible, the audit is what ships a Playbook with copy-paste fixes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I track multiple prompts or multiple domains?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Not on a single subscription. Subscribe once per (domain, prompt) pair - three prompts means three subscriptions. Bulk discounts available; email hello@web-cited.com if you need to track 5+ pairs."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you store my buyer prompt anywhere public?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Prompts are stored encrypted at rest in Cloudflare KV and appear only in your private report URL and the operator-only admin dashboard. We never publish, share, or repurpose them."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I bundle Citation Monitor with the full SXO Audit?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. At checkout for any Audit tier (Pulse, SXO Audit, or Enterprise) there is an Add Citation Monitor for $99/mo checkbox. The audit ships first; the monthly subscription starts on the same day. One Stripe customer, two charges - the audit one-time, the monitor recurring."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -133,10 +222,85 @@
           <li><strong>Month-over-month delta.</strong> What changed since last month (from report 2 onward).</li>
           <li><strong>Rolling trend chart.</strong> Your citation share over the last 12 months, side by side.</li>
         </ol>
-        <h2>How it differs from the full audit</h2>
-        <p>Citation Monitor watches <strong>one prompt</strong> in 12 LLM calls per month - cheap, fast, and trend-focused. The SXO Audit at <a href="/start.html">/start</a> runs <strong>60 measurements per brand</strong> (5 buyer prompts &times; 4 engines &times; 3 trials), inspects your schema, and ships a Playbook with copy-paste remediations. Use Citation Monitor to track movement; use SXO Audit to fix root causes.</p>
-        <h2>Cancellation</h2>
-        <p>Cancel anytime from a link in any of your monthly emails or by replying to <a href="mailto:hello@web-cited.com">hello@web-cited.com</a>. We do not prorate partial months (see TOS §4.8). Reports already delivered stay accessible at their private URLs for 30 days after cancellation.</p>
+      </div>
+    </section>
+
+    <section class="cm-compare-section">
+      <div class="wrap wrap--narrow">
+        <h2>Citation Monitor vs SXO Audit</h2>
+        <p class="cm-compare-lead">Both are powered by the same citation engine across ChatGPT, Claude, Gemini, and Perplexity. The difference is depth versus cadence: the audit is a one-time deep diagnosis with a Playbook of fixes; Citation Monitor is a recurring lightweight tracker that watches one buyer prompt monthly.</p>
+        <div class="cm-compare-wrap">
+          <table class="cm-compare">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">SXO Audit</th>
+                <th scope="col">Citation Monitor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Cadence</th><td>One-time deliverable</td><td>Monthly, cancel anytime</td></tr>
+              <tr><th scope="row">Price</th><td>$1,500 / $5,000 / $12,500</td><td>$99/month</td></tr>
+              <tr><th scope="row">Prompts tested</th><td>5 to 25 per brand</td><td>1</td></tr>
+              <tr><th scope="row">LLM calls per report</th><td>60 to 300 (by tier)</td><td>12</td></tr>
+              <tr><th scope="row">Schema + technical audit</th><td>Included</td><td>Not included</td></tr>
+              <tr><th scope="row">Competitor landscape</th><td>Included</td><td>Included</td></tr>
+              <tr><th scope="row">Month-over-month delta</th><td>N/A (one-shot)</td><td>Included (from report 2)</td></tr>
+              <tr><th scope="row">Output</th><td>8-section Playbook (PDF + HTML) with copy-paste fixes</td><td>Trend report (HTML + email)</td></tr>
+              <tr><th scope="row">Best for</th><td>Diagnosing + fixing root causes</td><td>Tracking movement over time</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cm-compare-foot">Most teams run them together: <a href="/start.html">start with an audit</a> to fix the foundation, then leave Citation Monitor running to watch the work pay off. You can <a href="/start.html">bundle both at audit checkout</a> with one click.</p>
+      </div>
+    </section>
+
+    <section class="cm-faq-section" aria-labelledby="cm-faq-h2">
+      <div class="wrap wrap--narrow">
+        <h2 id="cm-faq-h2">Frequently asked questions</h2>
+        <div class="faq">
+          <details class="faq__item">
+            <summary>Can I change my buyer prompt later?</summary>
+            <p>Yes. Email <a href="mailto:hello@web-cited.com">hello@web-cited.com</a> with the new prompt and we'll swap it for your next monthly run. Changing the prompt mid-tracking resets the trend baseline (different question, different denominator) so the next report reads like a fresh start.</p>
+          </details>
+          <details class="faq__item">
+            <summary>Why only one prompt? The SXO Audit covers more.</summary>
+            <p>Trend isolation. With one prompt and 12 monthly trials, the citation share movement you see is the change in your positioning - not noise from comparing different prompts. The SXO Audit covers 5 to 25 prompts per brand for breadth; Citation Monitor covers 1 prompt monthly for depth in trend signal. Different jobs.</p>
+          </details>
+          <details class="faq__item">
+            <summary>When does my first report arrive?</summary>
+            <p>After the current calendar month ends. If you subscribe on the 5th, your first report covers the rest of that month and is delivered in the first week of the next month. Subsequent reports run on calendar boundaries, not your billing date.</p>
+          </details>
+          <details class="faq__item">
+            <summary>What is a "good" citation share number?</summary>
+            <p>It depends on your category and prompt breadth more than positioning does. A niche-tool prompt with 3 to 5 real competitors will show much higher share than a broad-category prompt with 50+ named brands. Watch your month-over-month delta - the direction matters more than the absolute number.</p>
+          </details>
+          <details class="faq__item">
+            <summary>How do I cancel?</summary>
+            <p>Click "Manage subscription" in any monthly report email; Stripe handles the rest. Cancellation takes effect at the end of your current billing period. Reports already delivered stay accessible at their private URLs for 30 days after cancellation.</p>
+          </details>
+          <details class="faq__item">
+            <summary>Can I get a refund?</summary>
+            <p>Cancel anytime and you won't be charged again. We do not prorate partial months (TOS §4.8). For refunds on specific charges, email <a href="mailto:hello@web-cited.com">hello@web-cited.com</a> - we handle those case by case.</p>
+          </details>
+          <details class="faq__item">
+            <summary>What if my domain isn't cited at all?</summary>
+            <p>The report shows 0% citation share, lists every competitor that did get cited, and includes a pointer toward the full <a href="/start.html">SXO Audit</a>. Citation Monitor is a tracker, not a remediation tool - if your domain is invisible, the audit is what ships a Playbook with copy-paste fixes.</p>
+          </details>
+          <details class="faq__item">
+            <summary>Can I track multiple prompts or multiple domains?</summary>
+            <p>Not on a single subscription. Subscribe once per (domain, prompt) pair - three prompts means three subscriptions. Bulk discounts available; email <a href="mailto:hello@web-cited.com">hello@web-cited.com</a> if you need to track 5+ pairs.</p>
+          </details>
+          <details class="faq__item">
+            <summary>Do you store my buyer prompt anywhere public?</summary>
+            <p>No. Prompts are stored encrypted at rest in Cloudflare KV and appear only in your private report URL and the operator-only admin dashboard. We never publish, share, or repurpose them.</p>
+          </details>
+          <details class="faq__item">
+            <summary>Can I bundle Citation Monitor with the full SXO Audit?</summary>
+            <p>Yes. At checkout for any Audit tier (Pulse, SXO Audit, or Enterprise) there's an "Add Citation Monitor for $99/mo" checkbox. The audit ships first; the monthly subscription starts on the same day. One Stripe customer, two charges - the audit one-time, the monitor recurring.</p>
+          </details>
+        </div>
+        <p class="cm-faq-foot">Question not covered? <a href="/contact.html">Send us a note</a> - one business day response, no sales pitch.</p>
       </div>
     </section>
 
